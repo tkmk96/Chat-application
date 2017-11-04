@@ -39,6 +39,7 @@ module.exports = {
     },
     devtool: 'inline-source-map',
     devServer: {
+        contentBase: './static',
         watchOptions: {
             poll: 1000
         }
