@@ -37,6 +37,11 @@ module.exports = {
         ]
     },
     devtool: 'inline-source-map',
+    devServer: {
+        watchOptions: {
+            poll: 1000
+        }
+    },
     plugins: [
         new ExtractTextPlugin('style.css')
     ]
