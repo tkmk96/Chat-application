@@ -8,7 +8,8 @@ module.exports = {
     ],
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build')
+        path: path.resolve(__dirname, 'build'),
+        publicPath: 'build/'
     },
     module: {
         rules: [
@@ -22,6 +23,16 @@ module.exports = {
                     use: 'css-loader'
                 }),
                 test: /\.css$/
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: { limit: 10000 }
+                    },
+                    'image-webpack-loader'
+                ]
             }
         ]
     },
