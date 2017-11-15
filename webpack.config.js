@@ -30,7 +30,10 @@ module.exports = {
                 use: [
                     {
                         loader: 'url-loader',
-                        options: { limit: 10000 }
+                        options: {
+                            name: 'assets/[name].[ext]',
+                            limit: 10000
+                        }
                     },
                     'image-webpack-loader'
                 ]
@@ -40,6 +43,7 @@ module.exports = {
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './static',
+        historyApiFallback: true,
         watchOptions: {
             poll: 1000
         }
