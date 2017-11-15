@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { reduxForm, Field } from 'redux-form';
+import { Link } from 'react-router-dom';
 import RegistrationField from './RegistrationField';
 
 const formFields = [
@@ -16,6 +17,7 @@ class RegistrationForm extends Component {
                 <h3>Registration</h3>
                 {this._renderFields()}
                 <button className='btn btn-primary'>Create a new Channeler!</button>
+                <Link to='/login'>I have channeled before</Link>
             </div>
         );
     }
