@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
 
 import RegistrationField from './RegistrationField';
+import {loginUser} from '../actions/index';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -21,7 +22,8 @@ class LoginForm extends Component {
     }
 
     _onSubmit(values){
-        console.log(values);
+        const {email, password} = values;
+        this.props.loginUser(email, password, this.props.history);
     }
 
     render(){
@@ -55,4 +57,6 @@ function validate(values) {
 export default reduxForm({
     form: 'loginForm',
     validate
-})(LoginForm);
+})(
+    connect(null, { loginUser})(withRouter(LoginForm))
+);

@@ -29,8 +29,29 @@ export const registerUser = (email, customData,  history) => {
 export const loginUser = (email, password, history) => {
     return async dispatch => {
         const token = await fetchToken(email);
+
+
+        const res = await axios({
+            method: 'get',
+            url: `${API_URL}/${APP_ID}/user/${email}`,
+            headers: {
+                'Authorization': `bearer ${token}`,
+                'Accept': 'application/json',
+            }
+        });
+        console.log(res);
+        const user = {email, ...JSON.parse(res.data.customData)}
+
+        if(user.password != password){
+            return null; //idk
+        }
         dispatch(receivedToken(token));
-        //TODO...
+
+        dispatch({
+            type: LOGGED_USER,
+            payload: user
+        });
+        history.push('/')
     }
 };
 
