@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import RegistrationField from './RegistrationField';
 import { registerUser } from '../actions';
 import {connect} from 'react-redux';
@@ -35,7 +35,9 @@ class RegistrationForm extends Component {
     }
 
     _onSubmit(values) {
-        this.props.registerUser(values.email);
+        const {name, password} = values;
+        this.props.registerUser(values.email, {name, password}, this.props.history);
+
     }
 }
 
@@ -68,5 +70,5 @@ export default reduxForm({
     form: 'registrationForm',
     validate
 })(
-    connect(null, { registerUser})(RegistrationForm)
+    connect(null, { registerUser})(withRouter(RegistrationForm))
 );
