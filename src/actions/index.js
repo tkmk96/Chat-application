@@ -1,10 +1,10 @@
-import {REGISTER_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
 import axios from 'axios';
+
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_TOKEN} from '../constants/storageKeys';
+import {LOGGED_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
 
 export const registerUser = (email, customData,  history) => {
-
     return async dispatch => {
         const res = await axios({
             method: 'post',
@@ -17,33 +17,43 @@ export const registerUser = (email, customData,  history) => {
         });
         console.log(res);
         dispatch({
-            type: REGISTER_USER,
+            type: LOGGED_USER,
             payload: {email, ...customData}
         });
-        dispatch(fetchUserToken(history, email));
+        const token = await fetchToken(email);
+        dispatch(receivedToken(token));
+        history.push('/');
     };
 };
 
-export const fetchUserToken = (history, email) => {
-
+export const loginUser = (email, password, history) => {
     return async dispatch => {
-        const response = await axios({
-            method: 'post',
-            url: `${API_URL}/auth`,
-            headers: {
-                'Accept': 'text/plain',
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify(email)
+        const token = await fetchToken(email);
+        dispatch(receivedToken(token));
+        //TODO...
+    }
+};
 
-        });
+const fetchToken = async (email) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/auth`,
+        headers: {
+            'Accept': 'text/plain',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(email)
 
-        console.log(response);
-        localStorage.setItem(AUTH_TOKEN, response.data);
-        history.push('/');
-        dispatch({
-            type: FETCH_AUTH_TOKEN,
-            payload: response.data
-        });
+    });
+    return res.data;
+};
+
+const receivedToken = (token) => {
+
+    localStorage.setItem(AUTH_TOKEN, token);
+    return {
+        type: FETCH_AUTH_TOKEN,
+        payload: token
     };
+
 };
