@@ -29,6 +29,32 @@ class RegistrationForm extends Component {
     }
 }
 
+function validate(values) {
+    const errors = {};
+
+    if (!values.name) {
+        errors.name = 'Please provide a value.';
+    }
+
+    if (!values.email) {
+        errors.email = 'Please provide a value.';
+    }
+
+    if (!values.password) {
+        errors.password = 'Please provide a value.';
+    }
+
+    if (!values.repeatPassword) {
+        errors.repeatPassword = 'Please provide a value.';
+    }
+
+    if (values.password !== values.repeatPassword) {
+        errors.repeatPassword = 'Passwords must be the same!';
+    }
+    return errors;
+}
+
 export default reduxForm({
-    form: 'registrationForm'
+    form: 'registrationForm',
+    validate
 })(RegistrationForm);
