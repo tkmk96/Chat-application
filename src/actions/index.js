@@ -36,7 +36,7 @@ export const loginUser = (email, password, history) => {
             throw new SubmissionError({
                 password: 'Incorrect password!',
                 _error: 'Login failed!'
-            })
+            });
         }
         localStorage.setItem(AUTH_EMAIL, email);
 
@@ -92,7 +92,12 @@ const fetchToken = async (email) => {
             'Content-Type': 'application/json'
         },
         data: JSON.stringify(email)
-
+    })
+    .catch(() => {
+        throw new SubmissionError({
+            email: 'Invalid email!',
+            _error: 'Login failed!'
+        });
     });
     return res.data;
 };
