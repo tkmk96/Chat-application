@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import RegistrationField from './RegistrationField';
+import { registerUser } from '../actions';
+import {connect} from 'react-redux';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -33,7 +35,7 @@ class RegistrationForm extends Component {
     }
 
     _onSubmit(values) {
-        console.log(values);
+        this.props.registerUser(values.email);
     }
 }
 
@@ -65,4 +67,6 @@ function validate(values) {
 export default reduxForm({
     form: 'registrationForm',
     validate
-})(RegistrationForm);
+})(
+    connect(null, { registerUser})(RegistrationForm)
+);
