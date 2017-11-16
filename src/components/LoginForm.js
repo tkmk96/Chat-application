@@ -23,13 +23,13 @@ class LoginForm extends Component {
 
     _onSubmit(values){
         const {email, password} = values;
-        this.props.loginUser(email, password, this.props.history);
+        return this.props.loginUser(email, password, this.props.history);
     }
 
     render(){
         return (
             <div className='col-md-6 col-md-offset-3'>
-                <h3>Registration</h3>
+                <h3>Login</h3>
                 <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
                     {this._renderFields()}
                     <button className='btn btn-primary' type='submit'>Go</button>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { SubmissionError } from 'redux-form';
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
 import {LOGGED_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
@@ -15,7 +15,6 @@ export const registerUser = (email, customData,  history) => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log(res);
         localStorage.setItem(AUTH_EMAIL, email);
         dispatch({
             type: LOGGED_USER,
@@ -32,8 +31,12 @@ export const loginUser = (email, password, history) => {
         const token = await fetchToken(email);
         const { customData} = await fetchData(email, token);
         const user = {email, ...JSON.parse(customData)};
+
         if(user.password !== password){
-            return null; //idk
+            throw new SubmissionError({
+                password: 'Incorrect password!',
+                _error: 'Login failed!'
+            })
         }
         localStorage.setItem(AUTH_EMAIL, email);
 
