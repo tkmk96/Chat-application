@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import {API_URL, APP_ID} from '../constants/api';
-import {AUTH_TOKEN} from '../constants/storageKeys';
+import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
 import {LOGGED_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
 
 export const registerUser = (email, customData,  history) => {
@@ -16,6 +16,7 @@ export const registerUser = (email, customData,  history) => {
             }
         });
         console.log(res);
+        localStorage.setItem(AUTH_EMAIL, email);
         dispatch({
             type: LOGGED_USER,
             payload: {email, ...customData}
@@ -29,30 +30,54 @@ export const registerUser = (email, customData,  history) => {
 export const loginUser = (email, password, history) => {
     return async dispatch => {
         const token = await fetchToken(email);
-
-
-        const res = await axios({
-            method: 'get',
-            url: `${API_URL}/${APP_ID}/user/${email}`,
-            headers: {
-                'Authorization': `bearer ${token}`,
-                'Accept': 'application/json',
-            }
-        });
-        console.log(res);
-        const user = {email, ...JSON.parse(res.data.customData)}
-
-        if(user.password != password){
+        const { customData} = await fetchData(email, token);
+        const user = {email, ...JSON.parse(customData)};
+        if(user.password !== password){
             return null; //idk
         }
-        dispatch(receivedToken(token));
+        localStorage.setItem(AUTH_EMAIL, email);
 
         dispatch({
             type: LOGGED_USER,
             payload: user
         });
-        history.push('/')
+        dispatch(receivedToken(token));
+        history.push('/');
     }
+};
+
+export const fetchUserData = (email, token) => {
+
+    return async dispatch => {
+        const {customData} = await fetchData(email, token);
+        dispatch({
+            type: LOGGED_USER,
+            payload: { email, ...JSON.parse(customData)}
+        });
+        dispatch(receivedToken(token));
+    }
+};
+
+const receivedToken = (token) => {
+
+    localStorage.setItem(AUTH_TOKEN, token);
+    return {
+        type: FETCH_AUTH_TOKEN,
+        payload: token
+    };
+
+};
+
+const fetchData = async (email, token) => {
+    const res = await axios({
+        method: 'get',
+        url: `${API_URL}/${APP_ID}/user/${email}`,
+        headers: {
+            'Authorization': `bearer ${token}`,
+            'Accept': 'application/json',
+        }
+    });
+    return res.data;
 };
 
 const fetchToken = async (email) => {
@@ -69,12 +94,3 @@ const fetchToken = async (email) => {
     return res.data;
 };
 
-const receivedToken = (token) => {
-
-    localStorage.setItem(AUTH_TOKEN, token);
-    return {
-        type: FETCH_AUTH_TOKEN,
-        payload: token
-    };
-
-};
