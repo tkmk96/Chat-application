@@ -10,4 +10,4 @@ export default ({label, type, input, meta: {touched, error}}) => {
         </div>
     );
 
-}
+};
