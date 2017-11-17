@@ -26,13 +26,26 @@ module.exports = {
                 test: /\.css$/
             },
             {
-                test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)$/,
+                test: /\.(jpe?g|png|gif|svg|eot|ttf)$/,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
                             name: 'assets/[name].[ext]',
                             limit: 10000
+                        }
+                    },
+                    'image-webpack-loader'
+                ]
+            },
+            {
+                test: /\.(woff|woff2)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            name: 'assets/[name].[ext]',
+                            limit: 80000
                         }
                     },
                     'image-webpack-loader'
