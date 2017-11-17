@@ -1,17 +1,23 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {setActiveChannel} from '../../actions/channelActions';
 
-export default (props) => {
-    return (
-        <div className='row'>
-            <div className=''>
-                <div className='card light-blue darken-3'>
-                    <div className='card-content white-text'>
-                        <span className='card-title'>{props.name}</span>
-
-                    </div>
+class Channel extends Component {
+    render() {
+        return (
+            <div className='row'>
+                <div className=''>
+                    <a style={{cursor: 'pointer'}} onClick={() => this.props.setActiveChannel(this.props.id)}>
+                        <div className='card light-blue darken-3'>
+                            <div className='card-content white-text'>
+                                <span className='card-title'>{this.props.name}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </div>
-    
-    );
-};
+        );
+    }
+}
+
+export default connect(null, {setActiveChannel})(Channel);

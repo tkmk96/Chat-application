@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import {fetchedAuthToken, loggedUser} from './authReducer';
-import {fetchChannel} from './channelReducer';
+import {activeChannel, fetchChannel} from './channelReducer';
 import {fetchMessages} from './messageReducer';
 
 export default combineReducers({
@@ -9,5 +9,6 @@ export default combineReducers({
     user: loggedUser,
     authToken: fetchedAuthToken,
     channels: fetchChannel,
-    messages: fetchMessages
+    messages: fetchMessages,
+    activeChannel: activeChannel
 });
