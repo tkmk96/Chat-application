@@ -2,7 +2,7 @@ import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
-import {LOGGED_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
+import {LOGGED_USER, LOGOUT_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
 
 export const registerUser = (email, customData,  history) => {
     return async dispatch => {
@@ -48,6 +48,13 @@ export const loginUser = (email, password, history) => {
         history.push('/');
     }
 };
+
+export function logoutUser() {
+    localStorage.clear();
+    return {
+        type: LOGOUT_USER
+    }
+}
 
 export const fetchUserData = (email, token) => {
 

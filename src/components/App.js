@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
+
+import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
+import { fetchUserData } from '../actions';
+
 import Registration from './Registration';
 import Login from './Login';
-import { fetchUserData } from '../actions';
-import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
+import Header from './Header';
 
 class App extends Component {
 
@@ -21,6 +24,7 @@ class App extends Component {
             <div className='container'>
                 <BrowserRouter>
                     <div>
+                        <Route path='/' component={Header}/>
                         <Route path='/register' component={Registration}/>
                         <Route path='/login' component={Login}/>
                     </div>
