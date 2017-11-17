@@ -3,6 +3,7 @@ import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
 import ChannelList from './channels/ChannelList';
 import Login from './Login';
+import MessagePanel from './messages/MessagePanel';
 
 class Main extends Component {
 
@@ -11,8 +12,9 @@ class Main extends Component {
             return <Login/>;
         }
         return(
-            <div>
+            <div className='row'>
                 <ChannelList />
+                <MessagePanel/>
             </div>
         );
     }

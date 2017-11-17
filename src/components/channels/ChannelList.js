@@ -20,22 +20,21 @@ class ChannelList extends Component {
 
     render() {
         return (
-            <div className='row'>
-                <div className='col s4'>
-                    {this.state.newChannel ?
-                        <ChannelForm toggleNewChannel={() => this._toggleNewChannel()}/>
-                        :
-                        <div className='center'>
-                            <button
-                                onClick={() => this.setState({newChannel: true})}
-                                className='btn-floating btn-large blue lighten-3'>
-                                <i className='material-icons'>add</i>
-                            </button>
-                        </div>
-                    }
-                    {this._renderChannels()}
-                </div>
+            <div className='col s4'>
+                {this.state.newChannel ?
+                    <ChannelForm toggleNewChannel={() => this._toggleNewChannel()}/>
+                    :
+                    <div className='center'>
+                        <button
+                            onClick={() => this.setState({newChannel: true})}
+                            className='btn-floating btn-large blue lighten-3'>
+                            <i className='material-icons'>add</i>
+                        </button>
+                    </div>
+                }
+                {this._renderChannels()}
             </div>
+
         );
     }
 
