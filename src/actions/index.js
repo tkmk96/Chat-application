@@ -56,15 +56,18 @@ export function logoutUser() {
     }
 }
 
-export const fetchUserData = (email, token) => {
+export const fetchUserData = () => {
 
-    return async dispatch => {
-        const {customData} = await fetchData(email, token);
-        dispatch({
-            type: LOGGED_USER,
-            payload: { email, ...JSON.parse(customData)}
-        });
-        dispatch(receivedToken(token));
+    return async (dispatch, getState) => {
+        const token = getState().authToken;
+        const email = getState().user.email;
+        if (token && email) {
+            const {customData} = await fetchData(email, token);
+            dispatch({
+                type: LOGGED_USER,
+                payload: {email, ...JSON.parse(customData)}
+            });
+        }
     }
 };
 

@@ -1,14 +1,14 @@
 import axios from 'axios';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
 import {FETCH_CHANNELS} from '../constants/actionTypes';
-import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
 import {uuid} from '../utils/uuidGenerator';
 
 export const createChannel = (name) => {
-    const token = localStorage.getItem(AUTH_TOKEN);
-    const email = localStorage.getItem(AUTH_EMAIL);
 
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const token = getState().authToken;
+        const email = getState().user.email;
+
         const res = await axios({
             method: 'patch',
             url: `${API_URL}/app/${APP_ID}`,
@@ -36,9 +36,9 @@ export const createChannel = (name) => {
 };
 
 export const fetchChannels = () => {
-    const token = localStorage.getItem(AUTH_TOKEN);
-    return async dispatch => {
-          const res = await axios({
+    return async (dispatch, getState) => {
+        const token = getState().authToken;
+        const res = await axios({
               method: 'get',
               url: `${API_URL}/app/${APP_ID}`,
               headers: {

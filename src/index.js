@@ -7,11 +7,12 @@ import reducers from './reducers';
 import App from './components/App';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min';
+import {getPersistedData} from './utils/getPersistedData';
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(reducers, {}, composeEnhancers(applyMiddleware(reduxThunk)));
+const store = createStore(reducers, getPersistedData(), composeEnhancers(applyMiddleware(reduxThunk)));
 
 ReactDOM.render(
     <Provider store={store}>

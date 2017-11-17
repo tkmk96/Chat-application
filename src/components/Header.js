@@ -7,7 +7,7 @@ import {logoutUser} from '../actions/index';
 class Header extends Component {
     _onLogoutClick(){
         this.props.logoutUser();
-        this.props.history.push('/login');
+        this.props.history.push('/');
     }
 
     render(){
