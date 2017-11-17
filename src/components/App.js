@@ -5,6 +5,8 @@ import Registration from './Registration';
 import Login from './Login';
 import { fetchUserData } from '../actions';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
+import ChannelList from './channels/ChannelList';
+import ChannelForm from './channels/ChannelForm';
 
 class App extends Component {
 
@@ -21,8 +23,11 @@ class App extends Component {
             <div className='container'>
                 <BrowserRouter>
                     <div>
+                        <Route exact path='/' component={ChannelList}/>
                         <Route path='/register' component={Registration}/>
                         <Route path='/login' component={Login}/>
+                        <Route path='/channels/new' component={ChannelList}/>
+                        <Route path='/channels/new' component={ChannelForm}/>
                     </div>
                 </BrowserRouter>
             </div>
