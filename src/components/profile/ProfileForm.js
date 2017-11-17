@@ -22,15 +22,12 @@ class ProfileForm extends Component {
         };
 
         return (
-            <div className='row'>
-                <div className='col s8 offset-s2'>
-                    <h4 className='center'>Your profile</h4>
-                    <div className='divider'/>
-                    <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
-                        <Field key={field.name} component={FormField} {...field} />
-                        <button className='waves-effect waves-light btn' type='submit'>Save changes</button>
-                    </form>
-                </div>
+            <div>
+                <h5 className='center'>Edit profile:</h5>
+                <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
+                    <Field key={field.name} component={FormField} {...field} />
+                    <button className='waves-effect waves-light btn' type='submit'>Save changes</button>
+                </form>
             </div>
         );
     }
