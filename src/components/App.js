@@ -8,6 +8,8 @@ import { fetchUserData } from '../actions';
 import Registration from './Registration';
 import Login from './Login';
 import Header from './Header';
+import ChannelList from './channels/ChannelList';
+import ChannelForm from './channels/ChannelForm';
 
 class App extends Component {
 
@@ -25,8 +27,11 @@ class App extends Component {
                 <BrowserRouter>
                     <div>
                         <Route path='/' component={Header}/>
+                        <Route exact path='/' component={ChannelList}/>
                         <Route path='/register' component={Registration}/>
                         <Route path='/login' component={Login}/>
+                        <Route path='/channels/new' component={ChannelList}/>
+                        <Route path='/channels/new' component={ChannelForm}/>
                     </div>
                 </BrowserRouter>
             </div>
