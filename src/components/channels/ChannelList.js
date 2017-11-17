@@ -47,7 +47,7 @@ class ChannelList extends Component {
 
     _renderChannels() {
         return this.props.channels.map(channel => {
-            return <Channel key={channel.name} {...channel} />;
+            return <Channel key={channel.id} {...channel} />;
         });
     }
 }
