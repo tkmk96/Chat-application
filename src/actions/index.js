@@ -57,7 +57,6 @@ export function logoutUser() {
 }
 
 export const fetchUserData = () => {
-
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
@@ -71,8 +70,31 @@ export const fetchUserData = () => {
     }
 };
 
-const receivedToken = (token) => {
+export const editUser = (name) => {
+    return async (dispatch, getState) => {
+        const token = getState().authToken;
+        const email = getState().user.email;
+        const res = await axios({
+            method: 'put',
+            url: `${API_URL}/${APP_ID}/user/${email}`,
+            data: {customData: JSON.stringify({name})},
+            headers: {
+                'Authorization': `bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log(res);
+        const {customData} = res.data;
 
+        dispatch({
+            type: LOGGED_USER,
+            payload: {email, ...JSON.parse(customData)}
+        });
+    }
+};
+
+const receivedToken = (token) => {
     localStorage.setItem(AUTH_TOKEN, token);
     return {
         type: FETCH_AUTH_TOKEN,
