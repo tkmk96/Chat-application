@@ -2,6 +2,7 @@ import axios from 'axios';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
 import {FETCH_CHANNELS} from '../constants/actionTypes';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
+import {uuid} from '../utils/uuidGenerator';
 
 export const createChannel = (name) => {
     const token = localStorage.getItem(AUTH_TOKEN);
@@ -20,7 +21,7 @@ export const createChannel = (name) => {
                 path: `${API_CHANNEL}/-`,
                 op: 'add',
                 value: {
-
+                    id: uuid(),
                     name
                 }
             }]
