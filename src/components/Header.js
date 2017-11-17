@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link, withRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import {logoutUser} from '../actions/index';
-
-
 
 class Header extends Component {
     _onLogoutClick(){
@@ -24,7 +22,7 @@ class Header extends Component {
                     <ul className="nav navbar-nav">
                         <li>
                             <Link to="/profile">
-                                ${this.props.user.email}
+                                {this.props.user.name}
                             </Link>
                         </li>
                         <li>
@@ -41,4 +39,4 @@ function mapStateToProps({user}) {
     return {user};
 }
 
-export default connect (mapStateToProps, {logoutUser})(withRouter(Header));
+export default connect (mapStateToProps, {logoutUser})(Header);
