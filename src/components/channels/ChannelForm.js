@@ -32,6 +32,7 @@ class ChannelForm extends Component {
 
     _onSubmit(values) {
         this.props.createChannel(values.name);
+        this.props.history.push('/');
     }
 }
 

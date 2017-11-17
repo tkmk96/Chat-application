@@ -11,7 +11,7 @@ import 'materialize-css/dist/css/materialize.min.css';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(reducers, { channels: [{id: '12', name: 'channel 1'}, {id: '13', name: 'My channel'}]}, composeEnhancers(applyMiddleware(reduxThunk)));
+const store = createStore(reducers, {}, composeEnhancers(applyMiddleware(reduxThunk)));
 
 ReactDOM.render(
     <Provider store={store}>

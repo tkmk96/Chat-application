@@ -2,8 +2,14 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Channel from './Channel';
+import { fetchChannels } from '../../actions/channelActions';
 
 class ChannelList extends Component {
+
+    componentDidMount() {
+        this.props.fetchChannels();
+    }
+
     render() {
         return(
             <div className='col-md-4'>
@@ -19,7 +25,7 @@ class ChannelList extends Component {
 
     _renderChannels() {
         return this.props.channels.map(channel => {
-            return <Channel key={channel.id} {...channel} />;
+            return <Channel key={channel.name} {...channel} />;
         });
     }
 }
@@ -30,4 +36,4 @@ function mapStateToProps({channels}) {
     };
 }
 
-export default connect(mapStateToProps)(ChannelList);
+export default connect(mapStateToProps, {fetchChannels})(ChannelList);
