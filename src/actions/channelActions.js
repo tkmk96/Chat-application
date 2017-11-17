@@ -2,6 +2,7 @@ import axios from 'axios';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
 import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
 import {uuid} from '../utils/uuidGenerator';
+import {fetchMessages} from './messageActions';
 
 export const createChannel = (name) => {
 
@@ -50,6 +51,9 @@ export const fetchChannels = () => {
           dispatch({
               type: FETCH_CHANNELS,
               payload: res.data.channels
-          })
+          });
+          if (res.data.channels.length) {
+            dispatch(fetchMessages(res.data.channels[0].id));
+          }
       };
 };
