@@ -12,7 +12,8 @@ export const fetchChannel = (state = [], action) => {
 export const activeChannel = (state = null, action) => {
     switch (action.type) {
         case ACTIVE_CHANNEL:
-            return action.payload;
+            const {channelId, messages} = action.payload;
+            return {channelId, messages};
         default:
             return state;
     }
