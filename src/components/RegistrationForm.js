@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Link, withRouter } from 'react-router-dom';
-import RegistrationField from './RegistrationField';
+import RegistrationField from './FormField';
 import { registerUser } from '../actions';
 import {connect} from 'react-redux';
 
@@ -17,13 +17,16 @@ const formFields = [
 class RegistrationForm extends Component {
     render() {
         return (
-            <div className='col-md-6 col-md-offset-3'>
-                <h3>Registration</h3>
-                <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
-                    {this._renderFields()}
-                    <button className='btn btn-primary' type='submit'>Create a new Channeler!</button>
-                    <Link className='pull-right' to='/login'>I have channeled before</Link>
-                </form>
+            <div className='row'>
+                <div className='col s6 offset-s3'>
+                    <h4 className='center'>Registration</h4>
+                    <div className='divider'/>
+                    <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
+                        {this._renderFields()}
+                        <button className='waves-effect waves-light btn' type='submit'>Create a new Channeler!</button>
+                        <Link className='right' to='/login'>I have channeled before</Link>
+                    </form>
+                </div>
             </div>
         );
     }

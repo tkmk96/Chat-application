@@ -12,23 +12,23 @@ class Header extends Component {
 
     render(){
         return (
-            <nav className="navbar navbar-inverse">
-                <div className="container-fluid">
-                    <div className="navbar-header">
-                        <Link to="/">
-                            <h1>The channeling</h1>
-                        </Link>
-                    </div>
-                    <ul className="nav navbar-nav">
-                        <li>
-                            <Link to="/profile">
-                                {this.props.user.name}
-                            </Link>
-                        </li>
-                        <li>
-                            <button className="btn btn-danger" onClick={this._onLogoutClick.bind(this)}>Log out</button>
-                        </li>
-                    </ul>
+            <nav>
+                <div className="nav-wrapper">
+                    <Link className='brand-logo' to="/">
+                        The channeling
+                    </Link>
+                    {this.props.user.name &&
+                        <ul className="right hide-on-med-and-down">
+                            <li>
+                                <Link to="/profile">
+                                    {this.props.user.name}
+                                </Link>
+                            </li>
+                            <li>
+                                <button className="btn" onClick={this._onLogoutClick.bind(this)}>Log out</button>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </nav>
         );

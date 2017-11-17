@@ -30,8 +30,6 @@ class App extends Component {
                         <Route exact path='/' component={ChannelList}/>
                         <Route path='/register' component={Registration}/>
                         <Route path='/login' component={Login}/>
-                        <Route path='/channels/new' component={ChannelList}/>
-                        <Route path='/channels/new' component={ChannelForm}/>
                     </div>
                 </BrowserRouter>
             </div>

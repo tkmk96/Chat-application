@@ -2,11 +2,16 @@ import React from 'react';
 
 export default (props) => {
     return (
-        <div className='panel panel-info'>
-            <div className='panel-heading'>
-                <h3 className='panel-title'>{props.name}</h3>
+        <div className='row'>
+            <div className=''>
+                <div className='card light-blue darken-3'>
+                    <div className='card-content white-text'>
+                        <span className='card-title'>{props.name}</span>
+
+                    </div>
+                </div>
             </div>
-            <div className='panel-body'/>
         </div>
+    
     );
 };

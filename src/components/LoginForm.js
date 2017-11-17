@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
 
-import RegistrationField from './RegistrationField';
+import RegistrationField from './FormField';
 import {loginUser} from '../actions/index';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -28,13 +28,16 @@ class LoginForm extends Component {
 
     render(){
         return (
-            <div className='col-md-6 col-md-offset-3'>
-                <h3>Login</h3>
-                <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
-                    {this._renderFields()}
-                    <button className='btn btn-primary' type='submit'>Go</button>
-                    <Link style={{marginLeft: '20px'}} to='/register'>New channeler!</Link>
-                </form>
+            <div className='row'>
+                <div className='col s6 offset-s3'>
+                    <h4 className='center'>Login</h4>
+                    <div className='divider'/>
+                    <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
+                        {this._renderFields()}
+                        <button className='waves-effect waves-light btn' type='submit'>Go</button>
+                        <Link className='right' to='/register'>New channeler!</Link>
+                    </form>
+                </div>
             </div>
         );
     }
