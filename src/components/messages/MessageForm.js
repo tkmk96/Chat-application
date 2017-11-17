@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
-import {reduxForm, Field} from 'redux-form';
+import {reduxForm, Field, reset} from 'redux-form';
 import { connect } from 'react-redux';
 import {createMessage} from '../../actions/messageActions';
-import FormField from '../FormField';
-
-const renderTextArea = (field) => {
-    return <textarea></textarea>;
-};
 
 class MessageForm extends Component {
     render() {
@@ -22,11 +17,16 @@ class MessageForm extends Component {
 
     _onSubmit(values) {
         this.props.createMessage(values.message);
+
     }
 }
 
+const afterSubmit = (result, dispatch) =>
+    dispatch(reset('messageForm'));
+
 export default reduxForm({
-    form: 'messageForm'
+    form: 'messageForm',
+    onSubmitSuccess: afterSubmit,
 })(
     connect(null, {createMessage})(MessageForm)
 );

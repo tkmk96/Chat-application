@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
-import {ACTIVE_CHANNEL, FETCH_MESSAGES} from '../constants/actionTypes';
+import {SET_ACTIVE_CHANNEL, CREATE_MESSAGE, FETCH_MESSAGES} from '../constants/actionTypes';
 import {uuid} from '../utils/uuidGenerator';
 
 export const createMessage = (text) => {
@@ -8,7 +8,7 @@ export const createMessage = (text) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
-        const channelId = getState().activeChannel;
+        const channelId = getState().activeChannel.channelId;
 
         const res = await axios({
             method: 'post',
@@ -27,8 +27,8 @@ export const createMessage = (text) => {
 
         console.log(res);
         dispatch({
-            type: FETCH_MESSAGES,
-            payload: res.data.channels
+            type: CREATE_MESSAGE,
+            payload: {channelId, message: res.data}
         })
     }
 };
@@ -49,7 +49,7 @@ export const fetchMessages = (channelId) => {
 
         console.log(res);
         dispatch({
-            type: ACTIVE_CHANNEL,
+            type: SET_ACTIVE_CHANNEL,
             payload: {channelId, messages: res.data}
         })
     };

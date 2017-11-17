@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
-import {ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
+import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
 import {uuid} from '../utils/uuidGenerator';
 
 export const createChannel = (name) => {
@@ -52,11 +52,4 @@ export const fetchChannels = () => {
               payload: res.data.channels
           })
       };
-};
-
-export const setActiveChannel = (channelId) => {
-    return {
-        type: ACTIVE_CHANNEL,
-        payload: channelId
-    }
 };
