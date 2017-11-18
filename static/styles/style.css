@@ -14,3 +14,13 @@
 .channel:hover {
     background-color: #0288d1 !important;
 }
+
+.channel {
+    width: 90%;
+}
+
+.channelsList {
+    height: 470px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -2,7 +2,7 @@ import axios from 'axios';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
 import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
 import {uuid} from '../utils/uuidGenerator';
-import {convertChannelsArray} from '../utils/convert';
+import {filterAndConvertChannels} from '../utils/convert';
 
 export const createChannel = (name) => {
 
@@ -23,14 +23,15 @@ export const createChannel = (name) => {
                 op: 'add',
                 value: {
                     id: uuid(),
-                    name
+                    name,
+                    customData: JSON.stringify({creator: email})
                 }
             }]
         });
 
         dispatch({
             type: FETCH_CHANNELS,
-            payload: convertChannelsArray(res.data.channels)
+            payload: filterAndConvertChannels(res.data.channels, email)
         });
     };
 };
@@ -38,6 +39,7 @@ export const createChannel = (name) => {
 export const fetchChannels = () => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
+        const email = getState().user.email;
         const res = await axios({
             method: 'get',
             url: `${API_URL}/app/${APP_ID}`,
@@ -46,7 +48,7 @@ export const fetchChannels = () => {
                 'Authorization': `bearer ${token}`
             }
         });
-        const channels = convertChannelsArray(res.data.channels);
+        const channels = filterAndConvertChannels(res.data.channels, email);
 
         dispatch({
             type: FETCH_CHANNELS,

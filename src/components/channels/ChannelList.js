@@ -33,7 +33,9 @@ class ChannelList extends Component {
                         </button>
                     </div>
                 }
-                {this._renderChannels()}
+                <div className='channelsList'>
+                    {this._renderChannels()}
+                </div>
             </div>
 
         );

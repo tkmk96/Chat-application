@@ -21,12 +21,21 @@ class MessageForm extends Component {
     }
 }
 
+function validate(values) {
+    const errors = {};
+    if (!values.message) {
+        errors.message = 'Error';
+    }
+    return errors;
+}
+
 const afterSubmit = (result, dispatch) =>
     dispatch(reset('messageForm'));
 
 export default reduxForm({
     form: 'messageForm',
     onSubmitSuccess: afterSubmit,
+    validate
 })(
     connect(null, {createMessage})(MessageForm)
 );
