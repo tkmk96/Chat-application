@@ -24,10 +24,11 @@ class ChannelList extends Component {
                 {this.state.newChannel ?
                     <ChannelForm toggleNewChannel={() => this._toggleNewChannel()}/>
                     :
-                    <div className='center'>
+                    <div className='center' style={{margin: '10px 0'}}>
                         <button
                             onClick={() => this.setState({newChannel: true})}
-                            className='btn-floating btn-large blue lighten-3'>
+                            className='btn-floating btn-large blue lighten-3'
+                        >
                             <i className='material-icons'>add</i>
                         </button>
                     </div>

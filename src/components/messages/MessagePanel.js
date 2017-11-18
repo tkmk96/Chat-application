@@ -8,9 +8,13 @@ class MessagePanel extends Component {
     render() {
         return(
             <div className='col s8 messagePanel'>
-                <MessagePanelHeader name={this.props.activeChannel.name}/>
-                <MessageList/>
-                <MessageForm/>
+                {this.props.activeChannel &&
+                    <div>
+                        <MessagePanelHeader name={this.props.activeChannel.name}/>
+                        <MessageList />
+                        <MessageForm />
+                    </div>
+                }
             </div>
         );
     }

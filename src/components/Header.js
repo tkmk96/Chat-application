@@ -14,7 +14,7 @@ class Header extends Component {
         return (
             <nav>
                 <div className="nav-wrapper">
-                    <Link className='brand-logo' to="/">
+                    <Link className='brand-logo' to="/" style={{marginLeft: '15px'}}>
                         The channeling
                     </Link>
                     {this.props.user.name &&
@@ -25,7 +25,13 @@ class Header extends Component {
                                 </Link>
                             </li>
                             <li>
-                                <button className="btn" onClick={this._onLogoutClick.bind(this)}>Log out</button>
+                                <button
+                                    className="btn"
+                                    onClick={this._onLogoutClick.bind(this)}
+                                    style={{margin: '0 15px 0 10px'}}
+                                >
+                                    Log out
+                                </button>
                             </li>
                         </ul>
                     }

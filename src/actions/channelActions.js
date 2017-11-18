@@ -28,7 +28,6 @@ export const createChannel = (name) => {
             }]
         });
 
-        console.log(res);
         dispatch({
             type: FETCH_CHANNELS,
             payload: convertChannelsArray(res.data.channels)
@@ -74,7 +73,6 @@ export const setActiveChannel = (channelId) => {
             }
         });
 
-        console.log(res);
         dispatch({
             type: SET_ACTIVE_CHANNEL,
             payload: { ...channels[channelId], messages: res.data}

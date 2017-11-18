@@ -6,7 +6,7 @@ import {createMessage} from '../../actions/messageActions';
 class MessageForm extends Component {
     render() {
         return(
-            <div>
+            <div style={{marginTop: '15px'}}>
                 <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
                     <Field name='message' component='textarea' />
                     <button className='waves-effect waves-light btn right' type='submit'>Send</button>

@@ -3,15 +3,14 @@
 }
 
 .messagePanel {
-    margin-top: 15px;
-}
-
-.messagePanelHeader {
-    margin-bottom: 10px;
+    margin-top: 12px;
 }
 
 .messageList {
     height: 400px;
     overflow-y: auto;
+}
 
+.channel:hover {
+    background-color: #0288d1 !important;
 }

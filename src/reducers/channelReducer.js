@@ -9,7 +9,7 @@ export const fetchChannel = (state = {}, action) => {
     }
 };
 
-export const activeChannel = (state = {messages: []}, action) => {
+export const activeChannel = (state = null, action) => {
     switch (action.type) {
         case SET_ACTIVE_CHANNEL:
             const {messages} = action.payload;
