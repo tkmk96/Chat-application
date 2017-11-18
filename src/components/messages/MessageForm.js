@@ -9,7 +9,7 @@ class MessageForm extends Component {
             <div>
                 <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
                     <Field name='message' component='textarea' />
-                    <button className='waves-effect waves-light btn' type='submit'>Send</button>
+                    <button className='waves-effect waves-light btn right' type='submit'>Send</button>
                 </form>
             </div>
         );

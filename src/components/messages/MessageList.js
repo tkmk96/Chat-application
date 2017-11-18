@@ -1,26 +1,34 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Message from './Message';
+import * as ReactDOM from 'react-dom';
 
 class MessageList extends Component {
     render() {
+        const {activeChannel} = this.props;
         return(
-            <div>
-                {this._renderMessages()}
+            <div className='messageList' ref={(list) => this.list = list }>
+                {this._renderMessages(activeChannel.messages)}
             </div>
         );
     }
 
-    _renderMessages() {
-        return this.props.messages.map(message => {
-            return <Message key={message.id} text={message.value}/>;
+    componentDidUpdate() {
+        this.list.scrollTop = this.list.scrollHeight;
+    }
+
+    _renderMessages(messages) {
+        return messages.map(message => {
+            const myMessage = message.createdBy === this.props.user.email;
+            return <Message key={message.id} text={message.value} myMessage={myMessage ? 'myMessage' : ''}/>;
         });
     }
 }
 
-function mapStateToProps({activeChannel}) {
+function mapStateToProps({activeChannel, user}) {
     return {
-        messages: activeChannel.messages
+        user,
+        activeChannel
     };
 }
 export default connect(mapStateToProps)(MessageList);

@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
+import MessagePanelHeader from './MessagePanelHeader';
+import {connect} from 'react-redux';
 
 class MessagePanel extends Component {
     render() {
         return(
-            <div className='col s8'>
+            <div className='col s8 messagePanel'>
+                <MessagePanelHeader name={this.props.activeChannel.name}/>
                 <MessageList/>
                 <MessageForm/>
             </div>
@@ -13,4 +16,9 @@ class MessagePanel extends Component {
     }
 }
 
-export default MessagePanel;
+function mapStateToProps({activeChannel}) {
+    return {
+        activeChannel
+    };
+}
+export default connect(mapStateToProps)(MessagePanel);

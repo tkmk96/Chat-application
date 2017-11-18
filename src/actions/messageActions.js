@@ -8,11 +8,11 @@ export const createMessage = (text) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
-        const channelId = getState().activeChannel.channelId;
+        const activeChannel = getState().activeChannel;
 
         const res = await axios({
             method: 'post',
-            url: `${API_URL}/app/${APP_ID}/channel/${channelId}/message`,
+            url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message`,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json-patch+json',
@@ -28,29 +28,7 @@ export const createMessage = (text) => {
         console.log(res);
         dispatch({
             type: CREATE_MESSAGE,
-            payload: {channelId, message: res.data}
+            payload: {activeChannel, message: res.data}
         })
     }
-};
-
-export const fetchMessages = (channelId) => {
-//GET /api/app/{appId}/channel/{channelId}/message
-    console.log(channelId);
-    return async (dispatch, getState) => {
-        const token = getState().authToken;
-        const res = await axios({
-            method: 'get',
-            url: `${API_URL}/app/${APP_ID}/channel/${channelId}/message?lastN=15`,
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `bearer ${token}`
-            }
-        });
-
-        console.log(res);
-        dispatch({
-            type: SET_ACTIVE_CHANNEL,
-            payload: {channelId, messages: res.data}
-        })
-    };
 };

@@ -1,0 +1,17 @@
+.myMessage {
+    text-align: end;
+}
+
+.messagePanel {
+    margin-top: 15px;
+}
+
+.messagePanelHeader {
+    margin-bottom: 10px;
+}
+
+.messageList {
+    height: 400px;
+    overflow-y: auto;
+
+}
