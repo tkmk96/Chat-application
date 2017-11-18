@@ -13,6 +13,10 @@ class MessageList extends Component {
         );
     }
 
+    componentDidMount() {
+        this.list.scrollTop = this.list.scrollHeight;
+    }
+
     componentDidUpdate() {
         this.list.scrollTop = this.list.scrollHeight;
     }
