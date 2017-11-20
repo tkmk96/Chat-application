@@ -74,9 +74,7 @@ export const editUserName = (name) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
-        const editedData = JSON.stringify({name});
-
-        const res = await updateUserData(editedData, email, token);
+        const res = await updateUserData({name}, getState, email, token);
 
         const customData = JSON.parse(res.customData);
 
@@ -86,6 +84,8 @@ export const editUserName = (name) => {
         });
     }
 };
+
+
 
 export const uploadAvatar = (file) => {
     return async (dispatch, getState)=> {
@@ -109,8 +109,7 @@ export const uploadAvatar = (file) => {
         console.log(res);
 
         const avatarUrl = await fetchFileUrl(res.data[0].id, token);
-        const editedData = JSON.stringify({avatarUrl});
-        const updateUserRes = await updateUserData(editedData, email, token);
+        const updateUserRes = await updateUserData({avatarUrl}, getState, email, token);
 
         const customData = JSON.parse(updateUserRes.customData);
 
@@ -121,7 +120,9 @@ export const uploadAvatar = (file) => {
     }
 };
 
-const updateUserData = async(customData, email, token) => {
+const updateUserData = async(newCustomData, getState, email, token) => {
+    const customData = updateCustomData(getState().user, newCustomData);
+
     const res = await axios({
         method: 'put',
         url: `${API_URL}/${APP_ID}/user/${email}`,
@@ -134,7 +135,7 @@ const updateUserData = async(customData, email, token) => {
     });
     console.log(res);
     return res.data;
-}
+};
 
 const fetchFileUrl = async (id, token) => {
     const res = await axios({
@@ -146,7 +147,7 @@ const fetchFileUrl = async (id, token) => {
         }
     });
     return res.data;
-}
+};
 
 const receivedToken = (token) => {
     localStorage.setItem(AUTH_TOKEN, token);
@@ -188,3 +189,6 @@ const fetchToken = async (email) => {
     return res.data;
 };
 
+const updateCustomData = ({name, password, avatarUrl}, customData) => {
+    return JSON.stringify(Object.assign({}, {name, password, avatarUrl}, customData));
+};
