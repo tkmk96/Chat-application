@@ -24,7 +24,7 @@ class RegistrationForm extends Component {
                     <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
                         {this._renderFields()}
                         <button className='waves-effect waves-light btn' type='submit'>Create a new Channeler!</button>
-                        <Link className='right' to='/login'>I have channeled before</Link>
+                        <Link className='right' to='/'>I have channeled before</Link>
                     </form>
                 </div>
             </div>
