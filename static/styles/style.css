@@ -15,12 +15,43 @@
     background-color: #0288d1 !important;
 }
 
-.channel {
-    width: 90%;
-}
-
 .channelsList {
     height: 470px;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.profile-panel {
+    /*border-top: solid 1px #039be5;*/
+    border-bottom: solid 3px #039be5;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px 0 40px 0;
+}
+
+.profile-avatar > img {
+    width: 100%;
+    max-height: 500px;
+}
+
+.profile-info{
+    margin: 10px 0 20px 0;
+}
+
+.profile-info > h6 {
+    margin-left: 10px;
+}
+
+.profile-edit {
+    margin: 20px 0;
+}
+
+.avatar-dropzone {
+    text-align: center;
+    margin: 20px 0;
+    border: dashed 1px black;
+}
+
+.avatar-dropzone:hover {
+    cursor: pointer;
 }
