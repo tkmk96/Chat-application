@@ -2,18 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { reduxForm, Field} from 'redux-form';
 
-import {editUser} from '../../actions/index';
+import {editUserName} from '../../actions/index';
 import FormField from '../FormField';
 
-
-
-
 class ProfileForm extends Component {
-    componentDidMount () {
-        this.props.initialize({ name: this.props.name });
-
-    }
-
     render(){
         const field = {
             label: 'Name',
@@ -22,25 +14,23 @@ class ProfileForm extends Component {
         };
 
         return (
-            <div>
-                <h5 className='center'>Edit profile:</h5>
-                <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
-                    <Field key={field.name} component={FormField} {...field} />
-                    <button className='waves-effect waves-light btn' type='submit'>Save changes</button>
-                </form>
+            <div className="profile-edit profile-panel">
+                <h5>Edit profile:</h5>
+                <div>
+                    <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
+                        <Field key={field.name} component={FormField} {...field} />
+                        <button className='waves-effect waves-light btn center' type='submit'>
+                            <i className="small material-icons">edit</i> Edit
+                        </button>
+                    </form>
+                </div>
             </div>
         );
     }
 
-    _renderFields() {
-        return formFields.map(field => {
-            return <Field key={field.name} component={FormField} {...field} />;
-        });
-    }
-
     _onSubmit(values) {
         const {name} = values;
-        this.props.editUser(name, this.props.history);
+        this.props.editUserName(name);
 
     }
 }
@@ -64,5 +54,5 @@ export default reduxForm({
     form: 'editProfileForm',
     validate,
 })(
-    connect(mapStateToProps, { editUser})(ProfileForm)
+    connect(mapStateToProps, { editUserName})(ProfileForm)
 );
