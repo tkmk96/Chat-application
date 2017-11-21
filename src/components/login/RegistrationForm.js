@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Link, withRouter } from 'react-router-dom';
-import RegistrationField from './FormField';
-import { registerUser } from '../actions';
+import RegistrationField from '../FormField';
+import { registerUser } from '../../actions/index';
 import {connect} from 'react-redux';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
