@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { reduxForm, Field} from 'redux-form';
+import { reduxForm, Field, reset} from 'redux-form';
 
 import {editUserName} from '../../actions/index';
 import FormField from '../FormField';
@@ -38,8 +38,8 @@ class ProfileForm extends Component {
 function validate({name}){
     const errors = {};
 
-    if (!name || name.length < 5){
-        errors.name = 'Name must contain at least 5 characters!';
+    if (!name || name.length < 3){
+        errors.name = 'Name must contain at least 3 characters!';
     }
 
     return errors;
@@ -49,10 +49,13 @@ function mapStateToProps({user}) {
     return {name: user.name};
 }
 
+const afterSubmit = (result, dispatch) =>
+    dispatch(reset('editProfileForm'));
 
 export default reduxForm({
     form: 'editProfileForm',
     validate,
+    onSubmitSuccess: afterSubmit,
 })(
     connect(mapStateToProps, { editUserName})(ProfileForm)
 );

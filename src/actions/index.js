@@ -2,7 +2,7 @@ import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
-import {LOGGED_USER, LOGOUT_USER, FETCH_AUTH_TOKEN, UPDATE_USER} from '../constants/actionTypes';
+import {FETCH_USER, LOGOUT_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
 
 export const registerUser = (email, customData,  history) => {
     return async dispatch => {
@@ -17,7 +17,7 @@ export const registerUser = (email, customData,  history) => {
         });
         localStorage.setItem(AUTH_EMAIL, email);
         dispatch({
-            type: LOGGED_USER,
+            type: FETCH_USER,
             payload: {email, ...customData}
         });
         const token = await fetchToken(email);
@@ -41,7 +41,7 @@ export const loginUser = (email, password, history) => {
         localStorage.setItem(AUTH_EMAIL, email);
 
         dispatch({
-            type: LOGGED_USER,
+            type: FETCH_USER,
             payload: user
         });
         dispatch(receivedToken(token));
@@ -63,7 +63,7 @@ export const fetchUserData = () => {
         if (token && email) {
             const {customData} = await fetchData(email, token);
             dispatch({
-                type: LOGGED_USER,
+                type: FETCH_USER,
                 payload: {email, ...JSON.parse(customData)}
             });
         }
@@ -73,14 +73,12 @@ export const fetchUserData = () => {
 export const editUserName = (name) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
-        const email = getState().user.email;
-        const res = await updateUserData({name}, getState, email, token);
+        const {email, customData} = await updateUserData({name}, getState().user, token);
 
-        const customData = JSON.parse(res.customData);
 
         dispatch({
-            type: UPDATE_USER,
-            payload: {...customData }
+            type: FETCH_USER,
+            payload: {email, ...JSON.parse(customData) }
         });
     }
 };
@@ -90,7 +88,6 @@ export const editUserName = (name) => {
 export const uploadAvatar = (file) => {
     return async (dispatch, getState)=> {
         const token = getState().authToken;
-        const email = getState().user.email;
 
         let formData = new FormData();
         formData.append('Files', file);
@@ -106,26 +103,22 @@ export const uploadAvatar = (file) => {
             data: formData
 
         });
-        console.log(res);
-
         const avatarUrl = await fetchFileUrl(res.data[0].id, token);
-        const updateUserRes = await updateUserData({avatarUrl}, getState, email, token);
-
-        const customData = JSON.parse(updateUserRes.customData);
+        const {email, customData} = await updateUserData({avatarUrl}, getState().user, token);
 
         dispatch({
-            type: UPDATE_USER,
-            payload: {...customData }
+            type: FETCH_USER,
+            payload: {email, ...JSON.parse(customData) }
         });
     }
 };
 
-const updateUserData = async(newCustomData, getState, email, token) => {
-    const customData = updateCustomData(getState().user, newCustomData);
+const updateUserData = async(newCustomData, user, token) => {
+    const customData = updateCustomData(newCustomData, user);
 
     const res = await axios({
         method: 'put',
-        url: `${API_URL}/${APP_ID}/user/${email}`,
+        url: `${API_URL}/${APP_ID}/user/${user.email}`,
         data: JSON.stringify(customData),
         headers: {
             'Authorization': `bearer ${token}`,
@@ -133,7 +126,6 @@ const updateUserData = async(newCustomData, getState, email, token) => {
             'Content-Type': 'application/json-patch+json'
         }
     });
-    console.log(res);
     return res.data;
 };
 
@@ -189,6 +181,6 @@ const fetchToken = async (email) => {
     return res.data;
 };
 
-const updateCustomData = ({name, password, avatarUrl}, customData) => {
+const updateCustomData = (customData, {name, password, avatarUrl}) => {
     return JSON.stringify(Object.assign({}, {name, password, avatarUrl}, customData));
 };
