@@ -15,6 +15,18 @@
     background-color: #0288d1 !important;
 }
 
+.channelHeader {
+    width: 88%;
+    display: inline-block;
+}
+
+.channelMenuBtn {
+    position: absolute;
+    right: inherit;
+    bottom: inherit;
+    display: inline-block;
+}
+
 .channelsList {
     height: 470px;
     overflow-y: auto;
