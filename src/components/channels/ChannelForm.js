@@ -14,15 +14,17 @@ class ChannelForm extends Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.props.handleSubmit((values) => this.props.onSubmit(values.name))} >
-                    <Field name='name' component={FormField} placeholder='Name' type='text' />
-                    <button className='waves-effect waves-light btn' type='submit'>
-                        Save
-                    </button>
-                    <button type='button' onClick={this.props.onCancel} className='waves-effect waves-light red btn right'>Cancel</button>
-                </form>
-            </div>
+            <form className={this.props.className} onSubmit={this.props.handleSubmit((values) => this.props.onSubmit(values.name))}>
+                <Field name='name' component={FormField} placeholder='Name' type='text'/>
+                <button className='waves-effect waves-light btn' type='submit'>
+                    Save
+                </button>
+                {this.props.onCancel &&
+                <button type='button' onClick={this.props.onCancel} className='waves-effect waves-light red btn right'>
+                    Cancel
+                </button>
+                }
+            </form>
         );
     }
 
