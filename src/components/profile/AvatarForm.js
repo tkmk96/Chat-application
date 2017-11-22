@@ -11,9 +11,8 @@ class AvatarForm extends Component {
 
     render(){
         return (
-            <div className="profile-avatar profile-panel">
-                <h5>Edit avatar:</h5>
-                <div className="text-center avatar-dropzone">
+            <div className="profile-avatar" title="Drag & drop or select manually">
+                <div className="text-center avatar-dropzone waves-light">
                     <Dropzone
                         accept="image/gif, image/png, image/jpeg, image/bmp"
                         className="dropzone"
@@ -21,6 +20,7 @@ class AvatarForm extends Component {
                         onDrop={this._handleFiles.bind(this)}
                     >
                         <i className="large material-icons">cloud_upload</i>
+                        <br/>Upload new
                     </Dropzone>
                 </div>
             </div>

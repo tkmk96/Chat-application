@@ -7,24 +7,33 @@ import AvatarForm from './AvatarForm';
 class Profile extends Component {
     render(){
         return (
-            <div className="row">
-                <div className="col s6 offset-s3">
-                    <div className="profile-avatar">
-                        <img src={this.props.user.avatarUrl} alt="avatar"/>
-                    </div>
-                    <div className="profile-info profile-panel">
-                        <div>
-                            <h5>Profile info: </h5>
+            <div className="profile-page">
+                <div className="row profile-avatar-row">
+                    <div className="col s4 offset-s1">
+                        <div className="profile-avatar-img" style={{backgroundImage: `url("${this.props.user.avatarUrl}")`}}>
+                            {/*<img src={this.props.user.avatarUrl} alt="avatar"/>*/}
                         </div>
-                        <h6>Email: {this.props.user.email}</h6>
-                        <h6>Name: {this.props.user.name}</h6>
+                        <AvatarForm/>
                     </div>
 
-                    <ProfileForm/>
-
-                    <AvatarForm/>
+                    <div className="col s5 offset-s1">
+                        <div className="profile-info">
+                            <div className="profile-info-field">
+                                <h5>Email: </h5>
+                                <p>
+                                    {this.props.user.email}
+                                </p>
+                            </div>
+                            <div className="profile-info-field">
+                                <h5>Name: </h5>
+                                <p>
+                                    {this.props.user.name}
+                                </p>
+                            </div>
+                        </div>
+                        <ProfileForm/>
+                    </div>
                 </div>
-
             </div>
         );
     }

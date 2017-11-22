@@ -14,14 +14,18 @@ class ProfileForm extends Component {
         };
 
         return (
-            <div className="profile-edit profile-panel">
-                <h5>Edit profile:</h5>
+            <div className="profile-edit">
                 <div>
                     <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
-                        <Field key={field.name} component={FormField} {...field} />
-                        <button className='waves-effect waves-light btn center' type='submit'>
-                            <i className="small material-icons">edit</i> Edit
-                        </button>
+                        <div className='profile-edit-name'>
+                            <Field key={field.name} component={FormField} {...field} />
+                        </div>
+                        <div className='center'>
+                            <button className='waves-effect waves-light btn' type='submit'>
+                                <i className="small material-icons">edit</i> Edit
+                            </button>
+                        </div>
+
                     </form>
                 </div>
             </div>
