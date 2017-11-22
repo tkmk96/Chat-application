@@ -11,23 +11,13 @@ export default (props) => {
                 </a>
                 <ul>
                     <li>
-                        <a className='btn-floating yellow darken-1' title='Rename channel'>
-                            <i className='material-icons'>edit</i>
-                        </a>
-                    </li>
-                    <li>
                         <a className='btn-floating red' title='Delete channel'>
                             <i className='material-icons'>delete</i>
                         </a>
                     </li>
                     <li>
-                        <a className='btn-floating green' title='Invite users'>
-                            <i className='material-icons'>person_add</i>
-                        </a>
-                    </li>
-                    <li>
-                        <a className='btn-floating blue' title='Change privileges'>
-                            <i className='material-icons'>verified_user</i>
+                        <a className='btn-floating yellow darken-1' title='Rename channel' onClick={props.onEdit}>
+                            <i className='material-icons'>edit</i>
                         </a>
                     </li>
                 </ul>

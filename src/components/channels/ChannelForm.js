@@ -5,6 +5,13 @@ import {createChannel} from '../../actions/channelActions';
 import FormField from '../FormField';
 
 class ChannelForm extends Component {
+
+    componentDidMount() {
+        this.props.initialize({
+            name: this.props.name
+        });
+    }
+
     render() {
         return (
             <div>

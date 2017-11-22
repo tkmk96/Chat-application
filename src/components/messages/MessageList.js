@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Message from './Message';
-import * as ReactDOM from 'react-dom';
 
 class MessageList extends Component {
     render() {

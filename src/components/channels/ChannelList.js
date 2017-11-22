@@ -14,9 +14,6 @@ class ChannelList extends Component {
         };
     }
 
-    componentDidMount() {
-        this.props.fetchChannels();
-    }
 
     render() {
         return (
