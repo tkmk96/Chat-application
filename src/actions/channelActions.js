@@ -37,7 +37,6 @@ export const createChannel = (name) => {
 };
 
 export const editChannel = (channel) => {
-
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
@@ -75,11 +74,21 @@ export const editChannel = (channel) => {
 };
 
 export const inviteUser = (channel, userEmail) => {
-    const customData = {...channel.customData, users: [...channel.customData.users, userEmail]};
-
     return async (dispatch) => {
-        dispatch(editChannel({...channel, customData}));
-    }
+        const {customData} = channel;
+        if (customData.users.indexOf(userEmail) === -1 &&
+            customData.admins.indexOf(userEmail) === -1 &&
+            customData.owners.indexOf(userEmail) === -1)
+        {
+            console.log("tu som");
+            const newCustomData = {...customData, users: [...customData.users, userEmail]};
+            console.log(newCustomData);
+            dispatch(editChannel({...channel, customData: newCustomData}));
+        }
+    };
+
+
+
 };
 
 export const fetchChannels = () => {
