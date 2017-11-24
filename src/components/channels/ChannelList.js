@@ -20,7 +20,11 @@ class ChannelList extends Component {
             <div className='col s4'>
                 {this.state.newChannel ?
                     <div style={{marginBottom: '20px', marginTop: '40px'}}>
-                        <ChannelForm onCancel={() => this._toggleNewChannel()} onSubmit={(name) => this._onSubmitForm(name)}/>
+                        <ChannelForm
+                            form='channelCreateForm'
+                            onCancel={() => this._toggleNewChannel()}
+                            onSubmit={(name) => this._onSubmitForm(name)}
+                        />
                     </div>
                     :
                     <div className='center' style={{margin: '10px 0'}}>

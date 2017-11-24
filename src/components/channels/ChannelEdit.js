@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import ChannelForm from './ChannelForm';
-import FormField from '../FormField';
-import {reduxForm, Field, reset} from 'redux-form';
-import {editChannel, inviteUser} from '../../actions/channelActions';
+import {editChannel} from '../../actions/channelActions';
 import {connect} from 'react-redux';
+import ChannelEditForm from './ChannelEditForm';
 
 class ChannelEdit extends Component {
     render() {
@@ -11,17 +10,14 @@ class ChannelEdit extends Component {
             <div className='row'>
                 <div>
 
-                    <ChannelForm className='col s6' name={this.props.channel.name} onSubmit={(name) => this._rename(name)}/>
+                    <ChannelForm
+                        form='channelRenameForm'
+                        className='col s6'
+                        name={this.props.channel.name}
+                        onSubmit={(name) => this._rename(name)}
+                    />
 
-                    <form className='col s6' onSubmit={this.props.handleSubmit(this._invite.bind(this))}>
-                        <Field name='email' component={FormField} placeholder='Email' type='text'/>
-                        <button className='waves-effect waves-light btn' type='submit'>
-                            Invite
-                        </button>
-                        {/*<button type='button' onClick={this.props.onCancel}*/}
-                                {/*className='waves-effect waves-light red btn right'>Cancel*/}
-                        {/*</button>*/}
-                    </form>
+                    <ChannelEditForm channel={this.props.channel} />
                 </div>
 
                 <div className='col s12'>
@@ -36,20 +32,6 @@ class ChannelEdit extends Component {
     _rename(name) {
         this.props.editChannel({...this.props.channel, name});
     }
-
-    _invite(values) {
-        console.log(values);
-        this.props.inviteUser(this.props.channel, values.email);
-    }
 }
 
-function afterSubmit(result, dispatch) {
-    dispatch(reset('channelEditForm'));
-}
-
-export default reduxForm({
-    form: 'channelEditForm',
-    onSubmitSuccess: afterSubmit
-})(
-    connect(null, {editChannel, inviteUser})(ChannelEdit)
-);
+export default connect(null, {editChannel})(ChannelEdit);

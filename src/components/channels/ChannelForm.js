@@ -36,7 +36,6 @@ function validate(values) {
 }
 
 export default reduxForm({
-    form: 'channelForm',
     validate
 })(
     connect(null, {createChannel})(ChannelForm)
