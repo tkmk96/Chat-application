@@ -9,7 +9,8 @@ export const createChannel = (name) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
-
+        const users = {};
+        users[email] = 'owner';
         const res = await axios({
             method: 'patch',
             url: `${API_URL}/app/${APP_ID}`,
@@ -24,7 +25,7 @@ export const createChannel = (name) => {
                 value: {
                     id: uuid(),
                     name,
-                    customData: JSON.stringify({creator: email, users: [], admins: [], owners: [email]})
+                    customData: JSON.stringify({creator: email, users})
                 }
             }]
         });
@@ -76,19 +77,13 @@ export const editChannel = (channel) => {
 export const inviteUser = (channel, userEmail) => {
     return async (dispatch) => {
         const {customData} = channel;
-        if (customData.users.indexOf(userEmail) === -1 &&
-            customData.admins.indexOf(userEmail) === -1 &&
-            customData.owners.indexOf(userEmail) === -1)
-        {
-            console.log("tu som");
-            const newCustomData = {...customData, users: [...customData.users, userEmail]};
-            console.log(newCustomData);
+        if (!customData.users.hasOwnProperty(userEmail)) {
+            const users = {...customData.users};
+            users[userEmail] = 'user';
+            const newCustomData = {...customData, users};
             dispatch(editChannel({...channel, customData: newCustomData}));
         }
     };
-
-
-
 };
 
 export const fetchChannels = () => {

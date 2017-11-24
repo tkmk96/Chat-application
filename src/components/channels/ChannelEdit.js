@@ -6,7 +6,6 @@ import ChannelEditForm from './ChannelEditForm';
 
 class ChannelEdit extends Component {
     render() {
-        const {users, admins, owners} = this.props.channel.customData;
         return (
             <div className='row'>
                 <div>
@@ -23,24 +22,24 @@ class ChannelEdit extends Component {
 
                 <div className='col s12'>
                     <div className='divider' style={{margin: '25px 0'}}/>
-                    <div className='section'>
-                        <h5>Owners:</h5>
-                        <ul>
-                            {this._renderUsers(owners)}
-                        </ul>
-                    </div>
-                    <div className='divider'/>
-                    <div className='section'>
-                        <h5>Admins:</h5>
-                        <ul>
-                            {this._renderUsers(admins)}
-                        </ul>
-                    </div>
-                    <div className='divider'/>
+                    {/*<div className='section'>*/}
+                        {/*<h5>Owners:</h5>*/}
+                        {/*<ul>*/}
+                            {/*{this._renderUsers(owners)}*/}
+                        {/*</ul>*/}
+                    {/*</div>*/}
+                    {/*<div className='divider'/>*/}
+                    {/*<div className='section'>*/}
+                        {/*<h5>Admins:</h5>*/}
+                        {/*<ul>*/}
+                            {/*{this._renderUsers(admins)}*/}
+                        {/*</ul>*/}
+                    {/*</div>*/}
+                    {/*<div className='divider'/>*/}
                     <div className='section'>
                         <h5>Users:</h5>
                         <ul>
-                            {this._renderUsers(users)}
+                            {this._renderUsers()}
                         </ul>
                     </div>
                 </div>
@@ -53,9 +52,10 @@ class ChannelEdit extends Component {
         this.props.editChannel({...this.props.channel, name});
     }
 
-    _renderUsers(users) {
-        return users.map(user => {
-            return <li key={user}>{user}</li>;
+    _renderUsers() {
+        const {users} = this.props.channel.customData;
+        return Object.entries(users).map(([key, value]) => {
+            return <li key={key}>{key}</li>;
         });
     }
 }
