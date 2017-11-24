@@ -5,7 +5,6 @@ import {createChannel} from '../../actions/channelActions';
 import FormField from '../FormField';
 
 class ChannelForm extends Component {
-
     render() {
         return (
             <form className={this.props.className} onSubmit={this.props.handleSubmit((values) => this.props.onSubmit(values.name))}>
@@ -24,12 +23,11 @@ class ChannelForm extends Component {
 
 }
 
-
 function validate(values) {
     const errors = {};
 
     if (!values.name) {
-        errors.name = 'Please provide a name.';
+        errors.name = 'Please provide a name';
     }
 
     return errors;

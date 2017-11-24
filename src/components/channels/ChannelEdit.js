@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ChannelForm from './ChannelForm';
+import ChannelRenameForm from './ChannelCreateEditForm';
 import {editChannel, changePrivilege} from '../../actions/channelActions';
 import {connect} from 'react-redux';
 import ChannelEditForm from './ChannelEditForm';
@@ -10,7 +10,7 @@ class ChannelEdit extends Component {
             <div className='row'>
                 <div>
 
-                    <ChannelForm
+                    <ChannelRenameForm
                         form='channelRenameForm'
                         className='col s6'
                         name={this.props.channel.name}

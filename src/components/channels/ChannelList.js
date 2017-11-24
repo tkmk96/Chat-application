@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import ChannelItem from './ChannelItem';
 import {fetchChannels, createChannel} from '../../actions/channelActions';
-import ChannelForm from './ChannelForm';
+import ChannelCreateForm from './ChannelCreateEditForm';
 
 class ChannelList extends Component {
 
@@ -20,7 +20,7 @@ class ChannelList extends Component {
             <div className='col s4'>
                 {this.state.newChannel ?
                     <div style={{marginBottom: '20px', marginTop: '40px'}}>
-                        <ChannelForm
+                        <ChannelCreateForm
                             form='channelCreateForm'
                             onCancel={() => this._toggleNewChannel()}
                             onSubmit={(name) => this._onSubmitForm(name)}
