@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ChannelRenameForm from './ChannelCreateEditForm';
 import {editChannel, changePrivilege} from '../../actions/channelActions';
 import {connect} from 'react-redux';
-import ChannelEditForm from './ChannelEditForm';
+import ChannelInviteForm from './ChannelInviteForm';
 
 class ChannelEdit extends Component {
     render() {
@@ -17,7 +17,7 @@ class ChannelEdit extends Component {
                         onSubmit={(name) => this._rename(name)}
                     />
 
-                    <ChannelEditForm onInvite={(email) => this._changePrivilege(email, 'user')} channel={this.props.channel}/>
+                    <ChannelInviteForm onInvite={(email) => this._changePrivilege(email, 'user')} channel={this.props.channel}/>
                 </div>
 
                 <div className='col s12'>

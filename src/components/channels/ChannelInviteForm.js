@@ -4,7 +4,7 @@ import {reduxForm, Field, reset} from 'redux-form';
 import {changePrivilege} from '../../actions/channelActions';
 import {connect} from 'react-redux';
 
-class ChannelEditForm extends Component {
+class ChannelInviteForm extends Component {
     render() {
         return (
             <form className='col s6' onSubmit={this.props.handleSubmit(({email}) => this.props.onInvite(email))}>
@@ -29,5 +29,5 @@ export default reduxForm({
     form: 'channelEditForm',
     onSubmitSuccess: afterSubmit
 })(
-    connect(null, {changePrivilege})(ChannelEditForm)
+    connect(null, {changePrivilege})(ChannelInviteForm)
 );
