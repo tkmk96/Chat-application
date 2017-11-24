@@ -166,6 +166,12 @@ const fetchData = async (email, token) => {
             'Authorization': `bearer ${token}`,
             'Accept': 'application/json',
         }
+    })
+    .catch(() => {
+        throw new SubmissionError({
+            email: 'Invalid email!',
+            _error: 'Login failed!'
+        });
     });
     return res.data;
 };
@@ -186,6 +192,7 @@ const fetchToken = async (email) => {
             _error: 'Login failed!'
         });
     });
+
     return res.data;
 };
 
