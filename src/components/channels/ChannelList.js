@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import Channel from './Channel';
+import ChannelItem from './ChannelItem';
 import {fetchChannels, createChannel} from '../../actions/channelActions';
 import ChannelForm from './ChannelForm';
 
@@ -58,7 +58,7 @@ class ChannelList extends Component {
     _renderChannels() {
         const {channels} = this.props;
         return Object.entries(channels).map(([key, value]) => {
-            return <Channel key={key} {...value} />;
+            return <ChannelItem key={key} {...value} />;
         });
 
     }

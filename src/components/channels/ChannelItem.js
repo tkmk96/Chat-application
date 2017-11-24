@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {setActiveChannel} from '../../actions/channelActions';
 
-class Channel extends Component {
+class ChannelItem extends Component {
     render() {
         return (
             <div className='row'>
@@ -20,4 +20,4 @@ class Channel extends Component {
     }
 }
 
-export default connect(null, {setActiveChannel})(Channel);
+export default connect(null, {setActiveChannel})(ChannelItem);
