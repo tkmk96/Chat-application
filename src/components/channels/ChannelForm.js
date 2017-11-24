@@ -6,12 +6,6 @@ import FormField from '../FormField';
 
 class ChannelForm extends Component {
 
-    componentDidMount() {
-        this.props.initialize({
-            name: this.props.name
-        });
-    }
-
     render() {
         return (
             <form className={this.props.className} onSubmit={this.props.handleSubmit((values) => this.props.onSubmit(values.name))}>

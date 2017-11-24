@@ -24,7 +24,7 @@ export const createChannel = (name) => {
                 value: {
                     id: uuid(),
                     name,
-                    customData: JSON.stringify({creator: email})
+                    customData: JSON.stringify({creator: email, users: [], admins: [], owners: [email]})
                 }
             }]
         });
@@ -37,7 +37,6 @@ export const createChannel = (name) => {
 };
 
 export const editChannel = (channel) => {
-    channel.customData = JSON.stringify(channel.customData);
 
     return async (dispatch, getState) => {
         const token = getState().authToken;
@@ -54,7 +53,10 @@ export const editChannel = (channel) => {
             data: [{
                 path: `${API_CHANNEL}/${channel.id}`,
                 op: 'replace',
-                value: channel
+                value: {
+                    ...channel,
+                    customData: JSON.stringify(channel.customData)
+                }
             }]
         });
 
@@ -70,6 +72,14 @@ export const editChannel = (channel) => {
             payload: { ...channels[channel.id], messages: channel.messages}
         });
     };
+};
+
+export const inviteUser = (channel, userEmail) => {
+    const customData = {...channel.customData, users: [...channel.customData.users, userEmail]};
+
+    return async (dispatch) => {
+        dispatch(editChannel({...channel, customData}));
+    }
 };
 
 export const fetchChannels = () => {
