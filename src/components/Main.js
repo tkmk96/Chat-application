@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import {fetchChannels} from '../actions/channelActions';
 import ChannelHeader from './channels/ChannelHeader';
 import ChannelEdit from './channels/ChannelEdit';
-import {activeChannel} from '../reducers/channelReducer';
 
 class Main extends Component {
 
@@ -46,7 +45,7 @@ class Main extends Component {
 
     _renderContent() {
         if (this.state.edit) {
-            return <ChannelEdit name={this.props.activeChannel.name} onCancel={() => this._toggleEdit()} />;
+            return <ChannelEdit channel={this.props.activeChannel} onCancel={() => this._toggleEdit()} />;
         }
         return <MessagePanel/>;
     }

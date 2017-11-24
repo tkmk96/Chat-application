@@ -36,6 +36,42 @@ export const createChannel = (name) => {
     };
 };
 
+export const editChannel = (channel) => {
+    channel.customData = JSON.stringify(channel.customData);
+
+    return async (dispatch, getState) => {
+        const token = getState().authToken;
+        const email = getState().user.email;
+
+        const res = await axios({
+            method: 'patch',
+            url: `${API_URL}/app/${APP_ID}`,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json-patch+json',
+                'Authorization': `bearer ${token}`
+            },
+            data: [{
+                path: `${API_CHANNEL}/${channel.id}`,
+                op: 'replace',
+                value: channel
+            }]
+        });
+
+        const channels = filterAndConvertChannels(res.data.channels, email);
+
+        dispatch({
+            type: FETCH_CHANNELS,
+            payload: channels
+        });
+
+        dispatch({
+            type: SET_ACTIVE_CHANNEL,
+            payload: { ...channels[channel.id], messages: channel.messages}
+        });
+    };
+};
+
 export const fetchChannels = () => {
     return async (dispatch, getState) => {
         const token = getState().authToken;

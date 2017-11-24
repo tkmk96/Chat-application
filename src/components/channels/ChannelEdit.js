@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import ChannelForm from './ChannelForm';
 import FormField from '../FormField';
 import {reduxForm, Field} from 'redux-form';
+import {editChannel} from '../../actions/channelActions';
+import {connect} from 'react-redux';
 
 class ChannelEdit extends Component {
     render() {
@@ -9,7 +11,7 @@ class ChannelEdit extends Component {
             <div className='row'>
                 <div>
 
-                    <ChannelForm className='col s6' name={this.props.name} />
+                    <ChannelForm className='col s6' name={this.props.channel.name} onSubmit={(name) => this._rename(name)}/>
 
                     <form className='col s6' onSubmit={this.props.handleSubmit(this._invite)}>
                         <Field name='invite' component={FormField} placeholder='Email' type='text'/>
@@ -31,11 +33,18 @@ class ChannelEdit extends Component {
         );
     }
 
+    _rename(name) {
+        this.props.editChannel({...this.props.channel, name});
+    }
+
     _invite(values) {
         console.log(values);
+        this.props.editChannel(this.props.channel, values);
     }
 }
 
 export default reduxForm({
     form: 'channelEditForm'
-})(ChannelEdit);
+})(
+    connect(null, {editChannel})(ChannelEdit)
+);
