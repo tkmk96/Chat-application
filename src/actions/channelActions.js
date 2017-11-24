@@ -69,20 +69,18 @@ export const editChannel = (channel) => {
 
         dispatch({
             type: SET_ACTIVE_CHANNEL,
-            payload: { ...channels[channel.id], messages: channel.messages}
+            payload: {...channels[channel.id], messages: channel.messages}
         });
     };
 };
 
-export const inviteUser = (channel, userEmail) => {
+export const changePrivilege = (channel, userEmail, privilege) => {
     return async (dispatch) => {
         const {customData} = channel;
-        if (!customData.users.hasOwnProperty(userEmail)) {
-            const users = {...customData.users};
-            users[userEmail] = 'user';
-            const newCustomData = {...customData, users};
-            dispatch(editChannel({...channel, customData: newCustomData}));
-        }
+        const users = {...customData.users};
+        privilege === 'none' ? delete users[userEmail] : users[userEmail] = privilege;
+        const newCustomData = {...customData, users};
+        dispatch(editChannel({...channel, customData: newCustomData}));
     };
 };
 
