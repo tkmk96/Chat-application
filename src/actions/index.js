@@ -61,11 +61,20 @@ export const fetchUserData = () => {
         const token = getState().authToken;
         const email = getState().user.email;
         if (token && email) {
-            const {customData} = await fetchData(email, token);
-            dispatch({
-                type: FETCH_USER,
-                payload: {email, ...JSON.parse(customData)}
-            });
+            try {
+                const {customData} = await fetchData(email, token);
+                dispatch({
+                    type: FETCH_USER,
+                    payload: {email, ...JSON.parse(customData)}
+                });
+            }
+            catch (e){
+                localStorage.clear();
+                dispatch({
+                    type: LOGOUT_USER,
+                });
+            }
+
         }
     }
 };
@@ -74,7 +83,6 @@ export const editUserName = (name) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const {email, customData} = await updateUserData({name}, getState().user, token);
-
 
         dispatch({
             type: FETCH_USER,
