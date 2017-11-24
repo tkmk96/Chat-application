@@ -29,7 +29,7 @@ class LoginForm extends Component {
     render(){
         return (
             <div className='row'>
-                <div className='col s6 offset-s3'>
+                <div className='col s6 offset-s3 login-form'>
                     <h4 className='center'>Login</h4>
                     <div className='divider'/>
                     <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
