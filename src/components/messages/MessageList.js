@@ -23,15 +23,22 @@ class MessageList extends Component {
     _renderMessages(messages) {
         return messages.map(message => {
             const myMessage = message.createdBy === this.props.user.email;
-            return <Message key={message.id} text={message.value} myMessage={myMessage ? 'myMessage' : ''}/>;
+            return <Message
+                key={message.id}
+                message={message}
+                user={this.props.users[message.createdBy]}
+                myMessage={myMessage ? 'myMessage' : ''}
+            />;
+
         });
     }
 }
 
-function mapStateToProps({activeChannel, user}) {
+function mapStateToProps({activeChannel, user, users}) {
     return {
         user,
-        activeChannel
+        activeChannel,
+        users
     };
 }
 export default connect(mapStateToProps)(MessageList);

@@ -13,3 +13,11 @@ export const filterAndConvertChannels = (channels, email) => {
     });
     return convertChannelsArray(filtered);
 };
+
+export const convertUsersArray = (users) => {
+    const usersObject = {};
+    users.forEach(({email, customData}) => {
+        usersObject[email] = {email, ...JSON.parse(customData)};
+    });
+    return usersObject;
+};

@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import RegistrationField from '../FormField';
 import { registerUser } from '../../actions/index';
 import {connect} from 'react-redux';
+import PersonImg from '../../../static/assets/person.jpg';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -39,7 +40,7 @@ class RegistrationForm extends Component {
 
     _onSubmit(values) {
         const {name, password} = values;
-        this.props.registerUser(values.email, {name, password}, this.props.history);
+        this.props.registerUser(values.email, {name, password, avatarUrl: PersonImg}, this.props.history);
 
     }
 }

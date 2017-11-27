@@ -2,7 +2,8 @@ import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
-import {FETCH_USER, LOGOUT_USER, FETCH_AUTH_TOKEN} from '../constants/actionTypes';
+import {FETCH_USER, LOGOUT_USER, FETCH_AUTH_TOKEN, FETCH_ALL_USERS} from '../constants/actionTypes';
+import {convertUsersArray} from '../utils/convert';
 
 export const registerUser = (email, customData,  history) => {
     return async dispatch => {
@@ -39,12 +40,13 @@ export const loginUser = (email, password, history) => {
             });
         }
         localStorage.setItem(AUTH_EMAIL, email);
+        dispatch(receivedToken(token));
 
+        dispatch(fetchAllUsers(token));
         dispatch({
             type: FETCH_USER,
             payload: user
         });
-        dispatch(receivedToken(token));
         history.push('/');
     }
 };
@@ -77,6 +79,26 @@ export const fetchUserData = () => {
 
         }
     }
+};
+
+export const fetchAllUsers = (token) => {
+    return async (dispatch, getState) => {
+        const authToken = token || getState().authToken;
+        if (authToken) {
+            const res = await axios({
+                method: 'get',
+                url: `${API_URL}/${APP_ID}/user`,
+                headers: {
+                    'Authorization': `bearer ${authToken}`,
+                    'Accept': 'application/json',
+                }
+            });
+            dispatch({
+                type: FETCH_ALL_USERS,
+                payload: convertUsersArray(res.data)
+            });
+        }
+    };
 };
 
 export const editUserName = (name) => {

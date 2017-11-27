@@ -24,8 +24,6 @@ export const createMessage = (text) => {
                 createdBy: email
             }
         });
-
-        console.log(res);
         dispatch({
             type: CREATE_MESSAGE,
             payload: {activeChannel, message: res.data}

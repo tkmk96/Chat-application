@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import { fetchUserData } from '../actions';
+import { fetchUserData, fetchAllUsers } from '../actions';
 
 import Registration from './login/Registration';
 import Header from './Header';
@@ -15,6 +15,7 @@ class App extends Component {
 
     componentWillMount() {
         this.props.fetchUserData();
+        this.props.fetchAllUsers();
     }
 
     render() {
@@ -34,4 +35,4 @@ class App extends Component {
     }
 }
 
-export default connect(null, { fetchUserData })(App);
+export default connect(null, { fetchUserData, fetchAllUsers })(App);

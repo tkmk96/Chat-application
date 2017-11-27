@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import {fetchedAuthToken, loggedUser} from './authReducer';
+import {fetchedAllUsers, fetchedAuthToken, fetchedUser} from './userReducer';
 import {activeChannel, fetchChannel} from './channelReducer';
 
 export default combineReducers({
     form: formReducer,
-    user: loggedUser,
+    user: fetchedUser,
     authToken: fetchedAuthToken,
     channels: fetchChannel,
-    activeChannel: activeChannel
+    activeChannel: activeChannel,
+    users: fetchedAllUsers
 });
