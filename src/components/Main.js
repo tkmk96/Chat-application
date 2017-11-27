@@ -4,7 +4,7 @@ import MessagePanel from './messages/MessagePanel';
 import {connect} from 'react-redux';
 import {fetchChannels} from '../actions/channelActions';
 import ChannelHeader from './channels/ChannelHeader';
-import ChannelEdit from './channels/ChannelEdit';
+import ChannelDetail from './channels/ChannelDetail';
 import * as role from '../constants/channelRoles';
 
 class Main extends Component {
@@ -57,7 +57,13 @@ class Main extends Component {
 
     _renderContent() {
         if (this.state.showDetail) {
-            return <ChannelEdit channel={this.props.activeChannel} onCancel={() => this._toggleDetail()} />;
+            return (
+                <ChannelDetail channel={this.props.activeChannel}
+                    userEmail={this.props.userEmail}
+                    owner={this.props.owner}
+                    admin={this.props.admin}
+                />
+            );
         }
         return <MessagePanel/>;
     }
@@ -68,9 +74,11 @@ function mapStateToProps({activeChannel, user}) {
     const userRole = activeChannel && activeChannel.customData.users[user.email];
     const owner = userRole === role.OWNER;
     const admin = userRole === role.ADMIN;
+    const userEmail = user.email;
 
     return {
         activeChannel,
+        userEmail,
         owner,
         admin
     };
