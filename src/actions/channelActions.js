@@ -1,16 +1,19 @@
 import axios from 'axios';
-import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
-import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
+
 import {uuid} from '../utils/uuidGenerator';
 import {filterAndConvertChannels} from '../utils/convert';
 
-export const createChannel = (name) => {
+import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
+import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
+import * as role from '../constants/channelRoles';
 
+
+export const createChannel = (name) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
         const users = {};
-        users[email] = 'owner';
+        users[email] = role.OWNER;
         const res = await axios({
             method: 'patch',
             url: `${API_URL}/app/${APP_ID}`,
@@ -109,7 +112,6 @@ export const fetchChannels = () => {
 };
 
 export const setActiveChannel = (channelId) => {
-//GET /api/app/{appId}/channel/{channelId}/message
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const channels = getState().channels;
