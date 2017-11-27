@@ -49,8 +49,8 @@ class Main extends Component {
                 name={this.props.activeChannel.name}
                 onDetail={() => this._toggleDetail()}
                 detail={this.state.showDetail}
-                owner={this.props.owner}
-                admin={this.props.admin}
+                isOwner={this.props.isOwner}
+                isAdmin={this.props.isAdmin}
             />
         );
     }
@@ -60,8 +60,8 @@ class Main extends Component {
             return (
                 <ChannelDetail channel={this.props.activeChannel}
                     userEmail={this.props.userEmail}
-                    owner={this.props.owner}
-                    admin={this.props.admin}
+                    isOwner={this.props.isOwner}
+                    isAdmin={this.props.isAdmin}
                 />
             );
         }
@@ -72,15 +72,15 @@ class Main extends Component {
 
 function mapStateToProps({activeChannel, user}) {
     const userRole = activeChannel && activeChannel.customData.users[user.email];
-    const owner = userRole === role.OWNER;
-    const admin = userRole === role.ADMIN;
+    const isOwner = userRole === role.OWNER;
+    const isAdmin = userRole === role.ADMIN;
     const userEmail = user.email;
 
     return {
         activeChannel,
         userEmail,
-        owner,
-        admin
+        isOwner,
+        isAdmin
     };
 }
 export default connect(mapStateToProps, {fetchChannels})(Main);

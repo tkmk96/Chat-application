@@ -8,7 +8,7 @@ import * as role from '../../constants/channelRoles';
 
 class ChannelDetail extends Component {
     render() {
-        if(this.props.owner || this.props.admin){
+        if(this.props.isOwner || this.props.isAdmin){
             return this._renderDetailWithEdit();
         }
         return this._renderJustDetail();
@@ -30,7 +30,7 @@ class ChannelDetail extends Component {
         return (
             <div className='row'>
                 <div>
-                    {this.props.owner &&
+                    {this.props.isOwner &&
                         <ChannelRenameForm
                             form='channelRenameForm'
                             className='col s6'
@@ -39,7 +39,7 @@ class ChannelDetail extends Component {
                         />
                     }
 
-                    {(this.props.owner || this.props.admin) &&
+                    {(this.props.isOwner || this.props.isAdmin) &&
                         <ChannelInviteForm onInvite={(email) => this._changePrivilege(email, role.USER)} channel={this.props.channel}/>
                     }
                 </div>
@@ -71,7 +71,7 @@ class ChannelDetail extends Component {
         return Object.entries(users).map(([email, userRole]) => {
             return (
                 <div key={email} className='row'>
-                    <div className='col s6' style={{overflowX: 'auto', textAlign: 'end'}}>
+                    <div className='col s6 channel-detail-user' style={{textAlign: 'end'}}>
                         <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
                         <span style={{fontSize: '1.2em'}}>
                             {email}
@@ -89,7 +89,7 @@ class ChannelDetail extends Component {
         return Object.entries(users).map(([email, userRole]) => {
             return (
                 <div key={email}>
-                    <div className='col s12' style={{overflowX: 'auto', textAlign: 'center'}}>
+                    <div className='col s7 offset-s5 channel-detail-user' >
                         <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
                         <span style={{fontSize: '1.2em'}}>
                             {this.props.users[email].name}
@@ -109,13 +109,13 @@ class ChannelDetail extends Component {
                     <i className='material-icons'>delete</i>
                 </a>
 
-                {this.props.owner &&
+                {this.props.isOwner &&
                     <a className='btn-floating green' title='Make owner' style={{marginRight: '10px'}}
                         onClick={() => this._changePrivilege(email, role.OWNER)}>
                         <i className='material-icons'>verified_user</i>
                     </a>
                 }
-                {this.props.owner &&
+                {this.props.isOwner &&
                     <a className='btn-floating yellow' title='Make admin' style={{marginRight: '10px'}}
                         onClick={() => this._changePrivilege(email, role.ADMIN)}>
                         <i className='material-icons'>child_care</i>
@@ -127,7 +127,7 @@ class ChannelDetail extends Component {
     }
 
     _renderIconsForOwner(email) {
-        if(!this.props.owner || this.props.userEmail === email){
+        if(!this.props.isOwner || this.props.userEmail === email){
             return <div className='col s6' style={{marginBottom: '10px'}}><br/></div>;
         }
         return (

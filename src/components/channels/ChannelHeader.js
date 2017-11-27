@@ -54,10 +54,10 @@ class ChannelHeader extends Component {
                     <i className='material-icons'>menu</i>
                 </a>
                 <ul>
-                    {this.props.owner && this._renderDeleteButton()}
-                    {!this.props.owner && this._renderLeaveButton()}
+                    {this.props.isOwner && this._renderDeleteButton()}
+                    {!this.props.isOwner && this._renderLeaveButton()}
                     <li>
-                        {this.props.owner || this.props.admin ? this._renderEditButton() : this._renderDetailButton()}
+                        {this.props.isOwner || this.props.isAdmin ? this._renderEditButton() : this._renderDetailButton()}
                     </li>
 
 

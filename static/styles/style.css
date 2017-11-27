@@ -56,6 +56,13 @@
 .channel-detail-avatar {
     width: 50px;
     height: 50px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.channel-detail-user {
+    overflow-x: auto;
+    margin-bottom: 10px;
 }
 
 .profile-page {
