@@ -81,7 +81,7 @@ export const changePrivilege = (channel, userEmail, privilege) => {
     return async (dispatch) => {
         const {customData} = channel;
         const users = {...customData.users};
-        privilege === 'none' ? delete users[userEmail] : users[userEmail] = privilege;
+        privilege ? users[userEmail] = privilege : delete users[userEmail] ;
         const newCustomData = {...customData, users};
         dispatch(editChannel({...channel, customData: newCustomData}));
     };
