@@ -70,8 +70,9 @@ class ChannelDetail extends Component {
         const {users} = this.props.channel.customData;
         return Object.entries(users).map(([email, userRole]) => {
             return (
-                <div key={email}>
+                <div key={email} className='row'>
                     <div className='col s6' style={{overflowX: 'auto', textAlign: 'end'}}>
+                        <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
                         <span style={{fontSize: '1.2em'}}>
                             {email}
                         </span>
@@ -85,14 +86,15 @@ class ChannelDetail extends Component {
 
     _renderUserNames(){
         const {users} = this.props.channel.customData;
-        return Object.entries(users).map(([key, value]) => {
+        return Object.entries(users).map(([email, userRole]) => {
             return (
-                <div key={key}>
+                <div key={email}>
                     <div className='col s12' style={{overflowX: 'auto', textAlign: 'center'}}>
+                        <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
                         <span style={{fontSize: '1.2em'}}>
-                            {key}
+                            {this.props.users[email].name}
                         </span>
-                        {value !== 'user' && <i style={{marginLeft: '3px'}}>({value})</i>}
+                        {userRole !== 'user' && <i style={{marginLeft: '3px'}}>({userRole})</i>}
                     </div>
                 </div>
             );
@@ -148,4 +150,8 @@ class ChannelDetail extends Component {
 
 }
 
-export default connect(null, {editChannel, changePrivilege})(ChannelDetail);
+function mapStateToProps({users}) {
+    return {users};
+}
+
+export default connect(mapStateToProps, {editChannel, changePrivilege})(ChannelDetail);
