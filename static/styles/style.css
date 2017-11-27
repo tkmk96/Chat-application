@@ -2,8 +2,24 @@
     padding-bottom: 20px;
 }
 
+.message {
+    height: auto;
+    border-radius: 25px;
+    font-size: 15px;
+}
+
+.message > img {
+    height: 45px;
+    width: 45px;
+}
+
 .myMessage {
-    text-align: end;
+    background-color: #0D47A1 !important;
+    color: white;
+}
+
+.messageText {
+    display: inline;
 }
 
 .messagePanel {
