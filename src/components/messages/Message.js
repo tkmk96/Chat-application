@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {deleteMessage, reactToMessage} from '../../actions/messageActions';
 import {DISLIKE, LIKE} from '../../constants/reactionTypes';
+import IconButton from '../generic/IconButton';
 
 class Message extends Component {
     render() {
@@ -28,30 +29,24 @@ class Message extends Component {
 
     _renderDeleteButton() {
         return (<li>
-            <a className='btn-floating red darken-2' title='Delete' onClick={() => this._deleteMessage()}>
-                <i className='material-icons'>delete</i>
-            </a>
+            <IconButton className='red darken-2' title='Delete' onClick={() => this._deleteMessage()} iconName='delete'/>
         </li>);
     }
 
     _renderEditButton() {
-        return <li><a className='btn-floating yellow darken-2' title='Edit'><i className='material-icons'>edit</i></a></li>;
+        return <li><IconButton className='yellow darken-2' title='Edit' iconName='edit'/></li>;
     }
 
     _renderLikeButton() {
         return (<li>
-            <a className='btn-floating blue darken-2' title='Like' onClick={() => this._likeMessage()}>
-                <i className='material-icons'>thumb_up</i>
-            </a>
+            <IconButton className='blue darken-2' title='Like' onClick={() => this._likeMessage()} iconName='thumb_up'/>
         </li>);
     }
 
     _renderDislikeButton() {
         return (
             <li>
-                <a className='btn-floating blue darken-2' title='Dislike' onClick={() => this._dislikeMessage()}>
-                    <i className='material-icons'>thumb_down</i>
-                </a>
+                <IconButton className='blue darken-2' title='Dislike' onClick={() => this._dislikeMessage()} iconName='thumb_down'/>
             </li>
         );
     }
