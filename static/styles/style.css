@@ -2,6 +2,21 @@
     padding-bottom: 20px;
 }
 
+.messageWrapper {
+    position: relative;
+    right: inherit;
+    bottom: inherit;
+    padding-top: 0;
+    cursor: pointer;
+}
+
+.messageWrapper.fixed-action-btn.horizontal ul {
+    width: auto;
+    right: 0;
+    top: 12px;
+    height: 50px;
+}
+
 .message {
     height: auto;
     border-radius: 25px;
