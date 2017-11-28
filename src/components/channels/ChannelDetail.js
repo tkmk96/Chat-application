@@ -71,7 +71,7 @@ class ChannelDetail extends Component {
         return Object.entries(users).map(([email, userRole]) => {
             return (
                 <div key={email} className='row'>
-                    <div className='col s6 channel-detail-user' style={{textAlign: 'end'}}>
+                    <div className='col s6 channel-detail-user'>
                         <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
                         <span style={{fontSize: '1.2em'}}>
                             {email}
