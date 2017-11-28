@@ -4,7 +4,7 @@ import {uuid} from '../utils/uuidGenerator';
 import {filterAndConvertChannels} from '../utils/convert';
 
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
-import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS} from '../constants/actionTypes';
+import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS, ZERO_CHANNELS} from '../constants/actionTypes';
 import * as role from '../constants/channelRoles';
 
 
@@ -64,17 +64,59 @@ export const editChannel = (channel) => {
         });
 
         const channels = filterAndConvertChannels(res.data.channels, email);
+        console.log(channels);
+        dispatch({
+            type: FETCH_CHANNELS,
+            payload: channels
+        });
+
+        if (!channels[channel.id]) {
+            if (Object.keys(channels).length === 0){
+                dispatch({type: ZERO_CHANNELS})
+            }
+            else{
+                dispatch(setActiveChannel(Object.keys(channels)[0]));
+            }
+        }
+        else{
+            dispatch({
+                type: SET_ACTIVE_CHANNEL,
+                payload: {...channels[channel.id], messages: channel.messages}
+            });
+        }
+    };
+};
+
+export const removeChannel = (id) => {
+    return async (dispatch, getState) => {
+        const token = getState().authToken;
+        const email = getState().user.email;
+
+        const res = await axios({
+            method: 'patch',
+            url: `${API_URL}/app/${APP_ID}`,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json-patch+json',
+                'Authorization': `bearer ${token}`
+            },
+            data: [{
+                path: `${API_CHANNEL}/${id}`,
+                op: 'remove',
+            }]
+        });
+
+        const channels = filterAndConvertChannels(res.data.channels, email);
 
         dispatch({
             type: FETCH_CHANNELS,
             payload: channels
         });
 
-        dispatch({
-            type: SET_ACTIVE_CHANNEL,
-            payload: {...channels[channel.id], messages: channel.messages}
-        });
-    };
+        if (Object.keys(channels).length) {
+            dispatch(setActiveChannel(Object.keys(channels)[0]));
+        }
+    }
 };
 
 export const changePrivilege = (channel, userEmail, privilege) => {

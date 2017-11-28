@@ -1,14 +1,29 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+
+import {changePrivilege, removeChannel} from '../../actions/channelActions';
+
+
 
 class ChannelHeader extends Component {
+    render(){
+        return (
+            <div style={{marginBottom: '10px'}}>
+                <h5 className='channelHeader'>{this.props.name}</h5>
+
+                {this.props.detail ? this._renderDetailPageButtons() : this._renderChannelPageButtons()}
+
+
+                <div className='divider' style={{marginTop: '25px'}}/>
+            </div>
+        );
+    }
+
     _renderDetailPageButtons(){
         return (
-            <button
-                onClick={this.props.onDetail}
-                className='btn-floating btn-large red'
-            >
+            <a onClick={this.props.onDetail} className='btn-floating btn-large red'>
                 <i className='material-icons'>undo</i>
-            </button>
+            </a>
         );
     }
 
@@ -30,7 +45,7 @@ class ChannelHeader extends Component {
     _renderLeaveButton(){
         return (
             <li>
-                <a className='btn-floating yellow darken-2' title='Leave'>
+                <a className='btn-floating yellow darken-2' title='Leave' onClick={() => this._leaveChannel()}>
                     <i className='material-icons'>cancel</i>
                 </a>
             </li>
@@ -40,7 +55,7 @@ class ChannelHeader extends Component {
     _renderDeleteButton(){
         return (
             <li>
-                <a className='btn-floating red darken-2' title='Delete'>
+                <a className='btn-floating red darken-2' title='Delete' onClick={() => this._removeChannel()}>
                     <i className='material-icons'>delete</i>
                 </a>
             </li>
@@ -66,18 +81,21 @@ class ChannelHeader extends Component {
         );
     }
 
-    render(){
-        return (
-            <div style={{marginBottom: '10px'}}>
-                <h5 className='channelHeader'>{this.props.name}</h5>
-
-                {this.props.detail ? this._renderDetailPageButtons() : this._renderChannelPageButtons()}
-
-
-                <div className='divider' style={{marginTop: '25px'}}/>
-            </div>
-        );
+    _leaveChannel(){
+        this.props.changePrivilege(this.props.activeChannel, this.props.userEmail, null);
     }
+
+    _removeChannel(){
+        this.props.removeChannel(this.props.activeChannel.id)
+    }
+
 }
 
-export default ChannelHeader;
+function mapStateToProps({activeChannel, user}) {
+    return {
+        userEmail: user.email,
+        activeChannel
+    };
+}
+
+export default connect(mapStateToProps, {removeChannel, changePrivilege})(ChannelHeader);
