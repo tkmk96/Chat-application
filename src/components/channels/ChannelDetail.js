@@ -4,6 +4,8 @@ import {editChannel, changePrivilege} from '../../actions/channelActions';
 import {connect} from 'react-redux';
 import ChannelInviteForm from './ChannelInviteForm';
 
+import Icon from '../generic/IconButton';
+
 import * as role from '../../constants/channelRoles';
 
 class ChannelDetail extends Component {
@@ -70,16 +72,20 @@ class ChannelDetail extends Component {
         const {users} = this.props.channel.customData;
         return Object.entries(users).map(([email, userRole]) => {
             return (
-                <div key={email} className='row'>
-                    <div className='col s6 channel-detail-user'>
-                        <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
-                        <span style={{fontSize: '1.2em'}}>
-                            {email}
-                        </span>
-                        {userRole !== role.USER && <i style={{marginLeft: '3px'}}>({userRole})</i>}
+                <div key={email}>
+                    <div className='row' style={{marginBottom: 0}}>
+                        <div className='col s7 channel-detail-user'>
+                            <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
+                            <span style={{fontSize: '1.2em'}}>
+                                {email}
+                            </span>
+                            {userRole !== role.USER && <i style={{marginLeft: '3px'}}>({userRole})</i>}
+                        </div>
+                        {userRole === role.USER ? this._renderIconsForUser(email) : this._renderIconsForOwner(email)}
                     </div>
-                    {userRole === role.USER ? this._renderIconsForUser(email) : this._renderIconsForOwner(email)}
+                    <div className='divider'/>
                 </div>
+
             );
         });
     }
@@ -103,47 +109,56 @@ class ChannelDetail extends Component {
 
     _renderIconsForUser(email) {
         return (
-            <div className='col s6' style={{marginBottom: '10px'}}>
-                <a className='btn-floating red' title='Remove user' style={{marginRight: '10px'}}
-                    onClick={() => this._changePrivilege(email, null)}>
-                    <i className='material-icons'>delete</i>
-                </a>
-
+            <div style={{paddingTop: '10px', textAlign: 'end'}}>
                 {this.props.isOwner &&
-                    <a className='btn-floating green' title='Make owner' style={{marginRight: '10px'}}
-                        onClick={() => this._changePrivilege(email, role.OWNER)}>
-                        <i className='material-icons'>verified_user</i>
-                    </a>
+                    <Icon title='Make owner'
+                        iconName='verified_user'
+                        className='green accent-4'
+                        style={{marginRight: '10px'}}
+                        onClick={() => this._changePrivilege(email, role.OWNER)}
+                    />
+
                 }
                 {this.props.isOwner &&
-                    <a className='btn-floating yellow' title='Make admin' style={{marginRight: '10px'}}
-                        onClick={() => this._changePrivilege(email, role.ADMIN)}>
-                        <i className='material-icons'>child_care</i>
-                    </a>
+                    <Icon title='Make admin'
+                        iconName='star'
+                        className='light-green accent-4'
+                        style={{marginRight: '10px'}}
+                        onClick={() => this._changePrivilege(email, role.ADMIN)}
+                    />
                 }
 
+                <Icon
+                    title='Remove user'
+                    iconName='close'
+                    className='red'
+                    style={{marginRight: '10px'}}
+                    onClick={() => this._changePrivilege(email, null)}
+                />
             </div>
         );
     }
 
     _renderIconsForOwner(email) {
         if(!this.props.isOwner || this.props.userEmail === email){
-            return <div className='col s6' style={{marginBottom: '10px'}}><br/></div>;
+            return null;
         }
         return (
-            <div className='col s6' style={{marginBottom: '10px'}}>
-                <a className='btn-floating red' title='Remove user' style={{marginRight: '10px'}}
-                    onClick={() => this._changePrivilege(email, null)}>
-                    <i className='material-icons'>delete</i>
-                </a>
-                <a
-                    className='btn-floating red'
+            <div style={{paddingTop: '10px', textAlign: 'end'}}>
+                <Icon
                     title='Remove privileges'
+                    iconName='no_encryption'
+                    className='deep-orange lighten-1'
                     style={{marginRight: '10px'}}
-                    onClick={() => this._changePrivilege(email, 'user')}
-                >
-                    <i className='material-icons'>remove_circle</i>
-                </a>
+                    onClick={() => this._changePrivilege(email, role.USER)}
+                />
+                <Icon
+                    title='Remove user'
+                    iconName='close'
+                    className='red'
+                    style={{marginRight: '10px'}}
+                    onClick={() => this._changePrivilege(email, null)}
+                />
             </div>
         );
     }
