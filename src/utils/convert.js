@@ -21,3 +21,10 @@ export const convertUsersArray = (users) => {
     });
     return usersObject;
 };
+
+export const parseMessages = (messages) => {
+    messages.forEach(message => {
+        message.customData = JSON.parse(message.customData);
+    });
+    return messages;
+};

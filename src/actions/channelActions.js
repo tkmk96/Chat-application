@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import {uuid} from '../utils/uuidGenerator';
-import {filterAndConvertChannels} from '../utils/convert';
+import {filterAndConvertChannels, parseMessages} from '../utils/convert';
 
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
 import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS, ZERO_CHANNELS} from '../constants/actionTypes';
@@ -169,7 +169,7 @@ export const setActiveChannel = (channelId) => {
 
         dispatch({
             type: SET_ACTIVE_CHANNEL,
-            payload: { ...channels[channelId], messages: res.data}
+            payload: { ...channels[channelId], messages: parseMessages(res.data)}
         });
     };
 };
