@@ -111,7 +111,8 @@ class ChannelDetail extends Component {
         return (
             <div style={{paddingTop: '10px', textAlign: 'end'}}>
                 {this.props.isOwner &&
-                    <Icon title='Make owner'
+                    <Icon
+                        title='Make owner'
                         iconName='verified_user'
                         className='green accent-4'
                         style={{marginRight: '10px'}}
@@ -120,7 +121,8 @@ class ChannelDetail extends Component {
 
                 }
                 {this.props.isOwner &&
-                    <Icon title='Make admin'
+                    <Icon
+                        title='Make admin'
                         iconName='star'
                         className='light-green accent-4'
                         style={{marginRight: '10px'}}

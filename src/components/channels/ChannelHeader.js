@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {changePrivilege, removeChannel} from '../../actions/channelActions';
-
+import Icon from '../generic/IconButton';
 
 
 class ChannelHeader extends Component {
@@ -21,33 +21,45 @@ class ChannelHeader extends Component {
 
     _renderDetailPageButtons(){
         return (
-            <a onClick={this.props.onDetail} className='btn-floating btn-large red'>
-                <i className='material-icons'>undo</i>
-            </a>
+            <Icon
+                title='Back to messages'
+                iconName='undo'
+                className='btn-large red'
+                onClick={this.props.onDetail}
+            />
         );
     }
 
     _renderDetailButton(){
         return (
-            <a className='btn-floating blue' title='Detail' onClick={this.props.onDetail}>
-                <i className='material-icons'>info_outline</i>
-            </a>
+            <Icon
+                title='Detail'
+                iconName='info_outline'
+                className='blue'
+                onClick={this.props.onDetail}
+            />
         );
     }
     _renderEditButton(){
         return (
-            <a className='btn-floating blue' title='Edit' onClick={this.props.onDetail}>
-                <i className='material-icons'>build</i>
-            </a>
+            <Icon
+                title='Settings'
+                iconName='settings'
+                className='blue'
+                onClick={this.props.onDetail}
+            />
         );
     }
 
     _renderLeaveButton(){
         return (
             <li>
-                <a className='btn-floating yellow darken-2' title='Leave' onClick={() => this._leaveChannel()}>
-                    <i className='material-icons'>cancel</i>
-                </a>
+                <Icon
+                    title='Leave channel'
+                    iconName='close'
+                    className='deep-orange lighten-1'
+                    onClick={this._leaveChannel}
+                />
             </li>
         );
     }
@@ -55,9 +67,12 @@ class ChannelHeader extends Component {
     _renderDeleteButton(){
         return (
             <li>
-                <a className='btn-floating red darken-2' title='Delete' onClick={() => this._removeChannel()}>
-                    <i className='material-icons'>delete</i>
-                </a>
+                <Icon
+                    title='Remove channel'
+                    iconName='delete'
+                    className='red darken-2'
+                    onClick={this._removeChannel}
+                />
             </li>
         );
     }
@@ -65,9 +80,11 @@ class ChannelHeader extends Component {
     _renderChannelPageButtons(){
         return (
             <div className='fixed-action-btn horizontal click-to-toggle channelMenuBtn' style={{position: 'absolute'}}>
-                <a className='btn-floating btn-large red'>
-                    <i className='material-icons'>menu</i>
-                </a>
+                <Icon
+                    title={this.props.detail ? 'Close menu' : 'Open menu'}
+                    iconName='menu'
+                    className='btn-large red'
+                />
                 <ul>
                     {this.props.isOwner && this._renderDeleteButton()}
                     {!this.props.isOwner && this._renderLeaveButton()}
