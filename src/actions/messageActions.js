@@ -27,9 +27,11 @@ export const createMessage = (text) => {
                 customData: JSON.stringify({likes: {}, dislikes: {}})
             }
         });
+        const message = res.data;
+        message.customData = JSON.parse(res.data.customData);
         dispatch({
             type: CREATE_MESSAGE,
-            payload: {activeChannel, message: res.data}
+            payload: {activeChannel, message}
         })
     }
 };

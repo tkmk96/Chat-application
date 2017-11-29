@@ -7,7 +7,8 @@
     right: inherit;
     bottom: inherit;
     padding-top: 0;
-    cursor: pointer;
+    width: 90%;
+    display: inline-block;
 }
 
 .messageWrapper.fixed-action-btn.horizontal ul {
@@ -21,6 +22,9 @@
     height: auto;
     border-radius: 25px;
     font-size: 15px;
+    cursor: pointer;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .message > img {
@@ -44,6 +48,16 @@
 .messageList {
     height: 400px;
     overflow-y: auto;
+}
+
+.like {
+    font-size: 12px;
+    float: right;
+    margin-right: 5px;
+}
+
+.like i {
+    font-size: 15px;
 }
 
 .channel:hover {

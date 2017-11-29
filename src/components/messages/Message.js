@@ -8,20 +8,32 @@ class Message extends Component {
     render() {
         const {message, user, myMessage, email} = this.props;
         const {likes, dislikes} = message.customData;
+        const numberOfLikes = Object.keys(likes).length;
+        const numberOfDislikes = Object.keys(dislikes).length;
         return (
-            <div className='fixed-action-btn horizontal click-to-toggle messageWrapper'>
-                <a>
-                    <div className={`chip message ${myMessage}`}>
-                        <img src={user.avatarUrl} title={user.name}/>
-                        <p className='messageText'>{message.value}</p>
-                    </div>
-                </a>
-                <ul>
-                    {myMessage && this._renderDeleteButton()}
-                    {myMessage && this._renderEditButton()}
-                    {!myMessage && !likes[email] && this._renderLikeButton()}
-                    {!myMessage && !dislikes[email] && this._renderDislikeButton()}
-                </ul>
+            <div>
+                <div className='fixed-action-btn horizontal click-to-toggle messageWrapper'>
+                    <a>
+                        <div className={`chip message ${myMessage}`}>
+                            <img src={user.avatarUrl} title={user.name}/>
+                            <p className='messageText'>{message.value}</p>
+                        </div>
+                    </a>
+                    <ul>
+                        {myMessage && this._renderDeleteButton()}
+                        {myMessage && this._renderEditButton()}
+                        {!myMessage && !likes[email] && this._renderLikeButton()}
+                        {!myMessage && !dislikes[email] && this._renderDislikeButton()}
+                    </ul>
+                </div>
+                {numberOfDislikes > 0 &&
+                <span className='like'><i
+                    className='material-icons'>thumb_down</i> {Object.keys(dislikes).length} </span>
+                }
+                {numberOfLikes > 0 &&
+                <span className='like'><i
+                    className='material-icons'>thumb_up</i> {Object.keys(likes).length} </span>
+                }
             </div>
 
         );
@@ -29,7 +41,8 @@ class Message extends Component {
 
     _renderDeleteButton() {
         return (<li>
-            <IconButton className='red darken-2' title='Delete' onClick={() => this._deleteMessage()} iconName='delete'/>
+            <IconButton className='red darken-2' title='Delete' onClick={() => this._deleteMessage()}
+                        iconName='delete'/>
         </li>);
     }
 
@@ -46,7 +59,8 @@ class Message extends Component {
     _renderDislikeButton() {
         return (
             <li>
-                <IconButton className='blue darken-2' title='Dislike' onClick={() => this._dislikeMessage()} iconName='thumb_down'/>
+                <IconButton className='blue darken-2' title='Dislike' onClick={() => this._dislikeMessage()}
+                            iconName='thumb_down'/>
             </li>
         );
     }
