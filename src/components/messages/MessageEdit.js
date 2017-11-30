@@ -6,8 +6,21 @@ class MessageEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: ''
+            text: '',
+            scroll: true
         };
+    }
+
+    componentDidMount() {
+        this.input.focus();
+        this.setState({text: this.props.message.value});
+    }
+
+    componentDidUpdate() {
+        if (this.state.scroll) {
+            this.input.scrollLeft = this.input.scrollWidth;
+            this.setState({scroll: false});
+        }
     }
 
     render() {
@@ -15,10 +28,11 @@ class MessageEdit extends Component {
             <div>
                 <form onSubmit={() => this._onSave()}>
                     <div className='col s10 messageEdit'>
-                        <input type='text' placeholder='Type a new message' onChange={(e) => this.setState({text: e.target.value})}/>
+                        <input id={this.props.message.id} ref={(input) => this.input = input} value={this.state.text} type='text' onChange={(e) => this.setState({text: e.target.value})}/>
                     </div>
                     <div className='col s2 center'>
-                        <IconButton iconName='check' title='save' type='submit' onClick={() => this._onSave()}/>
+                        <IconButton iconName='check' className='editBtn' title='Save' type='submit' onClick={() => this._onSave()}/>
+                        <IconButton iconName='close' className='red editBtn' title='Cancel' onClick={() => this.props.onCancel()}/>
                     </div>
                 </form>
             </div>

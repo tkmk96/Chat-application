@@ -53,6 +53,17 @@
     padding-left: 20px !important;
 }
 
+.editBtn {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 5px;
+}
+
+.editBtn i {
+    line-height: 30px;
+}
+
 .like {
     font-size: 12px;
     float: right;

@@ -33,7 +33,10 @@ class MessageList extends Component {
     _renderMessages(messages) {
         return messages.map(message => {
             if (this.state.editedMessageId === message.id) {
-                return <MessageEdit key={message.id} message={message} onEdit={(message) => this._onEditMessage(message)}/>;
+                return <MessageEdit key={message.id} message={message}
+                                    onEdit={(message) => this._onEditMessage(message)}
+                                    onCancel={() => this.setState({editedMessageId: null})}
+                />;
             }
             else {
                 const myMessage = message.createdBy === this.props.user.email;
