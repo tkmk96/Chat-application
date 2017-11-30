@@ -10,7 +10,7 @@ class ChannelItem extends Component {
                     <a style={{cursor: 'pointer'}} onClick={() => this.props.setActiveChannel(this.props.id)}>
                         <div className='card light-blue darken-3 channel'>
                             <div className='card-content white-text'>
-                                <span className='card-title'>{this.props.name}</span>
+                                <span className='card-title truncate'>{this.props.name}</span>
                             </div>
                         </div>
                     </a>

@@ -9,6 +9,7 @@ class MessagePanel extends Component {
             <div>
                 <div>
                     <MessageList/>
+                    <div className='divider' style={{marginTop: '10px'}}/>
                     <MessageForm/>
                 </div>
             </div>

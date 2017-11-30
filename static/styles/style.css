@@ -7,8 +7,6 @@
     right: inherit;
     bottom: inherit;
     padding-top: 0;
-    width: 90%;
-    display: inline-block;
 }
 
 .messageWrapper.fixed-action-btn.horizontal ul {
@@ -48,6 +46,11 @@
 .messageList {
     height: 400px;
     overflow-y: auto;
+    padding: 10px 0;
+}
+
+.messageEdit {
+    padding-left: 20px !important;
 }
 
 .like {

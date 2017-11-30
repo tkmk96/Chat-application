@@ -12,7 +12,7 @@ class Message extends Component {
         const numberOfDislikes = Object.keys(dislikes).length;
         return (
             <div>
-                <div className='fixed-action-btn horizontal click-to-toggle messageWrapper'>
+                <div className='fixed-action-btn horizontal click-to-toggle messageWrapper col s10'>
                     <a>
                         <div className={`chip message ${myMessage}`}>
                             <img src={user.avatarUrl} title={user.name}/>
@@ -26,14 +26,16 @@ class Message extends Component {
                         {!myMessage && !dislikes[email] && this._renderDislikeButton()}
                     </ul>
                 </div>
-                {numberOfDislikes > 0 &&
-                <span className='like'><i
-                    className='material-icons'>thumb_down</i> {Object.keys(dislikes).length} </span>
-                }
-                {numberOfLikes > 0 &&
-                <span className='like'><i
-                    className='material-icons'>thumb_up</i> {Object.keys(likes).length} </span>
-                }
+                <div className='col s2'>
+                    {numberOfDislikes > 0 &&
+                    <span className='like'><i
+                        className='material-icons'>thumb_down</i> {numberOfDislikes} </span>
+                    }
+                    {numberOfLikes > 0 &&
+                    <span className='like'><i
+                        className='material-icons'>thumb_up</i> {numberOfLikes} </span>
+                    }
+                </div>
             </div>
 
         );
@@ -47,12 +49,15 @@ class Message extends Component {
     }
 
     _renderEditButton() {
-        return <li><IconButton className='yellow darken-2' title='Edit' iconName='edit'/></li>;
+        return <li>
+            <IconButton className='yellow darken-2' title='Edit' onClick={() => this.props.onEdit(this.props.message.id)}
+                        iconName='edit'/>
+        </li>;
     }
 
     _renderLikeButton() {
         return (<li>
-            <IconButton className='blue darken-2' title='Like' onClick={() => this._likeMessage()} iconName='thumb_up'/>
+            <IconButton className='blue darken-2 pulse' title='Like' onClick={() => this._likeMessage()} iconName='thumb_up'/>
         </li>);
     }
 
