@@ -18,7 +18,7 @@ class MessageEdit extends Component {
                         <input type='text' placeholder='Type a new message' onChange={(e) => this.setState({text: e.target.value})}/>
                     </div>
                     <div className='col s2 center'>
-                        <IconButton iconName='check' title='save' type='submit' />
+                        <IconButton iconName='check' title='save' type='submit' onClick={() => this._onSave()}/>
                     </div>
                 </form>
             </div>
