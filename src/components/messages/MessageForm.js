@@ -1,41 +1,49 @@
 import React, {Component} from 'react';
-import {reduxForm, Field, reset} from 'redux-form';
 import { connect } from 'react-redux';
 import {createMessage} from '../../actions/messageActions';
+import RichTextEditor from 'react-rte';
+
+const toolbarConfig = {
+    display: ['INLINE_STYLE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+    INLINE_STYLE_BUTTONS: [
+        {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+        {label: 'Italic', style: 'ITALIC'},
+        {label: 'Underline', style: 'UNDERLINE'}
+    ]
+};
 
 class MessageForm extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: RichTextEditor.createEmptyValue()
+        };
+    }
+
     render() {
         return(
             <div style={{marginTop: '15px'}}>
-                <form onSubmit={this.props.handleSubmit(this._onSubmit.bind(this))}>
-                    <Field name='message' component='input' />
+                <form onSubmit={this._onSubmit.bind(this)}>
+                    <RichTextEditor toolbarConfig={toolbarConfig}  value={this.state.value} onChange={this._onChange.bind(this)}/>
                     <button className='waves-effect waves-light btn right' type='submit'>Send</button>
                 </form>
             </div>
         );
     }
 
-    _onSubmit(values) {
-        this.props.createMessage(values.message);
+    _onChange(value) {
+        this.setState({value});
+    }
 
+    _onSubmit(e) {
+        e.preventDefault();
+        const value = this.state.value.toString('html');
+        if (value !== '') {
+            this.props.createMessage(value);
+            this.setState({value: RichTextEditor.createEmptyValue()});
+        }
     }
 }
 
-function validate(values) {
-    const errors = {};
-    if (!values.message) {
-        errors.message = 'Error';
-    }
-    return errors;
-}
-
-const afterSubmit = (result, dispatch) =>
-    dispatch(reset('messageForm'));
-
-export default reduxForm({
-    form: 'messageForm',
-    onSubmitSuccess: afterSubmit,
-    validate
-})(
-    connect(null, {createMessage})(MessageForm)
-);
+export default connect(null, {createMessage})(MessageForm);

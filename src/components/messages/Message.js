@@ -16,7 +16,7 @@ class Message extends Component {
                     <a>
                         <div className={`chip message ${myMessage}`}>
                             <img src={user.avatarUrl} title={user.name}/>
-                            <p className='messageText'>{message.value}</p>
+                            <div className='messageText' dangerouslySetInnerHTML={{__html: message.value}}/>
                         </div>
                     </a>
                     <ul>

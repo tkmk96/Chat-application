@@ -23,6 +23,7 @@
     cursor: pointer;
     max-width: 100%;
     word-wrap: break-word;
+    font-weight: normal;
 }
 
 .message > img {
@@ -36,6 +37,10 @@
 }
 
 .messageText {
+    display: inline;
+}
+
+.messageText p:first-of-type {
     display: inline;
 }
 
