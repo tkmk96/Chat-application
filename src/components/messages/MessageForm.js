@@ -22,11 +22,14 @@ class MessageForm extends Component {
     }
 
     render() {
+        const {value} = this.state;
         return(
             <div style={{marginTop: '15px'}}>
                 <form onSubmit={this._onSubmit.bind(this)}>
-                    <RichTextEditor toolbarConfig={toolbarConfig}  value={this.state.value} onChange={this._onChange.bind(this)}/>
-                    <button className='waves-effect waves-light btn right' type='submit'>Send</button>
+                    <RichTextEditor toolbarConfig={toolbarConfig}  value={value} onChange={this._onChange.bind(this)}/>
+                    <button className='waves-effect waves-light btn right' type='submit' disabled={!value._editorState.getCurrentContent().hasText()}>
+                        Send
+                    </button>
                 </form>
             </div>
         );
@@ -38,9 +41,9 @@ class MessageForm extends Component {
 
     _onSubmit(e) {
         e.preventDefault();
-        const value = this.state.value.toString('html');
-        if (value !== '') {
-            this.props.createMessage(value);
+        const {value} = this.state;
+        if (value._editorState.getCurrentContent().hasText()) {
+            this.props.createMessage(value.toString('html'));
             this.setState({value: RichTextEditor.createEmptyValue()});
         }
     }
