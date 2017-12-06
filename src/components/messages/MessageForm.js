@@ -19,7 +19,8 @@ class MessageForm extends Component {
         super(props);
         this.state = {
             value: RichTextEditor.createEmptyValue(),
-            showDropzone: false
+            showDropzone: false,
+            files: []
         };
     }
 
@@ -34,7 +35,7 @@ class MessageForm extends Component {
                     </button>
                 </form>
                 <button onClick={this._toggleDropzone.bind(this)}>File</button>
-                <button onClick={this._button.bind(this)}>@</button>
+                {this.state.files.length !== 0 && this._renderFilesList()}
                 {this.state.showDropzone && this._renderDropzone()}
             </div>
         );
@@ -42,17 +43,33 @@ class MessageForm extends Component {
 
     _renderDropzone() {
         return (
-            <div className="profile-avatar" title="Drag & drop or select manually">
+            <div className="" title="Drag & drop or select manually">
                 <div className="text-center avatar-dropzone waves-light">
                     <Dropzone
                         className="dropzone"
                         multiple={true}
-                        // onDrop={this._handleFiles.bind(this)}
+                        disablePreview={true}
+                        maxSize={1048576}
+                        onDrop={this._addFiles.bind(this)}
                     >
                         <i className="large material-icons">cloud_upload</i>
                         <br/>Upload file
                     </Dropzone>
                 </div>
+            </div>
+        );
+    }
+
+    _renderFilesList(){
+        const files = this.state.files.map( file => {
+            return <li key={file.name}>{file.name}</li>;
+        });
+
+        return (
+            <div>
+                <ul>
+                    {files}
+                </ul>
             </div>
         );
     }
@@ -63,12 +80,21 @@ class MessageForm extends Component {
         });
     }
 
-    _onChange(value) {
-        this.setState({value});
+    _addFiles(files, rejectedFiles){
+        this.setState( prevState => {
+            return {files: [...prevState.files, ...files]};
+        });
+
+        if(rejectedFiles.length > 0) {
+            alert("Files must be smaller than 1MB");
+        }
+        else {
+            this._toggleDropzone();
+        }
     }
 
-    _button(){
-        console.log(this._getEditorState().getSelection());
+    _onChange(value) {
+        this.setState({value});
     }
 
     _onSubmit(e) {
