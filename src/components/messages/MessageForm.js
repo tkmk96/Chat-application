@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {createMessage} from '../../actions/messageActions';
 import RichTextEditor from 'react-rte';
+import Dropzone from 'react-dropzone';
 
 const toolbarConfig = {
     display: ['INLINE_STYLE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
@@ -17,7 +18,8 @@ class MessageForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: RichTextEditor.createEmptyValue()
+            value: RichTextEditor.createEmptyValue(),
+            showDropzone: false
         };
     }
 
@@ -31,21 +33,55 @@ class MessageForm extends Component {
                         Send
                     </button>
                 </form>
+                <button onClick={this._toggleDropzone.bind(this)}>File</button>
+                <button onClick={this._button.bind(this)}>@</button>
+                {this.state.showDropzone && this._renderDropzone()}
             </div>
         );
+    }
+
+    _renderDropzone() {
+        return (
+            <div className="profile-avatar" title="Drag & drop or select manually">
+                <div className="text-center avatar-dropzone waves-light">
+                    <Dropzone
+                        className="dropzone"
+                        multiple={true}
+                        // onDrop={this._handleFiles.bind(this)}
+                    >
+                        <i className="large material-icons">cloud_upload</i>
+                        <br/>Upload file
+                    </Dropzone>
+                </div>
+            </div>
+        );
+    }
+
+    _toggleDropzone() {
+        this.setState(prevState => {
+            return {showDropzone: !prevState.showDropzone};
+        });
     }
 
     _onChange(value) {
         this.setState({value});
     }
 
+    _button(){
+        console.log(this._getEditorState().getSelection());
+    }
+
     _onSubmit(e) {
         e.preventDefault();
         const {value} = this.state;
-        if (value._editorState.getCurrentContent().hasText()) {
+        if (this._getEditorState().getCurrentContent().hasText()) {
             this.props.createMessage(value.toString('html'));
             this.setState({value: RichTextEditor.createEmptyValue()});
         }
+    }
+
+    _getEditorState() {
+        return this.state.value._editorState;
     }
 }
 
