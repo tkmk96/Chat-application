@@ -34,7 +34,9 @@ class MessageForm extends Component {
                         Send
                     </button>
                 </form>
-                <button onClick={this._toggleDropzone.bind(this)}>File</button>
+                <button className='waves-effect grey lighten-3 btn' style={{color: 'black'}} onClick={this._toggleDropzone.bind(this)}>
+                    <i className='tiny material-icons'>note_add</i>
+                </button>
                 {this.state.files.length !== 0 && this._renderFilesList()}
                 {this.state.showDropzone && this._renderDropzone()}
             </div>
@@ -52,7 +54,7 @@ class MessageForm extends Component {
                         maxSize={1048576}
                         onDrop={this._addFiles.bind(this)}
                     >
-                        <i className="large material-icons">cloud_upload</i>
+                        <i className="large material-icons">note_add</i>
                         <br/>Upload file
                     </Dropzone>
                 </div>
@@ -62,7 +64,12 @@ class MessageForm extends Component {
 
     _renderFilesList(){
         const files = this.state.files.map( file => {
-            return <li key={file.name}>{file.name}</li>;
+            return(
+                <li className='message-files-list-item' key={file.name}>
+                    <i className="small material-icons">attach_file</i>
+                    {file.name}
+                </li>
+            );
         });
 
         return (

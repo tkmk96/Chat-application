@@ -79,6 +79,18 @@
     font-size: 15px;
 }
 
+.message-files-list-item {
+    font-family: "Inconsolata", "Menlo", "Consolas", monospace;
+    font-size: 1.5em !important;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+}
+
+.message-files-list-item > .material-icons {
+    position: relative;
+    top: 0.2em;
+}
+
 .channel:hover {
     background-color: #0288d1 !important;
 }
