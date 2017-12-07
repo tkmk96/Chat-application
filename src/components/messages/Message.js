@@ -7,7 +7,7 @@ import IconButton from '../generic/IconButton';
 class Message extends Component {
     render() {
         const {message, user, myMessage, email} = this.props;
-        const {likes, dislikes} = message.customData;
+        const {likes, dislikes, images, files} = message.customData;
         const numberOfLikes = Object.keys(likes).length;
         const numberOfDislikes = Object.keys(dislikes).length;
         return (
@@ -17,6 +17,7 @@ class Message extends Component {
                         <div className={`chip message ${myMessage}`}>
                             <img src={user.avatarUrl} title={user.name}/>
                             <div className='messageText' dangerouslySetInnerHTML={{__html: message.value}}/>
+                            {images && this._renderImages(images)}
                         </div>
                     </a>
                     <ul>
@@ -25,6 +26,7 @@ class Message extends Component {
                         {!myMessage && !likes[email] && this._renderLikeButton()}
                         {!myMessage && !dislikes[email] && this._renderDislikeButton()}
                     </ul>
+
                 </div>
                 <div className='col s2'>
                     {numberOfDislikes > 0 &&
@@ -36,22 +38,39 @@ class Message extends Component {
                         className='material-icons'>thumb_up</i> {numberOfLikes} </span>
                     }
                 </div>
+
             </div>
 
         );
     }
 
+    _renderImages(images){
+        const imageItems = images.map( ({id, name, fileUrl}, index) => {
+            return (
+                <div className={`col s5 message-img ${index % 2 !== 0 ? 'clear' : ''}`} key={id}>
+                    <a href={fileUrl}>
+                        <img src={fileUrl} title={name} />
+                    </a>
+                </div>
+            );
+        });
+
+        return (
+            <div className='message-img-row'>
+                {imageItems}
+            </div>
+        );
+    }
+
     _renderDeleteButton() {
         return (<li>
-            <IconButton className='red darken-2' title='Delete' onClick={() => this._deleteMessage()}
-                        iconName='delete'/>
+            <IconButton className='red darken-2' title='Delete' onClick={() => this._deleteMessage()} iconName='delete'/>
         </li>);
     }
 
     _renderEditButton() {
         return <li>
-            <IconButton className='yellow darken-2' title='Edit' onClick={() => this.props.onEdit(this.props.message.id)}
-                        iconName='edit'/>
+            <IconButton className='yellow darken-2' title='Edit' onClick={() => this.props.onEdit(this.props.message.id)} iconName='edit'/>
         </li>;
     }
 
@@ -64,8 +83,7 @@ class Message extends Component {
     _renderDislikeButton() {
         return (
             <li>
-                <IconButton className='blue darken-2' title='Dislike' onClick={() => this._dislikeMessage()}
-                            iconName='thumb_down'/>
+                <IconButton className='blue darken-2' title='Dislike' onClick={() => this._dislikeMessage()} iconName='thumb_down'/>
             </li>
         );
     }
