@@ -1,16 +1,44 @@
 import axios from 'axios';
+
+import {uuid} from '../utils/uuidGenerator';
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
 import {SET_ACTIVE_CHANNEL, CREATE_MESSAGE, FETCH_MESSAGES} from '../constants/actionTypes';
-import {uuid} from '../utils/uuidGenerator';
-import {setActiveChannel} from './channelActions';
 import {LIKE} from '../constants/reactionTypes';
 
-export const createMessage = (text) => {
-//POST /api/app/{appId}/channel/{channelId}/message
+import {fetchFileUrl, createFile} from './index';
+import {setActiveChannel} from './channelActions';
+
+
+export const createMessage = (text, inputFiles) => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
         const activeChannel = getState().activeChannel;
+
+        const images = [];
+        const files = [];
+
+        await Promise.all (inputFiles.map (async file => {
+            const isImage = file.type.startsWith('image');
+            const data = await createFile(file, token);
+            const fileUrl = await fetchFileUrl(data.id, token);
+            return {id: data.id, name: data.name, fileUrl, isImage}
+        }))
+        .then(values => {
+            values.forEach(({id, name, fileUrl, isImage}) => {
+                const file = {id, name, fileUrl};
+                isImage ? images.push(file) : files.push(file);
+            });
+        });
+
+        const customData = {likes: {}, dislikes: {} };
+
+        if(images.length > 0){
+            customData.images = images;
+        }
+        if(files.length > 0){
+            customData.files = files;
+        }
 
         const res = await axios({
             method: 'post',
@@ -24,7 +52,7 @@ export const createMessage = (text) => {
                 id: uuid(),
                 value: text,
                 createdBy: email,
-                customData: JSON.stringify({likes: {}, dislikes: {}})
+                customData: JSON.stringify(customData)
             }
         });
         const message = res.data;

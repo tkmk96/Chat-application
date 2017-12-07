@@ -143,6 +143,36 @@ export const uploadAvatar = (file) => {
     }
 };
 
+export const fetchFileUrl = async (id, token) => {
+    const res = await axios({
+        method: 'get',
+        url: `${API_URL}/file/${id}/download-link`,
+        headers: {
+            'Authorization': `bearer ${token}`,
+            'Accept': 'application/json',
+        }
+    });
+    return res.data;
+};
+
+export const createFile = async (file, token) => {
+    let formData = new FormData();
+    formData.append('Files', file);
+
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/file`,
+        headers: {
+            'Authorization': `bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data'
+        },
+        data: formData
+    });
+    console.log(res.data[0]);
+    return res.data[0];
+};
+
 const updateUserData = async(newCustomData, user, token) => {
     const customData = updateCustomData(newCustomData, user);
 
@@ -159,17 +189,7 @@ const updateUserData = async(newCustomData, user, token) => {
     return res.data;
 };
 
-const fetchFileUrl = async (id, token) => {
-    const res = await axios({
-        method: 'get',
-        url: `${API_URL}/file/${id}/download-link`,
-        headers: {
-            'Authorization': `bearer ${token}`,
-            'Accept': 'application/json',
-        }
-    });
-    return res.data;
-};
+
 
 const receivedToken = (token) => {
     localStorage.setItem(AUTH_TOKEN, token);

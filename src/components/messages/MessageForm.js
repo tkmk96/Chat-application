@@ -108,8 +108,11 @@ class MessageForm extends Component {
         e.preventDefault();
         const {value} = this.state;
         if (this._getEditorState().getCurrentContent().hasText()) {
-            this.props.createMessage(value.toString('html'));
-            this.setState({value: RichTextEditor.createEmptyValue()});
+            this.props.createMessage(value.toString('html'), this.state.files);
+            this.setState({
+                value: RichTextEditor.createEmptyValue(),
+                files: []
+            });
         }
     }
 
