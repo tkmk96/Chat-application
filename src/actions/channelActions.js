@@ -108,6 +108,10 @@ export const removeChannel = (id) => {
 
         const channels = filterAndConvertChannels(res.data.channels, email);
 
+        if (Object.keys(channels).length === 0){
+            dispatch({type: ZERO_CHANNELS})
+        }
+
         dispatch({
             type: FETCH_CHANNELS,
             payload: channels

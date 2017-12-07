@@ -58,7 +58,7 @@ class ChannelHeader extends Component {
                     title='Leave channel'
                     iconName='close'
                     className='deep-orange lighten-1'
-                    onClick={this._leaveChannel}
+                    onClick={() => this._leaveChannel()}
                 />
             </li>
         );
@@ -71,7 +71,7 @@ class ChannelHeader extends Component {
                     title='Remove channel'
                     iconName='delete'
                     className='red darken-2'
-                    onClick={this._removeChannel}
+                    onClick={() => this._removeChannel()}
                 />
             </li>
         );
@@ -103,7 +103,7 @@ class ChannelHeader extends Component {
     }
 
     _removeChannel(){
-        this.props.removeChannel(this.props.activeChannel.id)
+        this.props.removeChannel(this.props.activeChannel.id);
     }
 
 }

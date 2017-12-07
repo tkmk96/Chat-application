@@ -26,7 +26,6 @@ export const activeChannel = (state = null, action) => {
         case ZERO_CHANNELS:
         case LOGOUT_USER:
             return null;
-            //TODO empty
         default:
             return state;
     }
