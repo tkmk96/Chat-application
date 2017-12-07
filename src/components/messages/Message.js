@@ -17,6 +17,7 @@ class Message extends Component {
                         <div className={`chip message ${myMessage}`}>
                             <img src={user.avatarUrl} title={user.name}/>
                             <div className='messageText' dangerouslySetInnerHTML={{__html: message.value}}/>
+                            {files && this._renderFiles(files)}
                             {images && this._renderImages(images)}
                         </div>
                     </a>
@@ -26,7 +27,6 @@ class Message extends Component {
                         {!myMessage && !likes[email] && this._renderLikeButton()}
                         {!myMessage && !dislikes[email] && this._renderDislikeButton()}
                     </ul>
-
                 </div>
                 <div className='col s2'>
                     {numberOfDislikes > 0 &&
@@ -38,7 +38,6 @@ class Message extends Component {
                         className='material-icons'>thumb_up</i> {numberOfLikes} </span>
                     }
                 </div>
-
             </div>
 
         );
@@ -58,6 +57,24 @@ class Message extends Component {
         return (
             <div className='message-img-row'>
                 {imageItems}
+            </div>
+        );
+    }
+
+    _renderFiles(files){
+        const fileItems = files.map( ({id, name, fileUrl}) => {
+            return (
+                <span className='message-att' key={id}>
+                    <a href={fileUrl}>
+                        {name}
+                    </a>
+                </span>
+            );
+        });
+
+        return (
+            <div className='message-att-list'>
+                {fileItems}
             </div>
         );
     }
