@@ -17,8 +17,6 @@ class Message extends Component {
                         <div className={`chip message ${myMessage}`}>
                             <img src={user.avatarUrl} title={user.name}/>
                             <div className='messageText' dangerouslySetInnerHTML={{__html: message.value}}/>
-                            {files && this._renderFiles(files)}
-                            {images && this._renderImages(images)}
                         </div>
                     </a>
                     <ul>
@@ -37,6 +35,11 @@ class Message extends Component {
                     <span className='like'><i
                         className='material-icons'>thumb_up</i> {numberOfLikes} </span>
                     }
+                </div>
+                <div style={{clear: 'both'}}></div>
+                <div className='message-files'>
+                    {files && this._renderFiles(files)}
+                    {images && this._renderImages(images)}
                 </div>
             </div>
 

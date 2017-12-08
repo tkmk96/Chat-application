@@ -80,7 +80,11 @@
     font-size: 15px;
 }
 
-.message-files-list-item {
+.message-files {
+    margin: 10px 0 20px 0;
+}
+
+.messageFormFile {
     font-family: "Inconsolata", "Menlo", "Consolas", monospace;
     font-size: 1.5em !important;
     color: #4a4a4a;
@@ -100,10 +104,10 @@
     display: list-item;
 }
 
-.message-img-row {
-    margin: 20px 10px;
-    overflow: auto;
-}
+/*.message-img-row {*/
+    /*margin: 20px 10px;*/
+    /*overflow: auto;*/
+/*}*/
 
 .message-img {
     padding-left: 0.75rem !important;

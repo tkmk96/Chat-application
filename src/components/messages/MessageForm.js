@@ -30,7 +30,9 @@ class MessageForm extends Component {
             <div style={{marginTop: '15px'}}>
                 <form onSubmit={this._onSubmit.bind(this)}>
                     <RichTextEditor toolbarConfig={toolbarConfig}  value={value} onChange={this._onChange.bind(this)}/>
-                    <button className='waves-effect waves-light btn right' type='submit' disabled={!value._editorState.getCurrentContent().hasText()}>
+                    <button className='waves-effect waves-light btn right' type='submit'
+                        disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+                    >
                         Send
                     </button>
                 </form>
@@ -65,7 +67,7 @@ class MessageForm extends Component {
     _renderFilesList(){
         const files = this.state.files.map( file => {
             return(
-                <li className='message-files-list-item' key={file.name}>
+                <li className='messageFormFile' key={file.name}>
                     <i className="small material-icons">attach_file</i>
                     {file.name}
                 </li>
@@ -107,7 +109,7 @@ class MessageForm extends Component {
     _onSubmit(e) {
         e.preventDefault();
         const {value} = this.state;
-        if (this._getEditorState().getCurrentContent().hasText()) {
+        if (this._getEditorState().getCurrentContent().hasText() || this.state.files.length > 0) {
             this.props.createMessage(value.toString('html'), this.state.files);
             this.setState({
                 value: RichTextEditor.createEmptyValue(),
