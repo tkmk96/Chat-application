@@ -2,7 +2,10 @@ import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
-import {FETCH_USER, LOGOUT_USER, FETCH_AUTH_TOKEN, FETCH_ALL_USERS} from '../constants/actionTypes';
+import {
+    FETCH_USER, LOGOUT_USER, FETCH_AUTH_TOKEN, FETCH_ALL_USERS,
+    LOADING_CHANGE_USER_NAME
+} from '../constants/actionTypes';
 import {convertUsersArray} from '../utils/convert';
 
 export const registerUser = (email, customData,  history) => {
@@ -103,12 +106,20 @@ export const fetchAllUsers = (token) => {
 
 export const editUserName = (name) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_CHANGE_USER_NAME,
+            payload: true
+        });
         const token = getState().authToken;
         const {email, customData} = await updateUserData({name}, getState().user, token);
 
         dispatch({
             type: FETCH_USER,
             payload: {email, ...JSON.parse(customData) }
+        });
+        dispatch({
+            type: LOADING_CHANGE_USER_NAME,
+            payload: false
         });
     }
 };

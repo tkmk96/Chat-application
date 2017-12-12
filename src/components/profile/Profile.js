@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import {Loader} from '../Loader';
 import ProfileForm from './ProfileForm';
 import AvatarForm from './AvatarForm';
 
@@ -31,7 +31,10 @@ class Profile extends Component {
                                 </p>
                             </div>
                         </div>
-                        <ProfileForm/>
+                        <Loader show={this.props.loading.changeUserName}
+                        >
+                            <ProfileForm/>
+                        </Loader>
                     </div>
                 </div>
             </div>
@@ -39,8 +42,8 @@ class Profile extends Component {
     }
 }
 
-function mapStateToProps({user}) {
-    return {user};
+function mapStateToProps({user, loading}) {
+    return {user, loading};
 }
 
 export default connect(mapStateToProps, null)(Profile);
