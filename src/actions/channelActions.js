@@ -4,12 +4,19 @@ import {uuid} from '../utils/uuidGenerator';
 import {filterAndConvertChannels, parseMessages} from '../utils/convert';
 
 import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
-import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS, ZERO_CHANNELS} from '../constants/actionTypes';
+import {
+    SET_ACTIVE_CHANNEL, FETCH_CHANNELS, ZERO_CHANNELS, LOADING_EDIT_CHANNEL,
+    LOADING_CREATE_CHANNEL, LOADING_DELETE_CHANNEL, LOADING_ACTIVE_CHANNEL
+} from '../constants/actionTypes';
 import * as role from '../constants/channelRoles';
 
 
 export const createChannel = (name) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_CREATE_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const email = getState().user.email;
         const users = {};
@@ -37,11 +44,19 @@ export const createChannel = (name) => {
             type: FETCH_CHANNELS,
             payload: filterAndConvertChannels(res.data.channels, email)
         });
+        dispatch({
+            type: LOADING_CREATE_CHANNEL,
+            payload: false
+        });
     };
 };
 
 export const editChannel = (channel) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_EDIT_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const email = getState().user.email;
 
@@ -64,7 +79,7 @@ export const editChannel = (channel) => {
         });
 
         const channels = filterAndConvertChannels(res.data.channels, email);
-        console.log(channels);
+
         dispatch({
             type: FETCH_CHANNELS,
             payload: channels
@@ -84,11 +99,19 @@ export const editChannel = (channel) => {
                 payload: {...channels[channel.id], messages: channel.messages}
             });
         }
+        dispatch({
+            type: LOADING_EDIT_CHANNEL,
+            payload: false
+        });
     };
 };
 
 export const removeChannel = (id) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_DELETE_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const email = getState().user.email;
 
@@ -120,6 +143,10 @@ export const removeChannel = (id) => {
         if (Object.keys(channels).length) {
             dispatch(setActiveChannel(Object.keys(channels)[0]));
         }
+        dispatch({
+            type: LOADING_DELETE_CHANNEL,
+            payload: false
+        });
     }
 };
 
@@ -159,6 +186,10 @@ export const fetchChannels = () => {
 
 export const setActiveChannel = (channelId) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const channels = getState().channels;
 
@@ -174,6 +205,10 @@ export const setActiveChannel = (channelId) => {
         dispatch({
             type: SET_ACTIVE_CHANNEL,
             payload: { ...channels[channelId], messages: parseMessages(res.data)}
+        });
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: false
         });
     };
 };

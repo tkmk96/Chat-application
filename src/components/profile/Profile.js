@@ -6,14 +6,17 @@ import AvatarForm from './AvatarForm';
 
 class Profile extends Component {
     render(){
+        const {changeUserName, changeAvatar} = this.props.loading;
         return (
             <div className="profile-page">
                 <div className="row profile-avatar-row">
                     <div className="col s4 offset-s1">
-                        <div className="profile-avatar-img" style={{backgroundImage: `url("${this.props.user.avatarUrl}")`}}>
-                            {/*<img src={this.props.user.avatarUrl} alt="avatar"/>*/}
-                        </div>
-                        <AvatarForm/>
+                        <Loader show={changeAvatar}>
+                            <div className="profile-avatar-img" style={{backgroundImage: `url("${this.props.user.avatarUrl}")`}}>
+                                {/*<img src={this.props.user.avatarUrl} alt="avatar"/>*/}
+                            </div>
+                            <AvatarForm/>
+                        </Loader>
                     </div>
 
                     <div className="col s5 offset-s1">
@@ -31,7 +34,7 @@ class Profile extends Component {
                                 </p>
                             </div>
                         </div>
-                        <Loader show={this.props.loading.changeUserName}
+                        <Loader show={changeUserName}
                         >
                             <ProfileForm/>
                         </Loader>

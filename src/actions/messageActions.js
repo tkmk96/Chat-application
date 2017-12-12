@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 import {uuid} from '../utils/uuidGenerator';
-import {API_URL, APP_ID, API_CHANNEL} from '../constants/api';
-import {SET_ACTIVE_CHANNEL, CREATE_MESSAGE, FETCH_MESSAGES} from '../constants/actionTypes';
+import {API_URL, APP_ID} from '../constants/api';
+import {CREATE_MESSAGE, LOADING_ACTIVE_CHANNEL} from '../constants/actionTypes';
 import {LIKE} from '../constants/reactionTypes';
 
 import {fetchFileUrl, createFile} from './index';
@@ -11,6 +11,10 @@ import {setActiveChannel} from './channelActions';
 
 export const createMessage = (text, inputFiles) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const email = getState().user.email;
         const activeChannel = getState().activeChannel;
@@ -60,12 +64,20 @@ export const createMessage = (text, inputFiles) => {
         dispatch({
             type: CREATE_MESSAGE,
             payload: {activeChannel, message}
-        })
+        });
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: false
+        });
     }
 };
 
 export const deleteMessage = (id) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const activeChannel = getState().activeChannel;
 
@@ -83,6 +95,10 @@ export const deleteMessage = (id) => {
 
 export const editMessage = (message) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: true
+        });
         const token = getState().authToken;
         const activeChannel = getState().activeChannel;
         message.customData = JSON.stringify(message.customData);
@@ -102,6 +118,10 @@ export const editMessage = (message) => {
 
 export const reactToMessage = (message, reaction) => {
     return async (dispatch, getState) => {
+        dispatch({
+            type: LOADING_ACTIVE_CHANNEL,
+            payload: true
+        });
         const email = getState().user.email;
         const newMessage = {...message};
         if (reaction === LIKE) {

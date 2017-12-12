@@ -12,9 +12,7 @@ import {getPersistedData} from './utils/getPersistedData';
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const loading = {changeUserName: false};
-const initialState = {...getPersistedData(), loading };
-const store = createStore(reducers, initialState, composeEnhancers(applyMiddleware(reduxThunk)));
+const store = createStore(reducers, getPersistedData(), composeEnhancers(applyMiddleware(reduxThunk)));
 
 ReactDOM.render(
     <Provider store={store}>

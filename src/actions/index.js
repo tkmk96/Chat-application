@@ -4,12 +4,16 @@ import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
 import {
     FETCH_USER, LOGOUT_USER, FETCH_AUTH_TOKEN, FETCH_ALL_USERS,
-    LOADING_CHANGE_USER_NAME
+    LOADING_CHANGE_USER_NAME, LOADING_CHANGE_AVATAR, LOADING_LOGIN, LOADING_REGISTER
 } from '../constants/actionTypes';
 import {convertUsersArray} from '../utils/convert';
 
 export const registerUser = (email, customData,  history) => {
     return async dispatch => {
+        dispatch({
+            type: LOADING_REGISTER,
+            payload: true
+        });
         const res = await axios({
             method: 'post',
             url: `${API_URL}/${APP_ID}/user`,
@@ -26,12 +30,20 @@ export const registerUser = (email, customData,  history) => {
         });
         const token = await fetchToken(email);
         dispatch(receivedToken(token));
+        dispatch({
+            type: LOADING_REGISTER,
+            payload: false
+        });
         history.push('/');
     };
 };
 
 export const loginUser = (email, password, history) => {
     return async dispatch => {
+        dispatch({
+            type: LOADING_LOGIN,
+            payload: true
+        });
         const token = await fetchToken(email);
         const { customData} = await fetchData(email, token);
         const user = {email, ...JSON.parse(customData)};
@@ -49,6 +61,10 @@ export const loginUser = (email, password, history) => {
         dispatch({
             type: FETCH_USER,
             payload: user
+        });
+        dispatch({
+            type: LOADING_LOGIN,
+            payload: false
         });
         history.push('/');
     }
@@ -128,6 +144,10 @@ export const editUserName = (name) => {
 
 export const uploadAvatar = (file) => {
     return async (dispatch, getState)=> {
+        dispatch({
+            type: LOADING_CHANGE_AVATAR,
+            payload: true
+        });
         const token = getState().authToken;
 
         let formData = new FormData();
@@ -150,6 +170,10 @@ export const uploadAvatar = (file) => {
         dispatch({
             type: FETCH_USER,
             payload: {email, ...JSON.parse(customData) }
+        });
+        dispatch({
+            type: LOADING_CHANGE_AVATAR,
+            payload: false
         });
     }
 };

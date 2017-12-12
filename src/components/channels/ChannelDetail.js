@@ -7,16 +7,19 @@ import ChannelInviteForm from './ChannelInviteForm';
 import Icon from '../generic/IconButton';
 
 import * as role from '../../constants/channelRoles';
+import {Loader} from '../Loader';
 
 class ChannelDetail extends Component {
     render() {
-        if(this.props.isOwner || this.props.isAdmin){
-            return this._renderDetailWithEdit();
-        }
-        return this._renderJustDetail();
+        return (
+            <Loader show={this.props.loading}>
+                {(this.props.isOwner || this.props.isAdmin) && this._renderDetailWithEdit()}
+                {!this.props.isOwner && !this.props.isAdmin && this._renderJustDetail()}
+            </Loader>
+        );
     }
 
-    _renderJustDetail(){
+    _renderJustDetail() {
         return (
             <div className='row'>
                 <h4 className='center'>Users:</h4>
@@ -28,21 +31,22 @@ class ChannelDetail extends Component {
         );
     }
 
-    _renderDetailWithEdit(){
+    _renderDetailWithEdit() {
         return (
             <div className='row'>
                 <div>
                     {this.props.isOwner &&
-                        <ChannelRenameForm
-                            form='channelRenameForm'
-                            className='col s6'
-                            name={this.props.channel.name}
-                            onSubmit={(name) => this._rename(name)}
-                        />
+                    <ChannelRenameForm
+                        form='channelRenameForm'
+                        className='col s6'
+                        name={this.props.channel.name}
+                        onSubmit={(name) => this._rename(name)}
+                    />
                     }
 
                     {(this.props.isOwner || this.props.isAdmin) &&
-                        <ChannelInviteForm onInvite={(email) => this._changePrivilege(email, role.USER)} channel={this.props.channel}/>
+                    <ChannelInviteForm onInvite={(email) => this._changePrivilege(email, role.USER)}
+                                       channel={this.props.channel}/>
                     }
                 </div>
 
@@ -90,12 +94,12 @@ class ChannelDetail extends Component {
         });
     }
 
-    _renderUserNames(){
+    _renderUserNames() {
         const {users} = this.props.channel.customData;
         return Object.entries(users).map(([email, userRole]) => {
             return (
                 <div key={email}>
-                    <div className='col s7 offset-s5 channel-detail-user' >
+                    <div className='col s7 offset-s5 channel-detail-user'>
                         <img src={this.props.users[email].avatarUrl} className='channel-detail-avatar'/>
                         <span style={{fontSize: '1.2em'}}>
                             {this.props.users[email].name}
@@ -111,23 +115,23 @@ class ChannelDetail extends Component {
         return (
             <div style={{paddingTop: '10px', textAlign: 'end'}}>
                 {this.props.isOwner &&
-                    <Icon
-                        title='Make owner'
-                        iconName='verified_user'
-                        className='green accent-4'
-                        style={{marginRight: '10px'}}
-                        onClick={() => this._changePrivilege(email, role.OWNER)}
-                    />
+                <Icon
+                    title='Make owner'
+                    iconName='verified_user'
+                    className='green accent-4'
+                    style={{marginRight: '10px'}}
+                    onClick={() => this._changePrivilege(email, role.OWNER)}
+                />
 
                 }
                 {this.props.isOwner &&
-                    <Icon
-                        title='Make admin'
-                        iconName='star'
-                        className='light-green accent-4'
-                        style={{marginRight: '10px'}}
-                        onClick={() => this._changePrivilege(email, role.ADMIN)}
-                    />
+                <Icon
+                    title='Make admin'
+                    iconName='star'
+                    className='light-green accent-4'
+                    style={{marginRight: '10px'}}
+                    onClick={() => this._changePrivilege(email, role.ADMIN)}
+                />
                 }
 
                 <Icon
@@ -142,7 +146,7 @@ class ChannelDetail extends Component {
     }
 
     _renderIconsForOwner(email) {
-        if(!this.props.isOwner || this.props.userEmail === email){
+        if (!this.props.isOwner || this.props.userEmail === email) {
             return null;
         }
         return (
@@ -167,8 +171,8 @@ class ChannelDetail extends Component {
 
 }
 
-function mapStateToProps({users}) {
-    return {users};
+function mapStateToProps({users, loading}) {
+    return {users, loading: loading.editChannel};
 }
 
 export default connect(mapStateToProps, {editChannel, changePrivilege})(ChannelDetail);

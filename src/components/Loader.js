@@ -5,7 +5,7 @@ import {SavingSpinner} from './SavingSpinner';
 export const Loader = ({children, show}) => {
     return (
         <AdvancedLoader
-            show={show}
+            show={show || false}
             message={<SavingSpinner/>}
             contentBlur={2}
             backgroundStyle={{background: 'transparent'}}

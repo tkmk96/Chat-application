@@ -6,6 +6,7 @@ import {fetchChannels} from '../actions/channelActions';
 import ChannelHeader from './channels/ChannelHeader';
 import ChannelDetail from './channels/ChannelDetail';
 import * as role from '../constants/channelRoles';
+import {Loader} from './Loader';
 
 class Main extends Component {
 
@@ -22,17 +23,19 @@ class Main extends Component {
     }
 
     render() {
-        return(
+        return (
             <div className='row'>
-                <ChannelList />
-                <div className='col s8 messagePanel'>
-                    {this.props.activeChannel &&
-                    <div>
-                        {this._renderHeader()}
-                        {this._renderContent()}
+                <Loader show={this.props.loading}>
+                    <ChannelList/>
+                    <div className='col s8 messagePanel'>
+                        {this.props.activeChannel &&
+                        <div>
+                            {this._renderHeader()}
+                            {this._renderContent()}
+                        </div>
+                        }
                     </div>
-                    }
-                </div>
+                </Loader>
             </div>
         );
     }
@@ -59,9 +62,9 @@ class Main extends Component {
         if (this.state.showDetail) {
             return (
                 <ChannelDetail channel={this.props.activeChannel}
-                    userEmail={this.props.userEmail}
-                    isOwner={this.props.isOwner}
-                    isAdmin={this.props.isAdmin}
+                               userEmail={this.props.userEmail}
+                               isOwner={this.props.isOwner}
+                               isAdmin={this.props.isAdmin}
                 />
             );
         }
@@ -70,7 +73,7 @@ class Main extends Component {
 }
 
 
-function mapStateToProps({activeChannel, user}) {
+function mapStateToProps({activeChannel, user, loading}) {
     const userRole = activeChannel && activeChannel.customData.users[user.email];
     const isOwner = userRole === role.OWNER;
     const isAdmin = userRole === role.ADMIN;
@@ -80,7 +83,9 @@ function mapStateToProps({activeChannel, user}) {
         activeChannel,
         userEmail,
         isOwner,
-        isAdmin
+        isAdmin,
+        loading: loading.createChannel || loading.deleteChannel || loading.activeChannel
     };
 }
+
 export default connect(mapStateToProps, {fetchChannels})(Main);
