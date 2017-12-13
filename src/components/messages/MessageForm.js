@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {createMessage} from '../../actions/messageActions';
 import RichTextEditor from 'react-rte';
 import Dropzone from 'react-dropzone';
-import {Modifier, EditorState} from 'draft-js';
+import {Modifier, EditorState, CompositeDecorator, RichUtils} from 'draft-js';
 
 const toolbarConfig = {
     display: ['INLINE_STYLE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
@@ -14,11 +14,29 @@ const toolbarConfig = {
     ]
 };
 
+const UserAnnotation = (props) => {
+    return (
+        <span style={{color: 'green'}}>
+            {props.children}
+        </span>
+    );
+};
+
 class MessageForm extends Component {
     constructor(props) {
         super(props);
+
+        const decorator = new CompositeDecorator([
+            {
+                strategy: findTokenEntities,
+                component: UserAnnotation,
+            },
+        ]);
+        const editor = RichTextEditor.createEmptyValue();
+        editor._editorState = EditorState.createEmpty(decorator);
+
         this.state = {
-            value: RichTextEditor.createEmptyValue(),
+            value: editor,
             annotatedValue: '',
             showDropzone: false,
             showAnnotationForm: false,
@@ -26,11 +44,11 @@ class MessageForm extends Component {
         };
     }
 
-    componentDidUpdate(){
-        if (this.focusElement){
-            this.focusElement.focus();
-        }
-    }
+    // componentDidUpdate(){
+    //     if (this.focusElement){
+    //         this.focusElement.focus();
+    //     }
+    // }
 
     render() {
         const {value} = this.state;
@@ -38,12 +56,13 @@ class MessageForm extends Component {
             <div style={{marginTop: '15px'}}>
                 <form onSubmit={this._onSubmit.bind(this)} style={{marginBottom: '10px'}}>
                     <RichTextEditor toolbarConfig={toolbarConfig} value={value} onChange={this._onChange.bind(this)}/>
+                    <button className='waves-effect waves-light btn right' type='submit'
+                        disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+                    >
+                        Send
+                    </button>
                 </form>
-                <button className='waves-effect waves-light btn right' type='submit'
-                    disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
-                >
-                    Send
-                </button>
+
                 <button className='waves-effect grey lighten-3 btn' style={{color: 'black'}}
                     onClick={this._toggleDropzone.bind(this)}>
                     <i className='tiny material-icons'>note_add</i>
@@ -133,6 +152,7 @@ class MessageForm extends Component {
     _onSubmit(e) {
         e.preventDefault();
         const {value} = this.state;
+        console.log(value);
         if (this._getEditorState().getCurrentContent().hasText() || this.state.files.length > 0) {
             this.props.createMessage(value.toString('html'), this.state.files);
             this.setState({
@@ -144,9 +164,33 @@ class MessageForm extends Component {
 
     _onAnnotationSubmit(e) {
         e.preventDefault();
+        if (this.state.annotatedValue === '') {
+            return;
+        }
+        let editor = this._getEditorState();
+        const contentState = editor.getCurrentContent();
+
+        const contentStateWithEntity = contentState.createEntity(
+            'TOKEN',
+            'IMMUTABLE'
+        );
+
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        const newEditorState = EditorState.set(editor, { currentContent: contentStateWithEntity });
+        // const entityKey = contentState.getLastCreatedEntityKey();
+        // editor = EditorState.moveFocusToEnd(editor);
+        // console.log(editor.getSelection());
+        // contentState = Modifier.applyEntity(contentState, editor.getSelection(), entityKey);
+        // editor = EditorState.push(editor, contentState, 'apply-entity');
 
 
+        const name = `@${this.state.annotatedValue}`;
+        const newContentState = Modifier.replaceText(contentStateWithEntity, newEditorState.getSelection(), name, null, entityKey);
+        editor = EditorState.push(newEditorState, newContentState, 'insert-characters');
 
+        this.state.value._editorState = editor;
+
+        this._toggleAnnotationForm();
         this.setState({annotatedValue: ''});
     }
 
@@ -163,7 +207,7 @@ class MessageForm extends Component {
                     <option value='' disabled >Select your option</option>
                     {this._renderOptions(this.props.activeChannel.customData.users)}
                 </select>
-                <button type='submit' className='waves-effect waves-light btn right'>Add</button>
+                <button type='submit' className='waves-effect waves-light btn right' disabled={this.state.annotatedValue === ''}>Add</button>
             </form>
 
         );
@@ -171,9 +215,23 @@ class MessageForm extends Component {
 
     _renderOptions(users) {
         return Object.keys(users).map(user => {
-            return <option key={user} value={user}>{this.props.users[user].name}</option>;
+            const name = this.props.users[user].name;
+            return <option key={user} value={name}>{name}</option>;
         });
     }
+}
+
+function findTokenEntities(contentBlock, callback, contentState) {
+    contentBlock.findEntityRanges(
+        (character) => {
+            const entityKey = character.getEntity();
+            return (
+                entityKey !== null &&
+                contentState.getEntity(entityKey).getType() === 'TOKEN'
+            );
+        },
+        callback
+    );
 }
 
 function mapStateToProps({users, activeChannel}) {
