@@ -115,6 +115,15 @@
     text-align: center;
 }
 
+.annotationForm {
+    margin-top: 10px;
+}
+
+.annotationForm select {
+    display: inline-block !important;
+    width: 80%;
+}
+
 .clear {
     clear: right !important;
 }
