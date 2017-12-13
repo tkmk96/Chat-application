@@ -152,14 +152,22 @@ class MessageForm extends Component {
     _onSubmit(e) {
         e.preventDefault();
         const {value} = this.state;
-        console.log(value);
         if (this._getEditorState().getCurrentContent().hasText() || this.state.files.length > 0) {
-            this.props.createMessage(value.toString('html'), this.state.files);
+            const message = value.toString('html');
+            this.props.createMessage(this._createAnnotations(message), this.state.files);
             this.setState({
                 value: RichTextEditor.createEmptyValue(),
                 files: []
             });
         }
+    }
+
+
+    _createAnnotations(text) {
+        const pattern = /(@\w*(?=\s|$|<))/g;
+        return text.replace(pattern, match => {
+            return `<span class='annotation'}>${match}</span>`;
+        });
     }
 
     _onAnnotationSubmit(e) {

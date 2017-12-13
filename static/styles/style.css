@@ -124,6 +124,11 @@
     width: 80%;
 }
 
+.annotation {
+    color: red;
+    font-weight: bold;
+}
+
 .clear {
     clear: right !important;
 }
