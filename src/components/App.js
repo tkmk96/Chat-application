@@ -8,7 +8,7 @@ import Registration from './login/Registration';
 import Header from './Header';
 import Main from './Main';
 import Profile from './profile/Profile';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './generic/PrivateRoute';
 import Login from './login/Login';
 
 class App extends Component {

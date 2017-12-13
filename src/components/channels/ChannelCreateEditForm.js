@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import {createChannel} from '../../actions/channelActions';
-import FormField from '../FormField';
+import FormField from '../generic/FormField';
 
 class ChannelForm extends Component {
     render() {

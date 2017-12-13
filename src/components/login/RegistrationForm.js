@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {reduxForm, Field} from 'redux-form';
 import {Link, withRouter} from 'react-router-dom';
-import RegistrationField from '../FormField';
+import RegistrationField from '../generic/FormField';
 import {registerUser} from '../../actions/index';
 import {connect} from 'react-redux';
 import PersonImg from '../../../static/assets/person.jpg';
-import {Loader} from '../Loader';
+import {Loader} from '../generic/Loader';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

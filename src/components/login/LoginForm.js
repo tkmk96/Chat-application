@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import {reduxForm, Field} from 'redux-form';
 
-import RegistrationField from '../FormField';
+import RegistrationField from '../generic/FormField';
 import {loginUser} from '../../actions/index';
-import {Loader} from '../Loader';
+import {Loader} from '../generic/Loader';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

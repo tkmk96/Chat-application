@@ -6,7 +6,7 @@ import {fetchChannels} from '../actions/channelActions';
 import ChannelHeader from './channels/ChannelHeader';
 import ChannelDetail from './channels/ChannelDetail';
 import * as role from '../constants/channelRoles';
-import {Loader} from './Loader';
+import {Loader} from './generic/Loader';
 
 class Main extends Component {
 

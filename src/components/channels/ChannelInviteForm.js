@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import FormField from '../FormField';
+import FormField from '../generic/FormField';
 import {reduxForm, Field, reset} from 'redux-form';
 import {changePrivilege} from '../../actions/channelActions';
 import {connect} from 'react-redux';

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Loader} from '../Loader';
+import {Loader} from '../generic/Loader';
 import ProfileForm from './ProfileForm';
 import AvatarForm from './AvatarForm';
 

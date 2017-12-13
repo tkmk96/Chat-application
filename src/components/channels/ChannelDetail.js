@@ -7,7 +7,7 @@ import ChannelInviteForm from './ChannelInviteForm';
 import Icon from '../generic/IconButton';
 
 import * as role from '../../constants/channelRoles';
-import {Loader} from '../Loader';
+import {Loader} from '../generic/Loader';
 
 class ChannelDetail extends Component {
     render() {
