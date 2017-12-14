@@ -6,13 +6,6 @@ import {editMessage} from '../../actions/messageActions';
 
 class MessageList extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            editedMessageId: null
-        };
-    }
-
     render() {
         const {activeChannel} = this.props;
         return(

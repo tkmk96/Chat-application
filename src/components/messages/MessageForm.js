@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {createMessage} from '../../actions/messageActions';
+import {createMessage, editMessage} from '../../actions/messageActions';
 import RichTextEditor from 'react-rte';
 import {EditorState, CompositeDecorator} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
@@ -21,9 +21,18 @@ class MessageForm extends Component {
         };
     }
 
-    componentWillReceiveProps(props){
-        if (props.editedMessage){
+    componentWillReceiveProps(props) {
+        if (props.editedMessage) {
+            const {images, files} = props.editedMessage.customData;
             this.setState({value: createEditorWithContent(props.editedMessage.value)});
+            let newFiles = [];
+            if (images) {
+                newFiles = newFiles.concat(images);
+            }
+            if (files) {
+                newFiles = newFiles.concat(files);
+            }
+            this.setState({files: newFiles});
         }
     }
 
@@ -33,29 +42,60 @@ class MessageForm extends Component {
             <div style={{marginTop: '15px'}}>
                 <form onSubmit={this._onSubmit.bind(this)} style={{marginBottom: '10px'}}>
                     <RichTextEditor toolbarConfig={toolbarConfig} value={value} onChange={this._onChange.bind(this)}/>
-                    <button className='waves-effect waves-light btn right' type='submit'
-                        disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
-                    >
-                        Send
-                    </button>
+                    {this.props.editedMessage ? this._renderEditButtons() : this._renderSendBtn()}
                 </form>
                 <button className='waves-effect grey lighten-3 btn' style={{color: 'black', marginRight: '10px'}}
                     onClick={this._toggleAnnotationForm.bind(this)}>
                     @
                 </button>
                 <AttachmentForm
+                    disabled={this.props.editedMessage !== undefined}
                     files={this.state.files}
                     onDrop={(files, rejected) => this._addFiles(files, rejected)}
                 />
 
                 {this.state.showAnnotationForm &&
-                    <AnnotationForm
-                        onSubmit={this._onAnnotationSubmit.bind(this)}
-                        editor={this._getEditorState()}
-                    />
+                <AnnotationForm
+                    onSubmit={this._onAnnotationSubmit.bind(this)}
+                    editor={this._getEditorState()}
+                />
                 }
             </div>
         );
+    }
+
+    _renderSendBtn() {
+        return (
+            <button className='waves-effect waves-light btn right' type='submit'
+                disabled={!this.state.value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+            >
+                Send
+            </button>
+        );
+    }
+
+    _renderEditButtons() {
+        return (
+            <div>
+                <button className='waves-effect waves-light btn right'
+                        onClick={this._onEditMessage.bind(this)}
+                    // disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+                >
+                    Edit
+                </button>
+                <button className='waves-effect waves-light red btn right' style={{marginRight: '10px'}}
+                        onClick={this._onEditCancel.bind(this)}
+                    // disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+                >
+                    Cancel
+                </button>
+            </div>
+        );
+    }
+
+    _onEditCancel() {
+        this.setState({files: [], value: createEmptyEditor()});
+        this.props.clearEditedMessage();
     }
 
     _toggleAnnotationForm() {
@@ -70,7 +110,7 @@ class MessageForm extends Component {
         });
 
         if (rejectedFiles.length > 0) {
-            alert("Files must be smaller than 1MB");
+            alert('Files must be smaller than 1MB');
         }
         else {
             this._toggleDropzone();
@@ -93,6 +133,24 @@ class MessageForm extends Component {
                 files: []
             });
         }
+    }
+
+    _onEditMessage() {
+        const content = this._getEditorState().getCurrentContent();
+        const {editedMessage} = this.props;
+        const {images, files} = editedMessage.customData;
+        if (content.hasText() || files || images) {
+            const text = stateToHTML(content, optionsToHtml);
+            const newMessage = {...editedMessage};
+            newMessage.value = text;
+            this.props.editMessage(newMessage);
+
+            this.setState({
+                value: createEmptyEditor(),
+                files: []
+            });
+        }
+        this.props.clearEditedMessage();
     }
 
     _onAnnotationSubmit(editorState) {
@@ -118,7 +176,6 @@ const toolbarConfig = {
 };
 
 
-
 const optionsToHtml = {
     entityStyleFn: (entity) => {
         const entityType = entity.get('type').toLowerCase();
@@ -142,7 +199,7 @@ const optionsFromHtml = {
     },
 };
 
-function createDecorator(){
+function createDecorator() {
     return new CompositeDecorator([
         {
             strategy: findTokenEntities,
@@ -151,15 +208,14 @@ function createDecorator(){
     ]);
 }
 
-function createEmptyEditor(){
+function createEmptyEditor() {
     const decorator = createDecorator();
     const editor = RichTextEditor.createEmptyValue();
     editor._editorState = EditorState.createEmpty(decorator);
     return editor;
 }
 
-function createEditorWithContent(html){
-    console.log('got it');
+function createEditorWithContent(html) {
     const decorator = createDecorator();
     const editor = RichTextEditor.createEmptyValue();
     const contentState = stateFromHTML(html, optionsFromHtml);
@@ -180,4 +236,4 @@ function findTokenEntities(contentBlock, callback, contentState) {
     );
 }
 
-export default connect(null, {createMessage})(MessageForm);
+export default connect(null, {createMessage, editMessage})(MessageForm);

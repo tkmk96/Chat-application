@@ -12,10 +12,13 @@ class AttachmentForm extends Component {
     }
 
     render() {
+        console.log(this.props.disabled);
         return(
             <div style={{display: 'inline'}}>
                 <button className='waves-effect grey lighten-3 btn' style={{color: 'black'}}
-                        onClick={this._toggleDropzone.bind(this)}>
+                        onClick={this._toggleDropzone.bind(this)}
+                        disabled={this.props.disabled}
+                >
                     <i className='tiny material-icons'>note_add</i>
                 </button>
                 {this.props.files.length !== 0 && this._renderFilesList()}
@@ -31,7 +34,9 @@ class AttachmentForm extends Component {
     }
 
     _renderFilesList() {
+        console.log(this.props.files);
         const files = this.props.files.map(file => {
+            console.log(file);
             return (
                 <li className='messageFormFile' key={file.name}>
                     <i className="small material-icons">attach_file</i>

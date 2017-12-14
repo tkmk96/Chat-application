@@ -12,6 +12,10 @@ class MessagePanel extends Component {
         };
     }
 
+    componentWillReceiveProps() {
+        this.setState({editedMessage: null});
+    }
+
     render() {
         return (
             <div>
@@ -19,7 +23,10 @@ class MessagePanel extends Component {
                     <MessageList onEdit={(message) => this._onEdit(message)}/>
                     <div className='divider' style={{marginTop: '10px'}}/>
                     {this.state.editedMessage
-                        ? <MessageForm editedMessage={this.state.editedMessage} onEditCancel={() => this._onEditCancel()}/>
+                        ? <MessageForm
+                            editedMessage={this.state.editedMessage}
+                            clearEditedMessage={() => this._clearEditedMessage()}
+                        />
                         : <MessageForm/>}
                 </div>
             </div>
@@ -27,11 +34,10 @@ class MessagePanel extends Component {
     }
 
     _onEdit(message){
-        console.log(message);
         this.setState({editedMessage: message});
     }
 
-    _onEditCancel(){
+    _clearEditedMessage(){
         this.setState({editedMessage: null});
     }
 }
