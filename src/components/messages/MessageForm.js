@@ -5,37 +5,7 @@ import RichTextEditor from 'react-rte';
 import Dropzone from 'react-dropzone';
 import {Modifier, EditorState, CompositeDecorator, RichUtils} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-const toolbarConfig = {
-    display: ['INLINE_STYLE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
-    INLINE_STYLE_BUTTONS: [
-        {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
-        {label: 'Italic', style: 'ITALIC'},
-        {label: 'Underline', style: 'UNDERLINE'}
-    ]
-};
-
-const UserAnnotation = (props) => {
-    return (
-        <span className='annotation'>
-            {props.children}
-        </span>
-    );
-};
-
-const optionsToHtml = {
-    entityStyleFn: (entity) => {
-        const entityType = entity.get('type').toLowerCase();
-        const {className} = entity.getData();
-        if (entityType === 'token' && className === 'annotation') {
-            return {
-                element: 'span',
-                attributes: {
-                    className: className,
-                },
-            };
-        }
-    },
-};
+import {stateFromHTML} from 'draft-js-import-html';
 
 class MessageForm extends Component {
     constructor(props) {
@@ -163,7 +133,7 @@ class MessageForm extends Component {
             this.props.createMessage(message, this.state.files);
 
             this.setState({
-                value: createEmptyEditor(),
+                value: createEditorWithContent(message),//createEmptyEditor(),
                 files: []
             });
         }
@@ -235,15 +205,68 @@ class MessageForm extends Component {
     }
 }
 
-function createEmptyEditor(){
-    const decorator = new CompositeDecorator([
+
+const toolbarConfig = {
+    display: ['INLINE_STYLE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+    INLINE_STYLE_BUTTONS: [
+        {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+        {label: 'Italic', style: 'ITALIC'},
+        {label: 'Underline', style: 'UNDERLINE'}
+    ]
+};
+
+const UserAnnotation = (props) => {
+    return (
+        <span className='annotation'>
+            {props.children}
+        </span>
+    );
+};
+
+const optionsToHtml = {
+    entityStyleFn: (entity) => {
+        const entityType = entity.get('type').toLowerCase();
+        const {className} = entity.getData();
+        if (entityType === 'token' && className === 'annotation') {
+            return {
+                element: 'span',
+                attributes: {
+                    className: className,
+                },
+            };
+        }
+    },
+};
+
+const optionsFromHtml = {
+    customInlineFn: (element, {Entity}) => {
+        if (element.tagName === 'SPAN' && element.className === 'annotation') {
+            return Entity('TOKEN', 'IMMUTABLE', {src: element.getAttribute('src')});
+        }
+    },
+};
+
+function createDecorator(){
+    return new CompositeDecorator([
         {
             strategy: findTokenEntities,
             component: UserAnnotation,
         },
     ]);
+}
+
+function createEmptyEditor(){
+    const decorator = createDecorator();
     const editor = RichTextEditor.createEmptyValue();
     editor._editorState = EditorState.createEmpty(decorator);
+    return editor;
+}
+
+function createEditorWithContent(html){
+    const decorator = createDecorator();
+    const editor = RichTextEditor.createEmptyValue();
+    const contentState = stateFromHTML(html, optionsFromHtml);
+    editor._editorState = EditorState.createWithContent(contentState, decorator);
     return editor;
 }
 
