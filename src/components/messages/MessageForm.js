@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createMessage} from '../../actions/messageActions';
 import RichTextEditor from 'react-rte';
-import Dropzone from 'react-dropzone';
-import {Modifier, EditorState, CompositeDecorator} from 'draft-js';
+import {EditorState, CompositeDecorator} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import {stateFromHTML} from 'draft-js-import-html';
 import AnnotationForm from './AnnotationForm';
+import AttachmentForm from './AttachmentForm';
+import {UserAnnotation} from './UserAnnotation';
 
 class MessageForm extends Component {
     constructor(props) {
@@ -15,7 +16,6 @@ class MessageForm extends Component {
         this.state = {
             value: createEmptyEditor(),
             annotatedValue: '',
-            showDropzone: false,
             showAnnotationForm: false,
             files: []
         };
@@ -26,12 +26,6 @@ class MessageForm extends Component {
             this.setState({value: createEditorWithContent(props.editedMessage.value)});
         }
     }
-
-    // componentDidUpdate(){
-    //     if (this.focusElement){
-    //         this.focusElement.focus();
-    //     }
-    // }
 
     render() {
         const {value} = this.state;
@@ -45,69 +39,23 @@ class MessageForm extends Component {
                         Send
                     </button>
                 </form>
-
-                <button className='waves-effect grey lighten-3 btn' style={{color: 'black'}}
-                    onClick={this._toggleDropzone.bind(this)}>
-                    <i className='tiny material-icons'>note_add</i>
-                </button>
-                <button className='waves-effect grey lighten-3 btn' style={{color: 'black', marginLeft: '10px'}}
+                <button className='waves-effect grey lighten-3 btn' style={{color: 'black', marginRight: '10px'}}
                     onClick={this._toggleAnnotationForm.bind(this)}>
                     @
                 </button>
-                {this.state.files.length !== 0 && this._renderFilesList()}
+                <AttachmentForm
+                    files={this.state.files}
+                    onDrop={(files, rejected) => this._addFiles(files, rejected)}
+                />
+
                 {this.state.showAnnotationForm &&
                     <AnnotationForm
                         onSubmit={this._onAnnotationSubmit.bind(this)}
                         editor={this._getEditorState()}
                     />
                 }
-                {this.state.showDropzone && this._renderDropzone()}
             </div>
         );
-    }
-
-    _renderDropzone() {
-        return (
-            <div className="" title="Drag & drop or select manually">
-                <div className="text-center avatar-dropzone waves-light" tabIndex='0' ref={ (e) => this.focusElement = e}>
-                    <Dropzone
-                        className="dropzone"
-                        multiple={true}
-                        disablePreview={true}
-                        maxSize={1048576}
-                        onDrop={this._addFiles.bind(this)}
-                    >
-                        <i className="large material-icons">note_add</i>
-                        <br/>Upload file
-                    </Dropzone>
-                </div>
-            </div>
-        );
-    }
-
-    _renderFilesList() {
-        const files = this.state.files.map(file => {
-            return (
-                <li className='messageFormFile' key={file.name}>
-                    <i className="small material-icons">attach_file</i>
-                    {file.name}
-                </li>
-            );
-        });
-
-        return (
-            <div>
-                <ul>
-                    {files}
-                </ul>
-            </div>
-        );
-    }
-
-    _toggleDropzone() {
-        this.setState(prevState => {
-            return {showDropzone: !prevState.showDropzone};
-        });
     }
 
     _toggleAnnotationForm() {
@@ -169,13 +117,7 @@ const toolbarConfig = {
     ]
 };
 
-const UserAnnotation = (props) => {
-    return (
-        <span className='annotation'>
-            {props.children}
-        </span>
-    );
-};
+
 
 const optionsToHtml = {
     entityStyleFn: (entity) => {
@@ -237,7 +179,5 @@ function findTokenEntities(contentBlock, callback, contentState) {
         callback
     );
 }
-
-
 
 export default connect(null, {createMessage})(MessageForm);
