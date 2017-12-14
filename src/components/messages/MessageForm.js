@@ -6,6 +6,7 @@ import Dropzone from 'react-dropzone';
 import {Modifier, EditorState, CompositeDecorator} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import {stateFromHTML} from 'draft-js-import-html';
+import AnnotationForm from './AnnotationForm';
 
 class MessageForm extends Component {
     constructor(props) {
@@ -54,7 +55,12 @@ class MessageForm extends Component {
                     @
                 </button>
                 {this.state.files.length !== 0 && this._renderFilesList()}
-                {this.state.showAnnotationForm && this._renderAnnotationForm()}
+                {this.state.showAnnotationForm &&
+                    <AnnotationForm
+                        onSubmit={this._onAnnotationSubmit.bind(this)}
+                        editor={this._getEditorState()}
+                    />
+                }
                 {this.state.showDropzone && this._renderDropzone()}
             </div>
         );
@@ -127,10 +133,6 @@ class MessageForm extends Component {
         this.setState({value});
     }
 
-    _onAnnotationChange(e) {
-        this.setState({annotatedValue: e.target.value});
-    }
-
     _onSubmit(e) {
         e.preventDefault();
         const content = this._getEditorState().getCurrentContent();
@@ -145,70 +147,16 @@ class MessageForm extends Component {
         }
     }
 
-
-    _createAnnotations(text) {
-        const pattern = /(@\w*(?=\s|$|<))/g;
-        return text.replace(pattern, match => {
-            return `<span class='annotation'}>${match}</span>`;
-        });
-    }
-
-    _onAnnotationSubmit(e) {
-        e.preventDefault();
-        if (this.state.annotatedValue === '') {
-            return;
-        }
-
-        this.state.value._editorState = this._createAnnotationEntity();
-
+    _onAnnotationSubmit(editorState) {
+        this.state.value._editorState = editorState;
         this._toggleAnnotationForm();
-        this.setState({annotatedValue: ''});
     }
 
-    _createAnnotationEntity(){
-        let editorState = this._getEditorState();
-        let contentState = editorState.getCurrentContent();
-
-        contentState = contentState.createEntity(
-            'TOKEN',
-            'IMMUTABLE',
-            {className: 'annotation'}
-        );
-
-        const entityKey = contentState.getLastCreatedEntityKey();
-        editorState = EditorState.set(editorState, { currentContent: contentState });
-
-        const name = `@${this.state.annotatedValue}`;
-        contentState = Modifier.replaceText(contentState, editorState.getSelection(), name, null, entityKey);
-        editorState = EditorState.push(editorState, contentState, 'insert-characters');
-        return editorState;
-    }
 
     _getEditorState() {
         return this.state.value._editorState;
     }
 
-    _renderAnnotationForm() {
-        return (
-            <form className='annotationForm' autoFocus={true} onSubmit={this._onAnnotationSubmit.bind(this)}>
-                <select value={this.state.annotatedValue} onChange={this._onAnnotationChange.bind(this)}
-                    ref={ (e) => this.focusElement = e}
-                >
-                    <option value='' disabled >Select your option</option>
-                    {this._renderOptions(this.props.activeChannel.customData.users)}
-                </select>
-                <button type='submit' className='waves-effect waves-light btn right' disabled={this.state.annotatedValue === ''}>Add</button>
-            </form>
-
-        );
-    }
-
-    _renderOptions(users) {
-        return Object.keys(users).map(user => {
-            const name = this.props.users[user].name;
-            return <option key={user} value={name}>{name}</option>;
-        });
-    }
 }
 
 
@@ -290,8 +238,6 @@ function findTokenEntities(contentBlock, callback, contentState) {
     );
 }
 
-function mapStateToProps({users, activeChannel}, ownprops) {
-    return {users, activeChannel, ...ownprops};
-}
 
-export default connect(mapStateToProps, {createMessage})(MessageForm);
+
+export default connect(null, {createMessage})(MessageForm);
