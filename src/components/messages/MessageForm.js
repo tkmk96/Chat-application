@@ -4,7 +4,7 @@ import {createMessage} from '../../actions/messageActions';
 import RichTextEditor from 'react-rte';
 import Dropzone from 'react-dropzone';
 import {Modifier, EditorState, CompositeDecorator, RichUtils} from 'draft-js';
-
+import {stateToHTML} from 'draft-js-export-html';
 const toolbarConfig = {
     display: ['INLINE_STYLE_BUTTONS', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
     INLINE_STYLE_BUTTONS: [
@@ -16,10 +16,24 @@ const toolbarConfig = {
 
 const UserAnnotation = (props) => {
     return (
-        <span style={{color: 'green'}}>
+        <span className='annotation'>
             {props.children}
         </span>
     );
+};
+
+const optionsToHtml = {
+    entityStyleFn: (entity) => {
+        const entityType = entity.get('type').toLowerCase();
+        if (entityType === 'token') {
+            return {
+                element: 'span',
+                attributes: {
+                    className: 'annotation',
+                },
+            };
+        }
+    },
 };
 
 class MessageForm extends Component {
@@ -153,8 +167,9 @@ class MessageForm extends Component {
         e.preventDefault();
         const {value} = this.state;
         if (this._getEditorState().getCurrentContent().hasText() || this.state.files.length > 0) {
-            const message = value.toString('html');
-            this.props.createMessage(this._createAnnotations(message), this.state.files);
+            //const message = value.toString('html');
+            const message = stateToHTML(this._getEditorState().getCurrentContent(), optionsToHtml);
+            this.props.createMessage(message, this.state.files);
             this.setState({
                 value: RichTextEditor.createEmptyValue(),
                 files: []
