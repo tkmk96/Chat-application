@@ -25,11 +25,12 @@ const UserAnnotation = (props) => {
 const optionsToHtml = {
     entityStyleFn: (entity) => {
         const entityType = entity.get('type').toLowerCase();
-        if (entityType === 'token') {
+        const {className} = entity.getData();
+        if (entityType === 'token' && className === 'annotation') {
             return {
                 element: 'span',
                 attributes: {
-                    className: 'annotation',
+                    className: className,
                 },
             };
         }
@@ -40,17 +41,8 @@ class MessageForm extends Component {
     constructor(props) {
         super(props);
 
-        const decorator = new CompositeDecorator([
-            {
-                strategy: findTokenEntities,
-                component: UserAnnotation,
-            },
-        ]);
-        const editor = RichTextEditor.createEmptyValue();
-        editor._editorState = EditorState.createEmpty(decorator);
-
         this.state = {
-            value: editor,
+            value: createEmptyEditor(),
             annotatedValue: '',
             showDropzone: false,
             showAnnotationForm: false,
@@ -165,13 +157,13 @@ class MessageForm extends Component {
 
     _onSubmit(e) {
         e.preventDefault();
-        const {value} = this.state;
-        if (this._getEditorState().getCurrentContent().hasText() || this.state.files.length > 0) {
-            //const message = value.toString('html');
-            const message = stateToHTML(this._getEditorState().getCurrentContent(), optionsToHtml);
+        const content = this._getEditorState().getCurrentContent();
+        if (content.hasText() || this.state.files.length > 0) {
+            const message = stateToHTML(content, optionsToHtml);
             this.props.createMessage(message, this.state.files);
+
             this.setState({
-                value: RichTextEditor.createEmptyValue(),
+                value: createEmptyEditor(),
                 files: []
             });
         }
@@ -190,31 +182,30 @@ class MessageForm extends Component {
         if (this.state.annotatedValue === '') {
             return;
         }
-        let editor = this._getEditorState();
-        const contentState = editor.getCurrentContent();
 
-        const contentStateWithEntity = contentState.createEntity(
-            'TOKEN',
-            'IMMUTABLE'
-        );
-
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editor, { currentContent: contentStateWithEntity });
-        // const entityKey = contentState.getLastCreatedEntityKey();
-        // editor = EditorState.moveFocusToEnd(editor);
-        // console.log(editor.getSelection());
-        // contentState = Modifier.applyEntity(contentState, editor.getSelection(), entityKey);
-        // editor = EditorState.push(editor, contentState, 'apply-entity');
-
-
-        const name = `@${this.state.annotatedValue}`;
-        const newContentState = Modifier.replaceText(contentStateWithEntity, newEditorState.getSelection(), name, null, entityKey);
-        editor = EditorState.push(newEditorState, newContentState, 'insert-characters');
-
-        this.state.value._editorState = editor;
+        this.state.value._editorState = this._createAnnotationEntity();
 
         this._toggleAnnotationForm();
         this.setState({annotatedValue: ''});
+    }
+
+    _createAnnotationEntity(){
+        let editorState = this._getEditorState();
+        let contentState = editorState.getCurrentContent();
+
+        contentState = contentState.createEntity(
+            'TOKEN',
+            'IMMUTABLE',
+            {className: 'annotation'}
+        );
+
+        const entityKey = contentState.getLastCreatedEntityKey();
+        editorState = EditorState.set(editorState, { currentContent: contentState });
+
+        const name = `@${this.state.annotatedValue}`;
+        contentState = Modifier.replaceText(contentState, editorState.getSelection(), name, null, entityKey);
+        editorState = EditorState.push(editorState, contentState, 'insert-characters');
+        return editorState;
     }
 
     _getEditorState() {
@@ -242,6 +233,18 @@ class MessageForm extends Component {
             return <option key={user} value={name}>{name}</option>;
         });
     }
+}
+
+function createEmptyEditor(){
+    const decorator = new CompositeDecorator([
+        {
+            strategy: findTokenEntities,
+            component: UserAnnotation,
+        },
+    ]);
+    const editor = RichTextEditor.createEmptyValue();
+    editor._editorState = EditorState.createEmpty(decorator);
+    return editor;
 }
 
 function findTokenEntities(contentBlock, callback, contentState) {
