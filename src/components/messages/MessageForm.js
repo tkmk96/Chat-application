@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {createMessage} from '../../actions/messageActions';
 import RichTextEditor from 'react-rte';
 import Dropzone from 'react-dropzone';
-import {Modifier, EditorState, CompositeDecorator, RichUtils} from 'draft-js';
+import {Modifier, EditorState, CompositeDecorator} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import {stateFromHTML} from 'draft-js-import-html';
 
@@ -241,7 +241,7 @@ const optionsToHtml = {
 const optionsFromHtml = {
     customInlineFn: (element, {Entity}) => {
         if (element.tagName === 'SPAN' && element.className === 'annotation') {
-            return Entity('TOKEN', 'IMMUTABLE', {src: element.getAttribute('src')});
+            return Entity('TOKEN', {className: element.getAttribute('class')}, 'IMMUTABLE');
         }
     },
 };
