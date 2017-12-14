@@ -20,6 +20,12 @@ class MessageForm extends Component {
         };
     }
 
+    componentWillReceiveProps(props){
+        if (props.editedMessage){
+            this.setState({value: createEditorWithContent(props.editedMessage.value)});
+        }
+    }
+
     // componentDidUpdate(){
     //     if (this.focusElement){
     //         this.focusElement.focus();
@@ -133,7 +139,7 @@ class MessageForm extends Component {
             this.props.createMessage(message, this.state.files);
 
             this.setState({
-                value: createEditorWithContent(message),//createEmptyEditor(),
+                value: createEmptyEditor(),
                 files: []
             });
         }
@@ -263,6 +269,7 @@ function createEmptyEditor(){
 }
 
 function createEditorWithContent(html){
+    console.log('got it');
     const decorator = createDecorator();
     const editor = RichTextEditor.createEmptyValue();
     const contentState = stateFromHTML(html, optionsFromHtml);
@@ -283,8 +290,8 @@ function findTokenEntities(contentBlock, callback, contentState) {
     );
 }
 
-function mapStateToProps({users, activeChannel}) {
-    return {users, activeChannel};
+function mapStateToProps({users, activeChannel}, ownprops) {
+    return {users, activeChannel, ...ownprops};
 }
 
 export default connect(mapStateToProps, {createMessage})(MessageForm);
