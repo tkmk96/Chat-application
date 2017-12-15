@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { reduxForm, Field, reset} from 'redux-form';
 
-import {editUserName} from '../../actions/index';
+import {editUserName} from '../../actions/userActions';
 import FormField from '../generic/FormField';
 
 class ProfileForm extends Component {

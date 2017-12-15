@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import FormField from '../generic/FormField';
 import {reduxForm, Field, reset} from 'redux-form';
-import {changePrivilege} from '../../actions/channelActions';
+import {changePrivilege} from '../../actions';
 import {connect} from 'react-redux';
 
 class ChannelInviteForm extends Component {

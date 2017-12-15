@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {changePrivilege, removeChannel} from '../../actions/channelActions';
+import {changePrivilege, removeChannel} from '../../actions';
 import Icon from '../generic/IconButton';
 
 

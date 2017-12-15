@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {setActiveChannel} from '../../actions/channelActions';
+import {setActiveChannel} from '../../actions';
 
 class ChannelItem extends Component {
     render() {

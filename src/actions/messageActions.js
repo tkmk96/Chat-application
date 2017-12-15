@@ -5,8 +5,8 @@ import {API_URL, APP_ID} from '../constants/api';
 import {LOADING_ACTIVE_CHANNEL} from '../constants/actionTypes';
 import {LIKE} from '../constants/reactionTypes';
 
-import {fetchFileUrl, createFile} from './index';
-import {setActiveChannel} from './channelActions';
+import {fetchFileUrl, createFile} from './userActions';
+import {setActiveChannel} from '.';
 
 
 export const createMessage = (text, inputFiles) => {

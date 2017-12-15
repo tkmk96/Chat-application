@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import {uuid} from '../utils/uuidGenerator';
 import {filterAndConvertChannels, parseMessages} from '../utils/convert';
 
@@ -11,7 +9,7 @@ import {
 import * as role from '../constants/channelRoles';
 import {List} from 'immutable';
 
-export const createChannel = (name) => {
+export const createChannelFactory = (fetch) => (name) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_CREATE_CHANNEL,
@@ -21,7 +19,7 @@ export const createChannel = (name) => {
         const email = getState().user.email;
         const users = {};
         users[email] = role.OWNER;
-        const res = await axios({
+        const res = await fetch({
             method: 'patch',
             url: `${API_URL}/app/${APP_ID}`,
             headers: {
@@ -39,7 +37,7 @@ export const createChannel = (name) => {
                 }
             }]
         });
-
+        console.log(res);
         dispatch({
             type: FETCH_CHANNELS,
             payload: filterAndConvertChannels(res.data.channels, email)
@@ -51,7 +49,7 @@ export const createChannel = (name) => {
     };
 };
 
-export const editChannel = (channel) => {
+export const editChannelFactory = ({fetch, setActiveChannel}) => (channel) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_EDIT_CHANNEL,
@@ -60,7 +58,7 @@ export const editChannel = (channel) => {
         const token = getState().authToken;
         const email = getState().user.email;
 
-        const res = await axios({
+        const res = await fetch({
             method: 'patch',
             url: `${API_URL}/app/${APP_ID}`,
             headers: {
@@ -106,7 +104,7 @@ export const editChannel = (channel) => {
     };
 };
 
-export const removeChannel = (id) => {
+export const removeChannelFactory = ({fetch, setActiveChannel}) => (id) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_DELETE_CHANNEL,
@@ -115,7 +113,7 @@ export const removeChannel = (id) => {
         const token = getState().authToken;
         const email = getState().user.email;
 
-        const res = await axios({
+        const res = await fetch({
             method: 'patch',
             url: `${API_URL}/app/${APP_ID}`,
             headers: {
@@ -150,7 +148,7 @@ export const removeChannel = (id) => {
     }
 };
 
-export const changePrivilege = (channel, userEmail, privilege) => {
+export const changePrivilegeFactory = ({fetch, editChannel}) => (channel, userEmail, privilege) => {
     return async (dispatch) => {
         const {customData} = channel;
         const users = {...customData.users};
@@ -160,11 +158,11 @@ export const changePrivilege = (channel, userEmail, privilege) => {
     };
 };
 
-export const fetchChannels = () => {
+export const fetchChannelsFactory = ({fetch, setActiveChannel}) => () => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
-        const res = await axios({
+        const res = await fetch({
             method: 'get',
             url: `${API_URL}/app/${APP_ID}`,
             headers: {
@@ -184,7 +182,7 @@ export const fetchChannels = () => {
     };
 };
 
-export const setActiveChannel = (channelId) => {
+export const setActiveChannelFactory = (fetch) => (channelId) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,
@@ -193,7 +191,7 @@ export const setActiveChannel = (channelId) => {
         const token = getState().authToken;
         const channels = getState().channels;
 
-        const res = await axios({
+        const res = await fetch({
             method: 'get',
             url: `${API_URL}/app/${APP_ID}/channel/${channelId}/message?lastN=15`,
             headers: {

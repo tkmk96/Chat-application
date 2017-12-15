@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import {logoutUser} from '../actions/index';
+import {logoutUser} from '../actions/userActions';
 
 class Header extends Component {
     _onLogoutClick(){

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import { fetchUserData, fetchAllUsers } from '../actions';
+import { fetchUserData, fetchAllUsers } from '../actions/userActions';
 
 import Registration from './login/Registration';
 import Header from './Header';

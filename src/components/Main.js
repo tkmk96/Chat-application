@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ChannelList from './channels/ChannelList';
 import MessagePanel from './messages/MessagePanel';
 import {connect} from 'react-redux';
-import {fetchChannels} from '../actions/channelActions';
+import {fetchChannels} from '../actions';
 import ChannelHeader from './channels/ChannelHeader';
 import ChannelDetail from './channels/ChannelDetail';
 import * as role from '../constants/channelRoles';

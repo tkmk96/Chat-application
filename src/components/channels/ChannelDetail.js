@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ChannelRenameForm from './ChannelCreateEditForm';
-import {editChannel, changePrivilege} from '../../actions/channelActions';
+import {editChannel, changePrivilege} from '../../actions';
 import {connect} from 'react-redux';
 import ChannelInviteForm from './ChannelInviteForm';
 

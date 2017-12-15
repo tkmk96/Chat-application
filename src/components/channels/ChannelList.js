@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 import ChannelItem from './ChannelItem';
-import {fetchChannels, createChannel} from '../../actions/channelActions';
+import {fetchChannels, createChannel} from '../../actions';
 import ChannelCreateForm from './ChannelCreateEditForm';
 
 class ChannelList extends Component {
