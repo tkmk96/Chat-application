@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+import {List} from 'immutable';
 import {uuid} from '../utils/uuidGenerator';
 import {API_URL, APP_ID} from '../constants/api';
-import {CREATE_MESSAGE, LOADING_ACTIVE_CHANNEL} from '../constants/actionTypes';
+import {LOADING_ACTIVE_CHANNEL} from '../constants/actionTypes';
 import {LIKE} from '../constants/reactionTypes';
 
 import {fetchFileUrl, createFile} from './index';
@@ -38,10 +38,10 @@ export const createMessage = (text, inputFiles) => {
         const customData = {likes: {}, dislikes: {} };
 
         if(images.length > 0){
-            customData.images = images;
+            customData.images = List(images);
         }
         if(files.length > 0){
-            customData.files = files;
+            customData.files = List(files);
         }
 
         const res = await axios({
@@ -59,16 +59,7 @@ export const createMessage = (text, inputFiles) => {
                 customData: JSON.stringify(customData)
             }
         });
-        const message = res.data;
-        message.customData = JSON.parse(res.data.customData);
-        dispatch({
-            type: CREATE_MESSAGE,
-            payload: {activeChannel, message}
-        });
-        dispatch({
-            type: LOADING_ACTIVE_CHANNEL,
-            payload: false
-        });
+        dispatch(setActiveChannel(activeChannel.id));
     }
 };
 
@@ -129,7 +120,6 @@ export const reactToMessage = (message, reaction) => {
             delete newMessage.customData.dislikes[email];
         }
         else {
-            console.log('tu som');
             newMessage.customData.dislikes[email] = 'y';
             delete newMessage.customData.likes[email];
         }

@@ -8,6 +8,7 @@ import {stateFromHTML} from 'draft-js-import-html';
 import AnnotationForm from './AnnotationForm';
 import AttachmentForm from './AttachmentForm';
 import {UserAnnotation} from './UserAnnotation';
+import {List} from 'immutable';
 
 class MessageForm extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class MessageForm extends Component {
             value: createEmptyEditor(),
             annotatedValue: '',
             showAnnotationForm: false,
-            files: []
+            files: List()
         };
     }
 
@@ -25,7 +26,7 @@ class MessageForm extends Component {
         if (props.editedMessage) {
             const {images, files} = props.editedMessage.customData;
             this.setState({value: createEditorWithContent(props.editedMessage.value)});
-            let newFiles = [];
+            let newFiles = List();
             if (images) {
                 newFiles = newFiles.concat(images);
             }
@@ -75,17 +76,18 @@ class MessageForm extends Component {
     }
 
     _renderEditButtons() {
+        const {images, files} = this.props.editedMessage.customData;
+        const disabled = !this.state.value._editorState.getCurrentContent().hasText() && !files && !images;
         return (
             <div>
                 <button className='waves-effect waves-light btn right'
-                        onClick={this._onEditMessage.bind(this)}
-                    // disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+                    onClick={this._onEditMessage.bind(this)}
+                    disabled={disabled}
                 >
                     Edit
                 </button>
                 <button className='waves-effect waves-light red btn right' style={{marginRight: '10px'}}
-                        onClick={this._onEditCancel.bind(this)}
-                    // disabled={!value._editorState.getCurrentContent().hasText() && this.state.files.length === 0}
+                    onClick={this._onEditCancel.bind(this)}
                 >
                     Cancel
                 </button>
@@ -106,7 +108,7 @@ class MessageForm extends Component {
 
     _addFiles(files, rejectedFiles) {
         this.setState(prevState => {
-            return {files: [...prevState.files, ...files]};
+            return {files: prevState.files.concat(files)};
         });
 
         if (rejectedFiles.length > 0) {
@@ -130,7 +132,7 @@ class MessageForm extends Component {
 
             this.setState({
                 value: createEmptyEditor(),
-                files: []
+                files: List()
             });
         }
     }
@@ -147,7 +149,7 @@ class MessageForm extends Component {
 
             this.setState({
                 value: createEmptyEditor(),
-                files: []
+                files: List()
             });
         }
         this.props.clearEditedMessage();

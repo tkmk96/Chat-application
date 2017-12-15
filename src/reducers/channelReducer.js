@@ -15,14 +15,10 @@ export const activeChannel = (state = null, action) => {
     switch (action.type) {
         case SET_ACTIVE_CHANNEL:
             const {messages} = action.payload;
-            messages.sort((m1, m2) => {
+            const orderedMessages = messages.sort((m1, m2) => {
                 return new Date(m1.createdAt).getTime() - new Date(m2.createdAt).getTime();
             });
-            return {...action.payload, messages};
-        case CREATE_MESSAGE:
-            const channel = {...action.payload.activeChannel};
-            channel.messages.push(action.payload.message);
-            return channel;
+            return {...action.payload, messages: orderedMessages};
         case ZERO_CHANNELS:
         case LOGOUT_USER:
             return null;

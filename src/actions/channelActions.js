@@ -9,7 +9,7 @@ import {
     LOADING_CREATE_CHANNEL, LOADING_DELETE_CHANNEL, LOADING_ACTIVE_CHANNEL
 } from '../constants/actionTypes';
 import * as role from '../constants/channelRoles';
-
+import {List} from 'immutable';
 
 export const createChannel = (name) => {
     return async (dispatch, getState) => {
@@ -202,9 +202,10 @@ export const setActiveChannel = (channelId) => {
             }
         });
 
+        let messages = parseMessages(res.data);
         dispatch({
             type: SET_ACTIVE_CHANNEL,
-            payload: { ...channels[channelId], messages: parseMessages(res.data)}
+            payload: { ...channels[channelId], messages: List(messages)}
         });
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,

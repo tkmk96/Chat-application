@@ -204,7 +204,6 @@ export const createFile = async (file, token) => {
         },
         data: formData
     });
-    console.log(res.data[0]);
     return res.data[0];
 };
 
