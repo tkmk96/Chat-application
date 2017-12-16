@@ -146,7 +146,7 @@ export const removeChannelFactory = ({fetch, setActiveChannel}) => (id) => {
     };
 };
 
-export const changePrivilegeFactory = ({fetch, editChannel}) => (channel, userEmail, privilege) => {
+export const changePrivilegeFactory = (editChannel) => (channel, userEmail, privilege) => {
     return async (dispatch) => {
         const {customData} = channel;
         const users = {...customData.users};

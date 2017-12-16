@@ -1,13 +1,16 @@
-import {createChannelFactory, editChannelFactory, fetchChannelsFactory, removeChannelFactory} from '../channelActions';
 import {
-    FETCH_CHANNELS, LOADING_CREATE_CHANNEL, LOADING_DELETE_CHANNEL, LOADING_EDIT_CHANNEL,
+    createChannelFactory, editChannelFactory, fetchChannelsFactory, removeChannelFactory,
+    setActiveChannelFactory
+} from '../channelActions';
+import {
+    FETCH_CHANNELS, LOADING_ACTIVE_CHANNEL, LOADING_CREATE_CHANNEL, LOADING_DELETE_CHANNEL, LOADING_EDIT_CHANNEL,
     SET_ACTIVE_CHANNEL, ZERO_CHANNELS
 } from '../../constants/actionTypes';
-import {filterAndConvertChannels} from '../../utils/convert';
+import {filterAndConvertChannels, parseMessages} from '../../utils/convert';
+import {List} from 'immutable';
 
 import {checkCalls} from '../../utils/testUtils';
 
-/*eslint no-undef:0*/
 test('testing create channel > actions dispatch in correct order', async done => {
     const name = 'test channel';
     const customData = {creator: 'email', users: {email: 'owner'}};
@@ -44,7 +47,7 @@ test('testing edit channel > actions dispatch in correct order', async done => {
     const expected = [
         { type: LOADING_EDIT_CHANNEL, payload: true },
         { type: FETCH_CHANNELS, payload: channelsResult},
-        { type: SET_ACTIVE_CHANNEL, payload:  {...channelsResult['1'], messages: []}},
+        { type: SET_ACTIVE_CHANNEL, payload: 1},
         { type: LOADING_EDIT_CHANNEL, payload: false }
     ];
 
@@ -56,7 +59,9 @@ test('testing edit channel > actions dispatch in correct order', async done => {
 
     const editChannel = editChannelFactory({
         fetch: () => Promise.resolve({data: {channels}}),
-        setActiveChannel: (id) => Promise.resolve()});
+        setActiveChannel: (id) => {
+            return {type: SET_ACTIVE_CHANNEL, payload: 1};
+        }});
     await editChannel(channel)(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -122,7 +127,9 @@ test('testing remove channel > actions dispatch in correct order', async done =>
 
     const removeChannel = removeChannelFactory({
         fetch: () => Promise.resolve({data: {channels: channels.filter((channel) => channel.id !== 1)}}),
-        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 2}}});
+        setActiveChannel: () => {
+            return {type: SET_ACTIVE_CHANNEL, payload: 2};
+        }});
     await removeChannel(channels)(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -155,6 +162,35 @@ test('testing fetch channels > actions dispatch in correct order', async done =>
         fetch: () => Promise.resolve({data: {channels: channels}}),
         setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
     await fetchChannels()(dispatch, getState);
+
+    checkCalls(dispatch, expected);
+
+    done();
+});
+
+test('testing set active channel > actions dispatch in correct order', async done => {
+    const customData1 = {creator: 'email', users: {email: 'owner'}};
+    const channel1 = {id: 1, name: 'removed', messages: [], customData: JSON.stringify(customData1)};
+    const channels = filterAndConvertChannels([channel1], 'email');
+
+    const customData = {likes: {}, dislikes: {}};
+    const messages = [{id: 1, createdBy: 'email', value: '<p>some wise words</p>', customData: JSON.stringify(customData)}];
+    const messagesResult = parseMessages(messages);
+
+    const expected = [
+        { type: LOADING_ACTIVE_CHANNEL, payload: true },
+        { type: SET_ACTIVE_CHANNEL, payload: {...channels['1'], messages: List(messagesResult)}},
+        { type: LOADING_ACTIVE_CHANNEL, payload: false }
+    ];
+
+    const dispatch = jest.fn();
+    const getState = () => ({
+        authToken: 'token',
+        channels
+    });
+
+    const setActiveChannel = setActiveChannelFactory( () => Promise.resolve({data: messages}) );
+    await setActiveChannel(1)(dispatch, getState);
 
     checkCalls(dispatch, expected);
 
