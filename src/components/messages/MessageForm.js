@@ -131,7 +131,7 @@ class MessageForm extends Component {
     _onSubmit(e) {
         e.preventDefault();
         const content = this._getEditorState().getCurrentContent();
-        if (content.hasText() || this.state.files.length > 0) {
+        if (content.hasText() || this.state.files.size > 0) {
             const message = stateToHTML(content, optionsToHtml);
             this.props.createMessage(message, this.state.files);
 
