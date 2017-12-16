@@ -9,7 +9,6 @@ import {
 import * as role from '../constants/channelRoles';
 import {List} from 'immutable';
 import {SubmissionError} from 'redux-form';
-import {USER} from '../constants/channelRoles';
 
 export const createChannelFactory = (fetch) => (name) => {
     return async (dispatch, getState) => {
@@ -148,15 +147,18 @@ export const removeChannelFactory = ({fetch, setActiveChannel}) => (id) => {
 
 export const changePrivilegeFactory = (editChannel) => (channel, userEmail, privilege) => {
     return async (dispatch) => {
+        console.log(channel);
         const {customData} = channel;
         const users = {...customData.users};
+
         privilege ? users[userEmail] = privilege : delete users[userEmail] ;
         const newCustomData = {...customData, users};
+        console.log(newCustomData);
         dispatch(editChannel({...channel, customData: newCustomData}));
     };
 };
 
-export const inviteUserFactory = ({fetch, editChannel}) => (channel, userEmail) => {
+export const inviteUserFactory = (editChannel) => (channel, userEmail) => {
     return async (dispatch) => {
         const {customData} = channel;
         const users = {...customData.users};
@@ -167,7 +169,7 @@ export const inviteUserFactory = ({fetch, editChannel}) => (channel, userEmail) 
             });
         }
 
-        users[userEmail] = USER;
+        users[userEmail] = role.USER;
         const newCustomData = {...customData, users};
         dispatch(editChannel({...channel, customData: newCustomData}));
     };

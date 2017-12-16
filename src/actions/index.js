@@ -14,8 +14,8 @@ import {createMessageFactory, deleteMessageFactory, editMessageFactory, reactToM
 export const createChannel = createChannelFactory(axios);
 export const setActiveChannel = setActiveChannelFactory(axios);
 export const editChannel = editChannelFactory({fetch: axios, setActiveChannel});
-export const changePrivilege = changePrivilegeFactory({fetch: axios, editChannel});
-export const inviteUser = inviteUserFactory({fetch: axios, editChannel});
+export const changePrivilege = changePrivilegeFactory(editChannel);
+export const inviteUser = inviteUserFactory(editChannel);
 export const fetchChannels = fetchChannelsFactory({fetch: axios, setActiveChannel});
 export const removeChannel = removeChannelFactory({fetch: axios, setActiveChannel});
 
