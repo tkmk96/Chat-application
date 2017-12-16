@@ -28,9 +28,7 @@ test('testing create channel > actions dispatch in correct order', async done =>
     const createChannel = createChannelFactory(() => Promise.resolve({data: {channels}}));
     await createChannel(name)(dispatch, getState);
 
-    expect(dispatch.mock.calls[0][0]).toEqual(expected[0]);
-    expect(dispatch.mock.calls[1][0]).toEqual(expected[1]);
-    expect(dispatch.mock.calls[2][0]).toEqual(expected[2]);
+    checkCalls(dispatch, expected);
     done();
 });
 

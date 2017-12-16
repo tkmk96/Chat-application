@@ -37,7 +37,6 @@ export const createChannelFactory = (fetch) => (name) => {
                 }
             }]
         });
-        console.log(res);
         dispatch({
             type: FETCH_CHANNELS,
             payload: filterAndConvertChannels(res.data.channels, email)

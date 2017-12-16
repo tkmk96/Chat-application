@@ -5,7 +5,6 @@ import {LOADING_ACTIVE_CHANNEL} from '../constants/actionTypes';
 import {LIKE} from '../constants/reactionTypes';
 
 import {fetchFileUrlFactory} from './userActions';
-import {setActiveChannel} from '.';
 
 
 export const createMessageFactory = ({fetch, setActiveChannel}) => (text, inputFiles) => {
