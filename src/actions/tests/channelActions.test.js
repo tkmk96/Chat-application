@@ -5,6 +5,8 @@ import {
 } from "../../constants/actionTypes";
 import {filterAndConvertChannels} from "../../utils/convert";
 
+import {checkCalls} from "../../utils/testUtils";
+
 test('testing create channel > actions dispatch in correct order', async done => {
     const name = 'test channel';
     const customData = {creator: 'email', users: {email: 'owner'}};
@@ -128,10 +130,4 @@ test('testing remove channel > actions dispatch in correct order', async done =>
 
     done();
 });
-
-function checkCalls(fn, expected){
-    for(let i = 0; i < expected.length; i++){
-        expect(fn.mock.calls[i][0]).toEqual(expected[i]);
-    }
-}
 
