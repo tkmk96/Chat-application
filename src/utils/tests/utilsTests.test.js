@@ -1,5 +1,6 @@
 import {parseMessages, filterAndConvertChannels, convertUsersArray} from '../convert';
-
+import {getPersistedData} from '../getPersistedData';
+import {AUTH_EMAIL, AUTH_TOKEN} from '../../constants/storageKeys';
 
 /* eslint-disable no-undef */
 test('testing utility function > parse messages', async done => {
@@ -39,3 +40,11 @@ test('testing utility function > convert user array', async done => {
     expect(convertUsersArray([user1, user2])).toEqual(expected);
     done();
 });
+
+test('testing utility function > get persisted data', async done => {
+    getPersistedData();
+    expect(localStorage.getItem).toHaveBeenCalledWith(AUTH_TOKEN);
+    expect(localStorage.getItem).toHaveBeenCalledWith(AUTH_EMAIL);
+    done();
+});
+
