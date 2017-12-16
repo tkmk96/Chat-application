@@ -157,9 +157,16 @@ export const changePrivilegeFactory = (editChannel) => (channel, userEmail, priv
 };
 
 export const inviteUserFactory = (editChannel) => (channel, userEmail) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         const {customData} = channel;
         const users = {...customData.users};
+        const allUsers = getState().users;
+        if (!allUsers[userEmail]) {
+            throw new SubmissionError({
+                email: 'User does not exist!',
+                _error: 'Invite failed!'
+            });
+        }
         if (users[userEmail]) {
             throw new SubmissionError({
                 email: 'User already is in the channel!',
