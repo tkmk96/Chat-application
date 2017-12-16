@@ -1,4 +1,4 @@
-import {createChannelFactory, editChannelFactory, removeChannelFactory} from "../channelActions";
+import {createChannelFactory, editChannelFactory, fetchChannelsFactory, removeChannelFactory} from "../channelActions";
 import {
     FETCH_CHANNELS, LOADING_CREATE_CHANNEL, LOADING_DELETE_CHANNEL, LOADING_EDIT_CHANNEL,
     SET_ACTIVE_CHANNEL, ZERO_CHANNELS
@@ -130,4 +130,36 @@ test('testing remove channel > actions dispatch in correct order', async done =>
 
     done();
 });
+
+test('testing fetch channels > actions dispatch in correct order', async done => {
+    const customData1 = {creator: 'email', users: {email: 'owner'}};
+    const customData2 = {creator: 'email2', users: {email2: 'owner', email: 'user'}};
+
+    const channel1 = {id: 1, name: 'removed', messages: [], customData: JSON.stringify(customData1)};
+    const channel2 = {id: 2, name: 'channel2', messages: [], customData: JSON.stringify(customData2)};
+
+    const channels = [channel1, channel2];
+    const channelsResult = filterAndConvertChannels(channels, 'email');
+
+    const expected = [
+        { type: FETCH_CHANNELS, payload: channelsResult},
+        { type: SET_ACTIVE_CHANNEL, payload: 1},
+    ];
+
+    const dispatch = jest.fn();
+    const getState = () => ({
+        authToken: 'token',
+        user: {email: 'email'}
+    });
+
+    const fetchChannels = fetchChannelsFactory({
+        fetch: () => Promise.resolve({data: {channels: channels}}),
+        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
+    await fetchChannels()(dispatch, getState);
+
+    checkCalls(dispatch, expected);
+
+    done();
+});
+
 
