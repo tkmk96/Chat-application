@@ -26,7 +26,7 @@ export const updateUserData = updateUserDataFactory(axios);
 export const registerUser = registerUserFactory({fetch: axios, fetchToken});
 export const fetchUserData = fetchUserDataFactory({fetchData});
 export const fetchAllUsers = fetchAllUsersFactory(axios);
-export const loginUser = loginUserFactory({fetch: axios, fetchToken, fetchData, fetchAllUsers});
+export const loginUser = loginUserFactory({fetchToken, fetchData, fetchAllUsers});
 export const editUserName = editUserNameFactory({updateUserData});
 export const uploadAvatar = uploadAvatarFactory({fetch: axios, fetchFileUrl, updateUserData});
 

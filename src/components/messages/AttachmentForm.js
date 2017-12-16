@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Dropzone from './Dropzone';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 
 class AttachmentForm extends Component {
     static propTypes = {

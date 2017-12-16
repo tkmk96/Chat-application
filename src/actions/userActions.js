@@ -37,7 +37,7 @@ export const registerUserFactory = ({fetch, fetchToken}) => (email, customData, 
     };
 };
 
-export const loginUserFactory = ({fetch, fetchToken, fetchData, fetchAllUsers}) => (email, password, history) => {
+export const loginUserFactory = ({fetchToken, fetchData, fetchAllUsers}) => (email, password, history) => {
     return async dispatch => {
         dispatch({
             type: LOADING_LOGIN,

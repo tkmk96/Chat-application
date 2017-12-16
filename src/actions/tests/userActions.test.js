@@ -27,7 +27,7 @@ test('register user > actions dispatch in correct order', async done => {
 
     const registerUser = registerUserFactory({
         fetch: () => Promise.resolve(),
-        fetchToken: (email) => Promise.resolve(token)
+        fetchToken: () => Promise.resolve(token)
     });
     await registerUser(email, customData, history)(dispatch);
 
@@ -58,9 +58,9 @@ test('login user > actions dispatch in correct order', async done => {
 
     const loginUser = loginUserFactory({
         fetch: () => Promise.resolve(),
-        fetchToken: (email) => Promise.resolve(token),
-        fetchData: (email, token) => Promise.resolve({email, customData: JSON.stringify(customData)}),
-        fetchAllUsers: (token) => { return {type: FETCH_ALL_USERS, payload: [user]};}
+        fetchToken: () => Promise.resolve(token),
+        fetchData: () => Promise.resolve({email, customData: JSON.stringify(customData)}),
+        fetchAllUsers: () => { return {type: FETCH_ALL_USERS, payload: [user]};}
     });
     await loginUser(email, 'test', history)(dispatch);
 
@@ -87,7 +87,7 @@ test('fetch user data > actions dispatch in correct order', async done => {
     });
 
     const fetchUserData = fetchUserDataFactory({
-        fetchData: (email, token) => Promise.resolve({email, customData: JSON.stringify(customData)})
+        fetchData: () => Promise.resolve({email, customData: JSON.stringify(customData)})
     });
     await fetchUserData()(dispatch, getState);
 
