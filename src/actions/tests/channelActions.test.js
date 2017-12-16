@@ -1,6 +1,6 @@
-import {createChannelFactory} from "./channelActions";
-import {FETCH_CHANNELS, LOADING_CREATE_CHANNEL} from "../constants/actionTypes";
-import {filterAndConvertChannels} from "../utils/convert";
+import {createChannelFactory} from "../channelActions";
+import {FETCH_CHANNELS, LOADING_CREATE_CHANNEL} from "../../constants/actionTypes";
+import {filterAndConvertChannels} from "../../utils/convert";
 
 test('dispatches actions in correct order', async done => {
     const name = 'test channel';
