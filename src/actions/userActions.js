@@ -7,7 +7,7 @@ import {
 } from '../constants/actionTypes';
 import {convertUsersArray} from '../utils/convert';
 
-export const registerUserFactory = (fetch) => (email, customData,  history) => {
+export const registerUserFactory = ({fetch, fetchToken}) => (email, customData,  history) => {
     return async dispatch => {
         dispatch({
             type: LOADING_REGISTER,
@@ -27,7 +27,6 @@ export const registerUserFactory = (fetch) => (email, customData,  history) => {
             type: FETCH_USER,
             payload: {email, ...customData}
         });
-        const fetchToken = fetchTokenFactory(fetch);
         const token = await fetchToken(email);
         dispatch(receivedToken(token));
         dispatch({
@@ -38,17 +37,18 @@ export const registerUserFactory = (fetch) => (email, customData,  history) => {
     };
 };
 
-export const loginUserFactory = ({fetch, fetchAllUsers}) => (email, password, history) => {
+export const loginUserFactory = ({fetch, fetchToken, fetchData, fetchAllUsers}) => (email, password, history) => {
     return async dispatch => {
         dispatch({
             type: LOADING_LOGIN,
             payload: true
         });
-        const fetchToken = fetchTokenFactory(fetch);
         const token = await fetchToken(email);
-        const fetchData = fetchDataFactory(fetch);
+        dispatch(receivedToken(token));
+
         const { customData} = await fetchData(email, token);
         const user = {email, ...JSON.parse(customData)};
+        console.log(user);
 
         if(user.password !== password){
             dispatch({
@@ -61,7 +61,6 @@ export const loginUserFactory = ({fetch, fetchAllUsers}) => (email, password, hi
             });
         }
         localStorage.setItem(AUTH_EMAIL, email);
-        dispatch(receivedToken(token));
 
         dispatch(fetchAllUsers(token));
         dispatch({
@@ -214,8 +213,6 @@ const updateUserDataFactory = (fetch) => async(newCustomData, user, token) => {
     return res.data;
 };
 
-
-
 const receivedToken = (token) => {
     localStorage.setItem(AUTH_TOKEN, token);
     return {
@@ -225,7 +222,7 @@ const receivedToken = (token) => {
 
 };
 
-const fetchDataFactory = (fetch) => async (email, token) => {
+export const fetchDataFactory = (fetch) => async (email, token) => {
     const res = await fetch({
         method: 'get',
         url: `${API_URL}/${APP_ID}/user/${email}`,
@@ -243,7 +240,7 @@ const fetchDataFactory = (fetch) => async (email, token) => {
     return res.data;
 };
 
-const fetchTokenFactory = (fetch) => async (email) => {
+export const fetchTokenFactory = (fetch) => async (email) => {
     const res = await fetch({
         method: 'post',
         url: `${API_URL}/auth`,

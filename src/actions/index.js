@@ -4,8 +4,10 @@ import {
     fetchChannelsFactory, inviteUserFactory, removeChannelFactory, setActiveChannelFactory
 } from './channelActions';
 
-import {editUserNameFactory, fetchAllUsersFactory, fetchUserDataFactory, loginUserFactory,
-    registerUserFactory, uploadAvatarFactory} from './userActions';
+import {
+    editUserNameFactory, fetchAllUsersFactory, fetchUserDataFactory, loginUserFactory,
+    registerUserFactory, uploadAvatarFactory, fetchTokenFactory, fetchDataFactory
+} from './userActions';
 
 import {createMessageFactory, deleteMessageFactory, editMessageFactory, reactToMessageFactory} from './messageActions';
 
@@ -17,12 +19,14 @@ export const inviteUser = inviteUserFactory({fetch: axios, editChannel});
 export const fetchChannels = fetchChannelsFactory({fetch: axios, setActiveChannel});
 export const removeChannel = removeChannelFactory({fetch: axios, setActiveChannel});
 
-export const registerUser = registerUserFactory(axios);
+export const fetchToken = fetchTokenFactory(axios);
+export const fetchData = fetchDataFactory(axios);
+export const registerUser = registerUserFactory({fetch: axios, fetchToken});
 export const fetchUserData = fetchUserDataFactory(axios);
 export const fetchAllUsers = fetchAllUsersFactory(axios);
 export const editUserName = editUserNameFactory(axios);
 export const uploadAvatar = uploadAvatarFactory(axios);
-export const loginUser = loginUserFactory({fetch: axios, fetchAllUsers});
+export const loginUser = loginUserFactory({fetch: axios, fetchToken, fetchData, fetchAllUsers});
 
 export const createMessage = createMessageFactory({fetch: axios, setActiveChannel});
 export const deleteMessage = deleteMessageFactory({fetch: axios, setActiveChannel});
