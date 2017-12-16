@@ -1,6 +1,6 @@
-import {SET_ACTIVE_CHANNEL, CREATE_MESSAGE, FETCH_CHANNELS, LOGOUT_USER, ZERO_CHANNELS} from '../constants/actionTypes';
+import {SET_ACTIVE_CHANNEL, FETCH_CHANNELS, LOGOUT_USER, ZERO_CHANNELS} from '../constants/actionTypes';
 
-export const fetchChannel = (state = {}, action) => {
+export const fetchChannels = (state = {}, action) => {
     switch (action.type) {
         case FETCH_CHANNELS:
             return action.payload || {};
