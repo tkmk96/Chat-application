@@ -122,9 +122,6 @@ class MessageForm extends Component {
         if (rejectedFiles.length > 0) {
             alert('Files must be smaller than 1MB');
         }
-        else {
-            this._toggleDropzone();
-        }
     }
 
     _onChange(value) {

@@ -6,7 +6,7 @@ import Immutable from 'immutable';
 class AttachmentForm extends Component {
     static propTypes = {
         onDrop: PropTypes.func.isRequired,
-        files: PropTypes.instanceOf(Immutable.List).isRequired,
+        files: PropTypes.any.isRequired,
         disabled: PropTypes.bool.isRequired
     };
 

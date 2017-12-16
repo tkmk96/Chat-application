@@ -1,3 +1,3 @@
-export const APP_ID = '1cd8a6a4-3334-4bbc-99ad-5d972a5a1304';
+export const APP_ID = '969cb06f-7aee-40f7-af73-e4e65d96c85f';
 export const API_URL = 'https://pv247messaging.azurewebsites.net/api';
 export const API_CHANNEL = '/channels';

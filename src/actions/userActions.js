@@ -46,8 +46,18 @@ export const loginUserFactory = ({fetch, fetchToken, fetchData, fetchAllUsers}) 
         const token = await fetchToken(email);
         dispatch(receivedToken(token));
 
-        const { customData} = await fetchData(email, token);
-        const user = {email, ...JSON.parse(customData)};
+        let user;
+        try {
+            const {customData} = await fetchData(email, token);
+            user = {email, ...JSON.parse(customData)};
+
+        } catch (e) {
+            dispatch({
+                type: LOADING_LOGIN,
+                payload: false
+            });
+            throw e;
+        }
 
         if(user.password !== password){
             dispatch({
