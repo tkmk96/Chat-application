@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import {API_URL, APP_ID} from '../constants/api';
 import {AUTH_EMAIL, AUTH_TOKEN} from '../constants/storageKeys';
@@ -8,13 +7,13 @@ import {
 } from '../constants/actionTypes';
 import {convertUsersArray} from '../utils/convert';
 
-export const registerUser = (email, customData,  history) => {
+export const registerUserFactory = (fetch) => (email, customData,  history) => {
     return async dispatch => {
         dispatch({
             type: LOADING_REGISTER,
             payload: true
         });
-        const res = await axios({
+        const res = await fetch({
             method: 'post',
             url: `${API_URL}/${APP_ID}/user`,
             data: {email, customData: JSON.stringify(customData)},
@@ -28,6 +27,7 @@ export const registerUser = (email, customData,  history) => {
             type: FETCH_USER,
             payload: {email, ...customData}
         });
+        const fetchToken = fetchTokenFactory(fetch);
         const token = await fetchToken(email);
         dispatch(receivedToken(token));
         dispatch({
@@ -38,13 +38,15 @@ export const registerUser = (email, customData,  history) => {
     };
 };
 
-export const loginUser = (email, password, history) => {
+export const loginUserFactory = ({fetch, fetchAllUsers}) => (email, password, history) => {
     return async dispatch => {
         dispatch({
             type: LOADING_LOGIN,
             payload: true
         });
+        const fetchToken = fetchTokenFactory(fetch);
         const token = await fetchToken(email);
+        const fetchData = fetchDataFactory(fetch);
         const { customData} = await fetchData(email, token);
         const user = {email, ...JSON.parse(customData)};
 
@@ -77,12 +79,13 @@ export function logoutUser() {
     }
 }
 
-export const fetchUserData = () => {
+export const fetchUserDataFactory = (fetch) => () => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
         if (token && email) {
             try {
+                const fetchData = fetchDataFactory(fetch);
                 const {customData} = await fetchData(email, token);
                 dispatch({
                     type: FETCH_USER,
@@ -100,11 +103,11 @@ export const fetchUserData = () => {
     }
 };
 
-export const fetchAllUsers = (token) => {
+export const fetchAllUsersFactory = (fetch) => (token) => {
     return async (dispatch, getState) => {
         const authToken = token || getState().authToken;
         if (authToken) {
-            const res = await axios({
+            const res = await fetch({
                 method: 'get',
                 url: `${API_URL}/${APP_ID}/user`,
                 headers: {
@@ -120,13 +123,14 @@ export const fetchAllUsers = (token) => {
     };
 };
 
-export const editUserName = (name) => {
+export const editUserNameFactory = (fetch) => (name) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_CHANGE_USER_NAME,
             payload: true
         });
         const token = getState().authToken;
+        const updateUserData = updateUserDataFactory(fetch);
         const {email, customData} = await updateUserData({name}, getState().user, token);
 
         dispatch({
@@ -140,9 +144,7 @@ export const editUserName = (name) => {
     }
 };
 
-
-
-export const uploadAvatar = (file) => {
+export const uploadAvatarFactory = (fetch) => (file) => {
     return async (dispatch, getState)=> {
         dispatch({
             type: LOADING_CHANGE_AVATAR,
@@ -153,7 +155,7 @@ export const uploadAvatar = (file) => {
         let formData = new FormData();
         formData.append('Files', file);
 
-        const res = await axios({
+        const res = await fetch({
             method: 'post',
             url: `${API_URL}/file`,
             headers: {
@@ -164,7 +166,9 @@ export const uploadAvatar = (file) => {
             data: formData
 
         });
+        const fetchFileUrl = fetchFileUrlFactory(fetch);
         const avatarUrl = await fetchFileUrl(res.data[0].id, token);
+        const updateUserData = updateUserDataFactory(fetch);
         const {email, customData} = await updateUserData({avatarUrl}, getState().user, token);
 
         dispatch({
@@ -178,8 +182,8 @@ export const uploadAvatar = (file) => {
     }
 };
 
-export const fetchFileUrl = async (id, token) => {
-    const res = await axios({
+export const fetchFileUrlFactory = (fetch) => async (id, token) => {
+    const res = await fetch({
         method: 'get',
         url: `${API_URL}/file/${id}/download-link`,
         headers: {
@@ -190,27 +194,10 @@ export const fetchFileUrl = async (id, token) => {
     return res.data;
 };
 
-export const createFile = async (file, token) => {
-    let formData = new FormData();
-    formData.append('Files', file);
-
-    const res = await axios({
-        method: 'post',
-        url: `${API_URL}/file`,
-        headers: {
-            'Authorization': `bearer ${token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
-        },
-        data: formData
-    });
-    return res.data[0];
-};
-
-const updateUserData = async(newCustomData, user, token) => {
+const updateUserDataFactory = (fetch) => async(newCustomData, user, token) => {
     const customData = updateCustomData(newCustomData, user);
 
-    const res = await axios({
+    const res = await fetch({
         method: 'put',
         url: `${API_URL}/${APP_ID}/user/${user.email}`,
         data: JSON.stringify(customData),
@@ -234,8 +221,8 @@ const receivedToken = (token) => {
 
 };
 
-const fetchData = async (email, token) => {
-    const res = await axios({
+const fetchDataFactory = (fetch) => async (email, token) => {
+    const res = await fetch({
         method: 'get',
         url: `${API_URL}/${APP_ID}/user/${email}`,
         headers: {
@@ -252,8 +239,8 @@ const fetchData = async (email, token) => {
     return res.data;
 };
 
-const fetchToken = async (email) => {
-    const res = await axios({
+const fetchTokenFactory = (fetch) => async (email) => {
+    const res = await fetch({
         method: 'post',
         url: `${API_URL}/auth`,
         headers: {

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Dropzone from 'react-dropzone';
 
-import {uploadAvatar} from '../../actions/userActions';
+import {uploadAvatar} from '../../actions';
 
 class AvatarForm extends Component {
     _handleFiles(files){

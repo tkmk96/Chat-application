@@ -5,11 +5,11 @@ import {API_URL, APP_ID} from '../constants/api';
 import {LOADING_ACTIVE_CHANNEL} from '../constants/actionTypes';
 import {LIKE} from '../constants/reactionTypes';
 
-import {fetchFileUrl, createFile} from './userActions';
+import {fetchFileUrlFactory} from './userActions';
 import {setActiveChannel} from '.';
 
 
-export const createMessage = (text, inputFiles) => {
+export const createMessageFactory = (fetch) => (text, inputFiles) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,
@@ -25,6 +25,7 @@ export const createMessage = (text, inputFiles) => {
         await Promise.all (inputFiles.map (async file => {
             const isImage = file.type.startsWith('image');
             const data = await createFile(file, token);
+            const fetchFileUrl = fetchFileUrlFactory(fetch);
             const fileUrl = await fetchFileUrl(data.id, token);
             return {id: data.id, name: data.name, fileUrl, isImage}
         }))
@@ -126,4 +127,21 @@ export const reactToMessage = (message, reaction) => {
 
         dispatch(editMessage(newMessage));
     }
+};
+
+export const createFile = async (file, token) => {
+    let formData = new FormData();
+    formData.append('Files', file);
+
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/file`,
+        headers: {
+            'Authorization': `bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data'
+        },
+        data: formData
+    });
+    return res.data[0];
 };

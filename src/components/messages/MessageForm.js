@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {createMessage, editMessage} from '../../actions/messageActions';
+import {editMessage} from '../../actions/messageActions';
+import {createMessage} from '../../actions';
 import RichTextEditor from 'react-rte';
 import {EditorState, CompositeDecorator} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';

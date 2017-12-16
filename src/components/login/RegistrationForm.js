@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {reduxForm, Field} from 'redux-form';
 import {Link, withRouter} from 'react-router-dom';
 import RegistrationField from '../generic/FormField';
-import {registerUser} from '../../actions/userActions';
+import {registerUser} from '../../actions';
 import {connect} from 'react-redux';
 import PersonImg from '../../../static/assets/person.jpg';
 import {Loader} from '../generic/Loader';
