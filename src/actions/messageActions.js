@@ -26,14 +26,14 @@ export const createMessageFactory = ({fetch, setActiveChannel}) => (text, inputF
             const data = await createFile(file, token);
             const fetchFileUrl = fetchFileUrlFactory(fetch);
             const fileUrl = await fetchFileUrl(data.id, token);
-            return {id: data.id, name: data.name, fileUrl, isImage}
+            return {id: data.id, name: data.name, fileUrl, isImage};
         }))
-        .then(values => {
-            values.forEach(({id, name, fileUrl, isImage}) => {
-                const file = {id, name, fileUrl};
-                isImage ? images.push(file) : files.push(file);
+            .then(values => {
+                values.forEach(({id, name, fileUrl, isImage}) => {
+                    const file = {id, name, fileUrl};
+                    isImage ? images.push(file) : files.push(file);
+                });
             });
-        });
 
         const customData = {likes: {}, dislikes: {} };
 
@@ -44,7 +44,7 @@ export const createMessageFactory = ({fetch, setActiveChannel}) => (text, inputF
             customData.files = List(files);
         }
 
-        const res = await fetch({
+        await fetch({
             method: 'post',
             url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message`,
             headers: {
@@ -60,7 +60,7 @@ export const createMessageFactory = ({fetch, setActiveChannel}) => (text, inputF
             }
         });
         dispatch(setActiveChannel(activeChannel.id));
-    }
+    };
 };
 
 export const deleteMessageFactory = ({fetch, setActiveChannel}) => (id) => {
@@ -72,7 +72,7 @@ export const deleteMessageFactory = ({fetch, setActiveChannel}) => (id) => {
         const token = getState().authToken;
         const activeChannel = getState().activeChannel;
 
-        const res = await fetch({
+        await fetch({
             method: 'delete',
             url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message/${id}`,
             headers: {
@@ -81,7 +81,7 @@ export const deleteMessageFactory = ({fetch, setActiveChannel}) => (id) => {
             }
         });
         dispatch(setActiveChannel(activeChannel.id));
-    }
+    };
 };
 
 export const editMessageFactory = ({fetch, setActiveChannel}) => (message) => {
@@ -94,7 +94,7 @@ export const editMessageFactory = ({fetch, setActiveChannel}) => (message) => {
         const activeChannel = getState().activeChannel;
         message.customData = JSON.stringify(message.customData);
 
-        const res = await fetch({
+        await fetch({
             method: 'put',
             url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message/${message.id}`,
             headers: {
@@ -104,7 +104,7 @@ export const editMessageFactory = ({fetch, setActiveChannel}) => (message) => {
             data: message
         });
         dispatch(setActiveChannel(activeChannel.id));
-    }
+    };
 };
 
 export const reactToMessageFactory = ({editMessage}) => (message, reaction) => {
@@ -125,7 +125,7 @@ export const reactToMessageFactory = ({editMessage}) => (message, reaction) => {
         }
 
         dispatch(editMessage(newMessage));
-    }
+    };
 };
 
 const createFileFactory = (fetch) => async (file, token) => {

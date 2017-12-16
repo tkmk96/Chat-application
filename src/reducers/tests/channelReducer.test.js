@@ -1,6 +1,7 @@
 import {FETCH_CHANNELS, LOGOUT_USER, SET_ACTIVE_CHANNEL, ZERO_CHANNELS} from '../../constants/actionTypes';
 import {activeChannel, fetchChannels} from '../channelReducer';
 
+/*eslint no-undef:0*/
 test('fetchChannels reducer > sets state correctly', async done => {
 
     const customData = {creator: 'email', users: {email: 'owner'}};

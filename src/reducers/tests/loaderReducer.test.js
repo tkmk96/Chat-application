@@ -4,6 +4,7 @@ import {
 } from '../../constants/actionTypes';
 import {loading} from '../loaderReducer';
 
+/*eslint no-undef:0*/
 test('loading reducer > returns original state as default', async done => {
 
     const state = {

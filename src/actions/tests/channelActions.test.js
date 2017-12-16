@@ -1,12 +1,13 @@
-import {createChannelFactory, editChannelFactory, fetchChannelsFactory, removeChannelFactory} from "../channelActions";
+import {createChannelFactory, editChannelFactory, fetchChannelsFactory, removeChannelFactory} from '../channelActions';
 import {
     FETCH_CHANNELS, LOADING_CREATE_CHANNEL, LOADING_DELETE_CHANNEL, LOADING_EDIT_CHANNEL,
     SET_ACTIVE_CHANNEL, ZERO_CHANNELS
-} from "../../constants/actionTypes";
-import {filterAndConvertChannels} from "../../utils/convert";
+} from '../../constants/actionTypes';
+import {filterAndConvertChannels} from '../../utils/convert';
 
-import {checkCalls} from "../../utils/testUtils";
+import {checkCalls} from '../../utils/testUtils';
 
+/*eslint no-undef:0*/
 test('testing create channel > actions dispatch in correct order', async done => {
     const name = 'test channel';
     const customData = {creator: 'email', users: {email: 'owner'}};

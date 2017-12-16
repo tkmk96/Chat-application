@@ -13,7 +13,7 @@ export const registerUserFactory = (fetch) => (email, customData,  history) => {
             type: LOADING_REGISTER,
             payload: true
         });
-        const res = await fetch({
+        await fetch({
             method: 'post',
             url: `${API_URL}/${APP_ID}/user`,
             data: {email, customData: JSON.stringify(customData)},
@@ -73,7 +73,7 @@ export const loginUserFactory = ({fetch, fetchAllUsers}) => (email, password, hi
             payload: false
         });
         history.push('/');
-    }
+    };
 };
 
 export function logoutUser() {
@@ -104,7 +104,7 @@ export const fetchUserDataFactory = (fetch) => () => {
             }
 
         }
-    }
+    };
 };
 
 export const fetchAllUsersFactory = (fetch) => (token) => {
@@ -145,7 +145,7 @@ export const editUserNameFactory = (fetch) => (name) => {
             type: LOADING_CHANGE_USER_NAME,
             payload: false
         });
-    }
+    };
 };
 
 export const uploadAvatarFactory = (fetch) => (file) => {
@@ -183,7 +183,7 @@ export const uploadAvatarFactory = (fetch) => (file) => {
             type: LOADING_CHANGE_AVATAR,
             payload: false
         });
-    }
+    };
 };
 
 export const fetchFileUrlFactory = (fetch) => async (id, token) => {
@@ -234,12 +234,12 @@ const fetchDataFactory = (fetch) => async (email, token) => {
             'Accept': 'application/json',
         }
     })
-    .catch(() => {
-        throw new SubmissionError({
-            email: 'Invalid email!',
-            _error: 'Login failed!'
+        .catch(() => {
+            throw new SubmissionError({
+                email: 'Invalid email!',
+                _error: 'Login failed!'
+            });
         });
-    });
     return res.data;
 };
 
@@ -253,12 +253,12 @@ const fetchTokenFactory = (fetch) => async (email) => {
         },
         data: JSON.stringify(email)
     })
-    .catch(() => {
-        throw new SubmissionError({
-            email: 'Invalid email!',
-            _error: 'Login failed!'
+        .catch(() => {
+            throw new SubmissionError({
+                email: 'Invalid email!',
+                _error: 'Login failed!'
+            });
         });
-    });
 
     return res.data;
 };

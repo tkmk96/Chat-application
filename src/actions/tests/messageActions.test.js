@@ -23,7 +23,7 @@ test('create message > actions dispatch in correct order', async done => {
 
     const createMessage = createMessageFactory({
         fetch: () => Promise.resolve(),
-        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
+        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1};}});
     await createMessage('text', [])(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -31,6 +31,7 @@ test('create message > actions dispatch in correct order', async done => {
     done();
 });
 
+/*eslint no-undef:0*/
 test('edit message > actions dispatch in correct order', async done => {
     const customDataChannel = {creator: 'email', users: {email: 'owner'}};
     const customDataMessage = {likes: {}, dislikes: {}};
@@ -52,7 +53,7 @@ test('edit message > actions dispatch in correct order', async done => {
 
     const editMessage = editMessageFactory({
         fetch: () => Promise.resolve(),
-        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
+        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1};}});
     await editMessage(editedMessage)(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -75,7 +76,7 @@ test('react to message > actions dispatch in correct order', async done => {
     });
 
     const reactToMessage = reactToMessageFactory({
-        editMessage: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
+        editMessage: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1};}});
     await reactToMessage(message, LIKE)(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -103,7 +104,7 @@ test('delete message > actions dispatch in correct order', async done => {
 
     const deleteMessage = deleteMessageFactory({
         fetch: () => Promise.resolve(),
-        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
+        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1};}});
     await deleteMessage(1)(dispatch, getState);
 
     checkCalls(dispatch, expected);

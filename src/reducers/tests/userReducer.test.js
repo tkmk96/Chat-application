@@ -1,6 +1,7 @@
 import {FETCH_ALL_USERS, FETCH_AUTH_TOKEN, FETCH_CHANNELS, FETCH_USER, LOGOUT_USER} from '../../constants/actionTypes';
 import {fetchedAllUsers, fetchedAuthToken, fetchedUser} from '../userReducer';
 
+/*eslint no-undef:0*/
 test('fetchedUser reducer > returns original state as default', async done => {
 
     const state = {

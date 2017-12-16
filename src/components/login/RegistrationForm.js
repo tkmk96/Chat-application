@@ -8,7 +8,8 @@ import PersonImg from '../../../static/assets/person.jpg';
 import Loader from '../generic/Loader';
 import PropTypes from 'prop-types';
 
-const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+/*eslint no-useless-escape:0*/
+const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$ /;
 
 const formFields = [
     {label: 'Name', name: 'name', type: 'text'},

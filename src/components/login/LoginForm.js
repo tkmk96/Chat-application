@@ -8,6 +8,7 @@ import RegistrationField from '../generic/FormField';
 import {loginUser} from '../../actions';
 import Loader from '../generic/Loader';
 
+/*eslint no-useless-escape:0*/
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const formFields = [
