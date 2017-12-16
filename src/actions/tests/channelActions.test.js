@@ -1,5 +1,6 @@
 import {
-    createChannelFactory, editChannelFactory, fetchChannelsFactory, removeChannelFactory,
+    changePrivilegeFactory,
+    createChannelFactory, editChannelFactory, fetchChannelsFactory, inviteUserFactory, removeChannelFactory,
     setActiveChannelFactory
 } from '../channelActions';
 import {
@@ -10,7 +11,9 @@ import {filterAndConvertChannels, parseMessages} from '../../utils/convert';
 import {List} from 'immutable';
 
 import {checkCalls} from '../../utils/testUtils';
+import {SubmissionError} from 'redux-form';
 
+/* eslint-disable no-undef */
 test('testing create channel > actions dispatch in correct order', async done => {
     const name = 'test channel';
     const customData = {creator: 'email', users: {email: 'owner'}};
@@ -59,7 +62,7 @@ test('testing edit channel > actions dispatch in correct order', async done => {
 
     const editChannel = editChannelFactory({
         fetch: () => Promise.resolve({data: {channels}}),
-        setActiveChannel: (id) => {
+        setActiveChannel: () => {
             return {type: SET_ACTIVE_CHANNEL, payload: 1};
         }});
     await editChannel(channel)(dispatch, getState);
@@ -94,7 +97,7 @@ test('testing edit channel > actions dispatch in correct order, user left his la
 
     const editChannel = editChannelFactory({
         fetch: () => Promise.resolve({data: {channels}}),
-        setActiveChannel: (id) => Promise.resolve()});
+        setActiveChannel: () => Promise.resolve()});
     await editChannel(channel)(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -160,7 +163,10 @@ test('testing fetch channels > actions dispatch in correct order', async done =>
 
     const fetchChannels = fetchChannelsFactory({
         fetch: () => Promise.resolve({data: {channels: channels}}),
-        setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 1}}});
+        setActiveChannel: () => {
+            return { type: SET_ACTIVE_CHANNEL, payload: 1};
+        }
+    });
     await fetchChannels()(dispatch, getState);
 
     checkCalls(dispatch, expected);
@@ -194,6 +200,75 @@ test('testing set active channel > actions dispatch in correct order', async don
 
     checkCalls(dispatch, expected);
 
+    done();
+});
+
+test('testing change privilege > actions dispatch in correct order', async done => {
+    const customData = {creator: 'email', users: {email: 'owner', email2: 'user'}};
+    const channel = {id: 1, name: 'channel', messages: [], customData};
+
+    const newCustomData = {creator: 'email', users: {email: 'owner', email2: 'admin'}};
+
+    const expected = [
+        { ...channel, customData: newCustomData }
+    ];
+
+    const dispatch = jest.fn();
+    const editChannel = jest.fn();
+
+    const changePrivilege = changePrivilegeFactory(
+        editChannel
+    );
+    await changePrivilege(channel, 'email2', 'admin')(dispatch);
+
+    checkCalls(editChannel, expected);
+
+    done();
+});
+
+test('testing invite user > actions dispatch in correct order', async done => {
+    const customData = {creator: 'email', users: {email: 'owner'}};
+    const channel = {id: 1, name: 'channel', messages: [], customData};
+
+    const newCustomData = {creator: 'email', users: {email: 'owner', email2: 'user'}};
+
+    const expected = [
+        { ...channel, customData: newCustomData }
+    ];
+
+    const dispatch = jest.fn();
+    const editChannel = jest.fn();
+
+    const inviteUser = inviteUserFactory(
+        editChannel
+    );
+    await inviteUser(channel, 'email2')(dispatch);
+
+    checkCalls(editChannel, expected);
+
+    done();
+});
+
+test('testing invite user > inviting existing user throws exception', async done => {
+    const customData = {creator: 'email', users: {email: 'owner'}};
+    const channel = {id: 1, name: 'channel', messages: [], customData};
+
+
+
+    const dispatch = jest.fn();
+    const editChannel = jest.fn();
+
+    const inviteUser = inviteUserFactory(
+        editChannel
+    );
+
+    let threw = false;
+    try {
+        await inviteUser(channel, 'email')(dispatch);
+    } catch(ex) {
+        threw = ex instanceof SubmissionError;
+    }
+    expect(threw).toBe(true);
     done();
 });
 
