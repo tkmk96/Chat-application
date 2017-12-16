@@ -3,8 +3,15 @@ import FormField from '../generic/FormField';
 import {reduxForm, Field, reset} from 'redux-form';
 import {changePrivilege} from '../../actions';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class ChannelInviteForm extends Component {
+    static propTypes = {
+        channel: PropTypes.object.isRequired,
+        handleSubmit: PropTypes.func.isRequired,
+        onInvite: PropTypes.func.isRequired,
+        changePrivilege: PropTypes.func.isRequired,
+    };
     render() {
         return (
             <form className='col s6' onSubmit={this.props.handleSubmit(({email}) => this.props.onInvite(email))}>

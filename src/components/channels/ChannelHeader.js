@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {changePrivilege, removeChannel} from '../../actions';
 import Icon from '../generic/IconButton';
 
 
 class ChannelHeader extends Component {
+    static propTypes = {
+        name: PropTypes.string.isRequired,
+        detail: PropTypes.bool.isRequired,
+        onDetail: PropTypes.func.isRequired,
+        isOwner: PropTypes.bool.isRequired,
+        isAdmin: PropTypes.bool.isRequired,
+        removeChannel: PropTypes.func.isRequired,
+        changePrivilege: PropTypes.func.isRequired,
+        activeChannel: PropTypes.object.isRequired,
+        userEmail: PropTypes.string.isRequired,
+    };
     render(){
         return (
             <div style={{marginBottom: '10px'}}>

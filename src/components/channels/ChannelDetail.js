@@ -3,6 +3,7 @@ import ChannelRenameForm from './ChannelCreateEditForm';
 import {editChannel, changePrivilege} from '../../actions';
 import {connect} from 'react-redux';
 import ChannelInviteForm from './ChannelInviteForm';
+import PropTypes from 'prop-types';
 
 import Icon from '../generic/IconButton';
 
@@ -10,6 +11,16 @@ import * as role from '../../constants/channelRoles';
 import Loader from '../generic/Loader';
 
 class ChannelDetail extends Component {
+    static propTypes = {
+        loading: PropTypes.bool,
+        isOwner: PropTypes.bool.isRequired,
+        isAdmin: PropTypes.bool.isRequired,
+        userEmail: PropTypes.string.isRequired,
+        channel: PropTypes.object.isRequired,
+        editChannel: PropTypes.func.isRequired,
+        changePrivilege: PropTypes.func.isRequired,
+        users: PropTypes.object.isRequired
+    };
     render() {
         return (
             <Loader show={this.props.loading}>

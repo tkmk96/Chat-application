@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ChannelItem from './ChannelItem';
-import {fetchChannels, createChannel} from '../../actions';
+import {createChannel} from '../../actions';
 import ChannelCreateForm from './ChannelCreateEditForm';
+import PropTypes from 'prop-types';
 
 class ChannelList extends Component {
+    static propTypes = {
+        channels: PropTypes.object.isRequired,
+        createChannel: PropTypes.func.isRequired
+    };
 
     constructor(props) {
         super(props);
@@ -69,4 +74,4 @@ function mapStateToProps({channels}) {
     };
 }
 
-export default connect(mapStateToProps, {fetchChannels, createChannel})(ChannelList);
+export default connect(mapStateToProps, {createChannel})(ChannelList);

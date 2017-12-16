@@ -3,8 +3,15 @@ import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import {createChannel} from '../../actions';
 import FormField from '../generic/FormField';
+import PropTypes from 'prop-types';
 
 class ChannelForm extends Component {
+    static propTypes = {
+        className: PropTypes.string,
+        handleSubmit: PropTypes.func.isRequired,
+        onSubmit: PropTypes.func.isRequired,
+        onCancel: PropTypes.func,
+    };
     render() {
         return (
             <form className={this.props.className} onSubmit={this.props.handleSubmit((values) => this.props.onSubmit(values.name))}>
@@ -20,7 +27,6 @@ class ChannelForm extends Component {
             </form>
         );
     }
-
 }
 
 function validate(values) {
