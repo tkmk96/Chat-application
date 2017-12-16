@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Message from './Message';
-import MessageEdit from './MessageEdit';
-import {editMessage} from '../../actions/messageActions';
+import {editMessage} from '../../actions';
 
 class MessageList extends Component {
 

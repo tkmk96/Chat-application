@@ -5,7 +5,7 @@ import {changePrivilegeFactory, createChannelFactory, editChannelFactory,
 import {editUserNameFactory, fetchAllUsersFactory, fetchUserDataFactory, loginUserFactory,
     registerUserFactory, uploadAvatarFactory} from './userActions';
 
-import {createMessageFactory} from './messageActions';
+import {createMessageFactory, deleteMessageFactory, editMessageFactory, reactToMessageFactory} from './messageActions';
 
 export const createChannel = createChannelFactory(axios);
 export const setActiveChannel = setActiveChannelFactory(axios);
@@ -21,4 +21,7 @@ export const editUserName = editUserNameFactory(axios);
 export const uploadAvatar = uploadAvatarFactory(axios);
 export const loginUser = loginUserFactory({fetch: axios, fetchAllUsers});
 
-export const createMessage = createMessageFactory(axios);
+export const createMessage = createMessageFactory({fetch: axios, setActiveChannel});
+export const deleteMessage = deleteMessageFactory({fetch: axios, setActiveChannel});
+export const editMessage = editMessageFactory({fetch: axios, setActiveChannel});
+export const reactToMessage = reactToMessageFactory({editMessage});

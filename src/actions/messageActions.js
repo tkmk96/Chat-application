@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {List} from 'immutable';
 import {uuid} from '../utils/uuidGenerator';
 import {API_URL, APP_ID} from '../constants/api';
@@ -9,7 +8,7 @@ import {fetchFileUrlFactory} from './userActions';
 import {setActiveChannel} from '.';
 
 
-export const createMessageFactory = (fetch) => (text, inputFiles) => {
+export const createMessageFactory = ({fetch, setActiveChannel}) => (text, inputFiles) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,
@@ -24,6 +23,7 @@ export const createMessageFactory = (fetch) => (text, inputFiles) => {
 
         await Promise.all (inputFiles.map (async file => {
             const isImage = file.type.startsWith('image');
+            const createFile = createFileFactory(fetch);
             const data = await createFile(file, token);
             const fetchFileUrl = fetchFileUrlFactory(fetch);
             const fileUrl = await fetchFileUrl(data.id, token);
@@ -45,7 +45,7 @@ export const createMessageFactory = (fetch) => (text, inputFiles) => {
             customData.files = List(files);
         }
 
-        const res = await axios({
+        const res = await fetch({
             method: 'post',
             url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message`,
             headers: {
@@ -64,7 +64,7 @@ export const createMessageFactory = (fetch) => (text, inputFiles) => {
     }
 };
 
-export const deleteMessage = (id) => {
+export const deleteMessageFactory = ({fetch, setActiveChannel}) => (id) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,
@@ -73,7 +73,7 @@ export const deleteMessage = (id) => {
         const token = getState().authToken;
         const activeChannel = getState().activeChannel;
 
-        const res = await axios({
+        const res = await fetch({
             method: 'delete',
             url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message/${id}`,
             headers: {
@@ -85,7 +85,7 @@ export const deleteMessage = (id) => {
     }
 };
 
-export const editMessage = (message) => {
+export const editMessageFactory = ({fetch, setActiveChannel}) => (message) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,
@@ -95,7 +95,7 @@ export const editMessage = (message) => {
         const activeChannel = getState().activeChannel;
         message.customData = JSON.stringify(message.customData);
 
-        const res = await axios({
+        const res = await fetch({
             method: 'put',
             url: `${API_URL}/app/${APP_ID}/channel/${activeChannel.id}/message/${message.id}`,
             headers: {
@@ -108,7 +108,7 @@ export const editMessage = (message) => {
     }
 };
 
-export const reactToMessage = (message, reaction) => {
+export const reactToMessageFactory = ({editMessage}) => (message, reaction) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_ACTIVE_CHANNEL,
@@ -129,11 +129,11 @@ export const reactToMessage = (message, reaction) => {
     }
 };
 
-export const createFile = async (file, token) => {
+const createFileFactory = (fetch) => async (file, token) => {
     let formData = new FormData();
     formData.append('Files', file);
 
-    const res = await axios({
+    const res = await fetch({
         method: 'post',
         url: `${API_URL}/file`,
         headers: {

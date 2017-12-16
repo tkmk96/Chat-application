@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {deleteMessage, reactToMessage} from '../../actions/messageActions';
+import {deleteMessage, reactToMessage} from '../../actions';
 import {DISLIKE, LIKE} from '../../constants/reactionTypes';
 import IconButton from '../generic/IconButton';
 
