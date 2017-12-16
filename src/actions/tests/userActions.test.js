@@ -57,7 +57,6 @@ test('login user > actions dispatch in correct order', async done => {
     const dispatch = jest.fn();
 
     const loginUser = loginUserFactory({
-        fetch: () => Promise.resolve(),
         fetchToken: () => Promise.resolve(token),
         fetchData: () => Promise.resolve({email, customData: JSON.stringify(customData)}),
         fetchAllUsers: () => { return {type: FETCH_ALL_USERS, payload: [user]};}
