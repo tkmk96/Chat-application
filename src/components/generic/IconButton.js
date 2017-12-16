@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default ({title, className, style, iconName, onClick, type}) => {
+const IconButton = ({title, className, style, iconName, onClick, type}) => {
     className = className || '';
     return (
         <a className={`btn-floating ${className}`}
@@ -12,4 +13,15 @@ export default ({title, className, style, iconName, onClick, type}) => {
             <i className='material-icons'>{iconName}</i>
         </a>
     );
+};
+
+export default IconButton;
+
+IconButton.propTypes = {
+    title: PropTypes.string,
+    className: PropTypes.string,
+    iconName: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
+    type: PropTypes.string,
+    style: PropTypes.object,
 };

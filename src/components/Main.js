@@ -6,16 +6,24 @@ import {fetchChannels} from '../actions';
 import ChannelHeader from './channels/ChannelHeader';
 import ChannelDetail from './channels/ChannelDetail';
 import * as role from '../constants/channelRoles';
-import {Loader} from './generic/Loader';
+import Loader from './generic/Loader';
+import PropTypes from 'prop-types';
 
 class Main extends Component {
+    static propTypes = {
+        fetchChannels: PropTypes.func.isRequired,
+        loading: PropTypes.bool,
+        activeChannel: PropTypes.object,
+        isOwner: PropTypes.bool.isRequired,
+        isAdmin: PropTypes.bool.isRequired,
+        userEmail: PropTypes.string.isRequired,
+    };
 
     constructor(props) {
         super(props);
         this.state = {
             showDetail: false,
         };
-        //this._renderHeader = this._renderHeader.bind(this);
     }
 
     componentDidMount() {
@@ -61,10 +69,11 @@ class Main extends Component {
     _renderContent() {
         if (this.state.showDetail) {
             return (
-                <ChannelDetail channel={this.props.activeChannel}
-                               userEmail={this.props.userEmail}
-                               isOwner={this.props.isOwner}
-                               isAdmin={this.props.isAdmin}
+                <ChannelDetail
+                    channel={this.props.activeChannel}
+                    userEmail={this.props.userEmail}
+                    isOwner={this.props.isOwner}
+                    isAdmin={this.props.isAdmin}
                 />
             );
         }

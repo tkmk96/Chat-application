@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
-import {connect} from 'react-redux';
 
 class MessagePanel extends Component {
+
     constructor(props){
         super(props);
 
@@ -42,10 +42,4 @@ class MessagePanel extends Component {
     }
 }
 
-function mapStateToProps({activeChannel}) {
-    return {
-        activeChannel
-    };
-}
-
-export default connect(mapStateToProps)(MessagePanel);
+export default MessagePanel;

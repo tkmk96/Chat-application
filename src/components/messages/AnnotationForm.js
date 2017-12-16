@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
-import {Modifier, EditorState, CompositeDecorator} from 'draft-js';
+import {Modifier, EditorState} from 'draft-js';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class AnnotationForm extends Component {
+    static propTypes = {
+        users: PropTypes.object.isRequired,
+        activeChannel: PropTypes.object.isRequired,
+        editor: PropTypes.object.isRequired,
+        onSubmit: PropTypes.func.isRequired
+    };
 
     constructor(props) {
         super(props);

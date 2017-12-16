@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Dropzone from 'react-dropzone';
+import PropTypes from 'prop-types';
 
 import {uploadAvatar} from '../../actions';
 
 class AvatarForm extends Component {
+    static propTypes = {
+        uploadAvatar: PropTypes.func.isRequired
+    };
+
     _handleFiles(files){
         this.props.uploadAvatar(files[0]);
     }

@@ -3,8 +3,19 @@ import {connect} from 'react-redux';
 import {deleteMessage, reactToMessage} from '../../actions';
 import {DISLIKE, LIKE} from '../../constants/reactionTypes';
 import IconButton from '../generic/IconButton';
+import PropTypes from 'prop-types';
 
 class Message extends Component {
+    static propTypes = {
+        myMessage: PropTypes.string.isRequired,
+        message: PropTypes.object.isRequired,
+        user: PropTypes.object.isRequired,
+        email: PropTypes.string.isRequired,
+        deleteMessage: PropTypes.func.isRequired,
+        reactToMessage: PropTypes.func.isRequired,
+        onEdit: PropTypes.func.isRequired
+    };
+
     render() {
         const {message, user, myMessage, email} = this.props;
         const {likes, dislikes, images, files} = message.customData;
@@ -36,7 +47,7 @@ class Message extends Component {
                         className='material-icons'>thumb_up</i> {numberOfLikes} </span>
                     }
                 </div>
-                <div style={{clear: 'both'}}></div>
+                <div style={{clear: 'both'}}/>
                 <div className='message-files'>
                     {files && this._renderFiles(files)}
                     {images && this._renderImages(images)}

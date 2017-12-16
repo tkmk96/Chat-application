@@ -7,10 +7,18 @@ import {stateToHTML} from 'draft-js-export-html';
 import {stateFromHTML} from 'draft-js-import-html';
 import AnnotationForm from './AnnotationForm';
 import AttachmentForm from './AttachmentForm';
-import {UserAnnotation} from './UserAnnotation';
+import UserAnnotation from './UserAnnotation';
 import {List} from 'immutable';
+import PropTypes from 'prop-types';
 
 class MessageForm extends Component {
+    static propTypes = {
+        createMessage: PropTypes.func.isRequired,
+        editMessage: PropTypes.func.isRequired,
+        editedMessage: PropTypes.object,
+        clearEditedMessage: PropTypes.func,
+    };
+
     constructor(props) {
         super(props);
 

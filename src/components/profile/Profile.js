@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Loader} from '../generic/Loader';
+import Loader from '../generic/Loader';
 import ProfileForm from './ProfileForm';
 import AvatarForm from './AvatarForm';
+import PropTypes from 'prop-types';
 
 class Profile extends Component {
+    static propTypes = {
+        user: PropTypes.object.isRequired,
+        loading: PropTypes.object.isRequired
+    };
     render(){
         const {changeUserName, changeAvatar} = this.props.loading;
         return (

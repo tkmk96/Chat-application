@@ -5,7 +5,8 @@ import RegistrationField from '../generic/FormField';
 import {registerUser} from '../../actions';
 import {connect} from 'react-redux';
 import PersonImg from '../../../static/assets/person.jpg';
-import {Loader} from '../generic/Loader';
+import Loader from '../generic/Loader';
+import PropTypes from 'prop-types';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -17,6 +18,13 @@ const formFields = [
 ];
 
 class RegistrationForm extends Component {
+    static propTypes = {
+        registerUser: PropTypes.func.isRequired,
+        history: PropTypes.object.isRequired,
+        loading: PropTypes.bool,
+        handleSubmit: PropTypes.func.isRequired
+    };
+
     render() {
         return (
             <div className='row'>

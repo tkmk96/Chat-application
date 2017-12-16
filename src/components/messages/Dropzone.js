@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import DropzoneReact from 'react-dropzone';
+import PropTypes from 'prop-types';
 
 class Dropzone extends Component {
+    static propTypes = {
+        onDrop: PropTypes.func.isRequired
+    };
     render() {
         return (
             <div title='Drag & drop or select manually'>

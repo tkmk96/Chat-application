@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import {reduxForm, Field} from 'redux-form';
+import PropTypes from 'prop-types';
 
 import RegistrationField from '../generic/FormField';
 import {loginUser} from '../../actions';
-import {Loader} from '../generic/Loader';
+import Loader from '../generic/Loader';
 
 const RE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -16,6 +17,12 @@ const formFields = [
 
 
 class LoginForm extends Component {
+    static propTypes = {
+        loginUser: PropTypes.func.isRequired,
+        history: PropTypes.object.isRequired,
+        loading: PropTypes.bool,
+        handleSubmit: PropTypes.func.isRequired
+    };
     _renderFields() {
         return formFields.map(field => {
             return <Field key={field.name} component={RegistrationField} {...field} />;

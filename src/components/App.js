@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { fetchUserData, fetchAllUsers } from '../actions';
 
@@ -12,6 +13,10 @@ import PrivateRoute from './generic/PrivateRoute';
 import Login from './login/Login';
 
 class App extends Component {
+    static propTypes = {
+        fetchUserData: PropTypes.func.isRequired,
+        fetchAllUsers: PropTypes.func.isRequired
+    };
 
     componentWillMount() {
         this.props.fetchUserData();

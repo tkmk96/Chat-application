@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import {logoutUser} from '../actions/userActions';
 
 class Header extends Component {
+    static propTypes = {
+        logoutUser: PropTypes.func.isRequired,
+        history: PropTypes.object.isRequired,
+        user: PropTypes.object.isRequired,
+    };
+
     _onLogoutClick(){
         this.props.logoutUser();
         this.props.history.push('/');

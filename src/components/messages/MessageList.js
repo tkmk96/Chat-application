@@ -2,8 +2,16 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Message from './Message';
 import {editMessage} from '../../actions';
+import PropTypes from 'prop-types';
 
 class MessageList extends Component {
+    static propTypes = {
+        user: PropTypes.object.isRequired,
+        activeChannel: PropTypes.object.isRequired,
+        users: PropTypes.object.isRequired,
+        onEdit: PropTypes.func.isRequired,
+        editMessage: PropTypes.func.isRequired
+    };
 
     render() {
         const {activeChannel} = this.props;
