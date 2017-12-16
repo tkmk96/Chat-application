@@ -29,8 +29,10 @@ export const convertUsersArray = (users) => {
 };
 
 export const parseMessages = (messages) => {
-    messages.forEach(message => {
-        message.customData = JSON.parse(message.customData);
+    return messages.map(message => {
+        return {
+            ...message,
+            customData: JSON.parse(message.customData)
+        };
     });
-    return messages;
 };
