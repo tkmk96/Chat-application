@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import {changePrivilege, removeChannel} from '../../actions';
 import Icon from '../generic/IconButton';
+import {OWNER} from '../../constants/channelRoles';
 
 
 class ChannelHeader extends Component {
@@ -90,6 +91,11 @@ class ChannelHeader extends Component {
     }
 
     _renderChannelPageButtons(){
+        const {users} = this.props.activeChannel.customData;
+        const owners = Object.keys(users).filter(email => {
+            return users[email] === OWNER;
+        });
+        const canLeave = !this.props.isOwner || owners.length > 1;
         return (
             <div className='fixed-action-btn horizontal click-to-toggle channelMenuBtn' style={{position: 'absolute'}}>
                 <Icon
@@ -99,7 +105,7 @@ class ChannelHeader extends Component {
                 />
                 <ul>
                     {this.props.isOwner && this._renderDeleteButton()}
-                    {!this.props.isOwner && this._renderLeaveButton()}
+                    {canLeave && this._renderLeaveButton()}
                     <li>
                         {this.props.isOwner || this.props.isAdmin ? this._renderEditButton() : this._renderDetailButton()}
                     </li>

@@ -56,8 +56,7 @@ class ChannelDetail extends Component {
                     }
 
                     {(this.props.isOwner || this.props.isAdmin) &&
-                    <ChannelInviteForm onInvite={(email) => this._changePrivilege(email, role.USER)}
-                                       channel={this.props.channel}/>
+                    <ChannelInviteForm channel={this.props.channel}/>
                     }
                 </div>
 

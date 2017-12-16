@@ -8,6 +8,8 @@ import {
 } from '../constants/actionTypes';
 import * as role from '../constants/channelRoles';
 import {List} from 'immutable';
+import {SubmissionError} from 'redux-form';
+import {USER} from '../constants/channelRoles';
 
 export const createChannelFactory = (fetch) => (name) => {
     return async (dispatch, getState) => {
@@ -84,17 +86,14 @@ export const editChannelFactory = ({fetch, setActiveChannel}) => (channel) => {
 
         if (!channels[channel.id]) {
             if (Object.keys(channels).length === 0){
-                dispatch({type: ZERO_CHANNELS})
+                dispatch({type: ZERO_CHANNELS});
             }
             else{
                 dispatch(setActiveChannel(Object.keys(channels)[0]));
             }
         }
         else{
-            dispatch({
-                type: SET_ACTIVE_CHANNEL,
-                payload: {...channels[channel.id], messages: channel.messages}
-            });
+            dispatch(setActiveChannel(channel.id));
         }
         dispatch({
             type: LOADING_EDIT_CHANNEL,
@@ -129,7 +128,7 @@ export const removeChannelFactory = ({fetch, setActiveChannel}) => (id) => {
         const channels = filterAndConvertChannels(res.data.channels, email);
 
         if (Object.keys(channels).length === 0){
-            dispatch({type: ZERO_CHANNELS})
+            dispatch({type: ZERO_CHANNELS});
         }
 
         dispatch({
@@ -144,7 +143,7 @@ export const removeChannelFactory = ({fetch, setActiveChannel}) => (id) => {
             type: LOADING_DELETE_CHANNEL,
             payload: false
         });
-    }
+    };
 };
 
 export const changePrivilegeFactory = ({fetch, editChannel}) => (channel, userEmail, privilege) => {
@@ -152,6 +151,23 @@ export const changePrivilegeFactory = ({fetch, editChannel}) => (channel, userEm
         const {customData} = channel;
         const users = {...customData.users};
         privilege ? users[userEmail] = privilege : delete users[userEmail] ;
+        const newCustomData = {...customData, users};
+        dispatch(editChannel({...channel, customData: newCustomData}));
+    };
+};
+
+export const inviteUserFactory = ({fetch, editChannel}) => (channel, userEmail) => {
+    return async (dispatch) => {
+        const {customData} = channel;
+        const users = {...customData.users};
+        if (users[userEmail]) {
+            throw new SubmissionError({
+                email: 'User already is in the channel!',
+                _error: 'Invite failed!'
+            });
+        }
+
+        users[userEmail] = USER;
         const newCustomData = {...customData, users};
         dispatch(editChannel({...channel, customData: newCustomData}));
     };

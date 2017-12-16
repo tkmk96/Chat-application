@@ -51,6 +51,10 @@ export const loginUserFactory = ({fetch, fetchAllUsers}) => (email, password, hi
         const user = {email, ...JSON.parse(customData)};
 
         if(user.password !== password){
+            dispatch({
+                type: LOADING_LOGIN,
+                payload: false
+            });
             throw new SubmissionError({
                 password: 'Incorrect password!',
                 _error: 'Login failed!'
@@ -76,7 +80,7 @@ export function logoutUser() {
     localStorage.clear();
     return {
         type: LOGOUT_USER
-    }
+    };
 }
 
 export const fetchUserDataFactory = (fetch) => () => {
