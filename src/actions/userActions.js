@@ -48,7 +48,6 @@ export const loginUserFactory = ({fetch, fetchToken, fetchData, fetchAllUsers}) 
 
         const { customData} = await fetchData(email, token);
         const user = {email, ...JSON.parse(customData)};
-        console.log(user);
 
         if(user.password !== password){
             dispatch({
@@ -82,13 +81,12 @@ export function logoutUser() {
     };
 }
 
-export const fetchUserDataFactory = (fetch) => () => {
+export const fetchUserDataFactory = ({fetchData}) => () => {
     return async (dispatch, getState) => {
         const token = getState().authToken;
         const email = getState().user.email;
         if (token && email) {
             try {
-                const fetchData = fetchDataFactory(fetch);
                 const {customData} = await fetchData(email, token);
                 dispatch({
                     type: FETCH_USER,
@@ -118,6 +116,7 @@ export const fetchAllUsersFactory = (fetch) => (token) => {
                     'Accept': 'application/json',
                 }
             });
+            console.log(res.data);
             dispatch({
                 type: FETCH_ALL_USERS,
                 payload: convertUsersArray(res.data)
@@ -126,14 +125,13 @@ export const fetchAllUsersFactory = (fetch) => (token) => {
     };
 };
 
-export const editUserNameFactory = (fetch) => (name) => {
+export const editUserNameFactory = ({updateUserData}) => (name) => {
     return async (dispatch, getState) => {
         dispatch({
             type: LOADING_CHANGE_USER_NAME,
             payload: true
         });
         const token = getState().authToken;
-        const updateUserData = updateUserDataFactory(fetch);
         const {email, customData} = await updateUserData({name}, getState().user, token);
 
         dispatch({
@@ -147,7 +145,7 @@ export const editUserNameFactory = (fetch) => (name) => {
     };
 };
 
-export const uploadAvatarFactory = (fetch) => (file) => {
+export const uploadAvatarFactory = ({fetch, fetchFileUrl, updateUserData}) => (file) => {
     return async (dispatch, getState)=> {
         dispatch({
             type: LOADING_CHANGE_AVATAR,
@@ -169,9 +167,7 @@ export const uploadAvatarFactory = (fetch) => (file) => {
             data: formData
 
         });
-        const fetchFileUrl = fetchFileUrlFactory(fetch);
         const avatarUrl = await fetchFileUrl(res.data[0].id, token);
-        const updateUserData = updateUserDataFactory(fetch);
         const {email, customData} = await updateUserData({avatarUrl}, getState().user, token);
 
         dispatch({
@@ -197,7 +193,7 @@ export const fetchFileUrlFactory = (fetch) => async (id, token) => {
     return res.data;
 };
 
-const updateUserDataFactory = (fetch) => async(newCustomData, user, token) => {
+export const updateUserDataFactory = (fetch) => async(newCustomData, user, token) => {
     const customData = updateCustomData(newCustomData, user);
 
     const res = await fetch({

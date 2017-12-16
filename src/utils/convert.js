@@ -21,6 +21,7 @@ export const filterAndConvertChannels = (channels, email) => {
 };
 
 export const convertUsersArray = (users) => {
+    console.log(users);
     const usersObject = {};
     users.forEach(({email, customData}) => {
         usersObject[email] = {email, ...JSON.parse(customData)};
