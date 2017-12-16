@@ -58,10 +58,8 @@ test('testing edit channel > actions dispatch in correct order', async done => {
         setActiveChannel: (id) => Promise.resolve()});
     await editChannel(channel)(dispatch, getState);
 
-    expect(dispatch.mock.calls[0][0]).toEqual(expected[0]);
-    expect(dispatch.mock.calls[1][0]).toEqual(expected[1]);
-    expect(dispatch.mock.calls[2][0]).toEqual(expected[2]);
-    expect(dispatch.mock.calls[3][0]).toEqual(expected[3]);
+    checkCalls(dispatch, expected);
+
     done();
 });
 
@@ -93,10 +91,8 @@ test('testing edit channel > actions dispatch in correct order, user left his la
         setActiveChannel: (id) => Promise.resolve()});
     await editChannel(channel)(dispatch, getState);
 
-    expect(dispatch.mock.calls[0][0]).toEqual(expected[0]);
-    expect(dispatch.mock.calls[1][0]).toEqual(expected[1]);
-    expect(dispatch.mock.calls[2][0]).toEqual(expected[2]);
-    expect(dispatch.mock.calls[3][0]).toEqual(expected[3]);
+    checkCalls(dispatch, expected);
+
     done();
 });
 
@@ -127,11 +123,15 @@ test('testing remove channel > actions dispatch in correct order', async done =>
         fetch: () => Promise.resolve({data: {channels: channels.filter((channel) => channel.id !== 1)}}),
         setActiveChannel: () => { return { type: SET_ACTIVE_CHANNEL, payload: 2}}});
     await removeChannel(channels)(dispatch, getState);
-    console.log(dispatch.mock.calls);
-    expect(dispatch.mock.calls[0][0]).toEqual(expected[0]);
-    expect(dispatch.mock.calls[1][0]).toEqual(expected[1]);
-    expect(dispatch.mock.calls[2][0]).toEqual(expected[2]);
-    expect(dispatch.mock.calls[3][0]).toEqual(expected[3]);
+
+    checkCalls(dispatch, expected);
+
     done();
 });
+
+function checkCalls(fn, expected){
+    for(let i = 0; i < expected.length; i++){
+        expect(fn.mock.calls[i][0]).toEqual(expected[i]);
+    }
+}
 
