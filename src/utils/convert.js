@@ -7,11 +7,14 @@ const convertChannelsArray = (channels) => {
 };
 
 export const filterAndConvertChannels = (channels, email) => {
-    console.log(channels);
-    const filtered = channels.filter(channel => {
-        console.log('before', typeof channel.customData, '\n', channel);
-        channel.customData = JSON.parse(channel.customData);
-        console.log('after', typeof channel.customData, '\n', channel);
+    const parsed = channels.map(channel => {
+        return {
+            ...channel,
+            customData: JSON.parse(channel.customData)
+        };
+    });
+
+    const filtered = parsed.filter(channel => {
         return channel.customData.users.hasOwnProperty(email);
     });
     return convertChannelsArray(filtered);
