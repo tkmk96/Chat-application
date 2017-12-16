@@ -237,12 +237,15 @@ test('testing invite user > actions dispatch in correct order', async done => {
     ];
 
     const dispatch = jest.fn();
+    const getState = () => ({
+        users: {'email': {name: 'jano'}, 'email2': {name: 'honza'}},
+    });
     const editChannel = jest.fn();
 
     const inviteUser = inviteUserFactory(
         editChannel
     );
-    await inviteUser(channel, 'email2')(dispatch);
+    await inviteUser(channel, 'email2')(dispatch, getState);
 
     checkCalls(editChannel, expected);
 
@@ -253,9 +256,10 @@ test('testing invite user > inviting existing user throws exception', async done
     const customData = {creator: 'email', users: {email: 'owner'}};
     const channel = {id: 1, name: 'channel', messages: [], customData};
 
-
-
     const dispatch = jest.fn();
+    const getState = () => ({
+        users: {'email': {name: 'jano'}, 'email2': {name: 'honza'}},
+    });
     const editChannel = jest.fn();
 
     const inviteUser = inviteUserFactory(
@@ -264,7 +268,7 @@ test('testing invite user > inviting existing user throws exception', async done
 
     let threw = false;
     try {
-        await inviteUser(channel, 'email')(dispatch);
+        await inviteUser(channel, 'email')(dispatch, getState);
     } catch(ex) {
         threw = ex instanceof SubmissionError;
     }
