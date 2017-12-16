@@ -147,13 +147,11 @@ export const removeChannelFactory = ({fetch, setActiveChannel}) => (id) => {
 
 export const changePrivilegeFactory = (editChannel) => (channel, userEmail, privilege) => {
     return async (dispatch) => {
-        console.log(channel);
         const {customData} = channel;
         const users = {...customData.users};
 
         privilege ? users[userEmail] = privilege : delete users[userEmail] ;
         const newCustomData = {...customData, users};
-        console.log(newCustomData);
         dispatch(editChannel({...channel, customData: newCustomData}));
     };
 };

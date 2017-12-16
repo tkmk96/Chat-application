@@ -126,7 +126,6 @@ export const fetchAllUsersFactory = (fetch) => (token) => {
                     'Accept': 'application/json',
                 }
             });
-            console.log(res.data);
             dispatch({
                 type: FETCH_ALL_USERS,
                 payload: convertUsersArray(res.data)
