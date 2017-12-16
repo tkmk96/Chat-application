@@ -26,7 +26,7 @@ class AttachmentForm extends Component {
                     <i className='tiny material-icons'>note_add</i>
                 </button>
                 {this.props.files.length !== 0 && this._renderFilesList()}
-                {this.state.showDropzone && <Dropzone onDrop={(files, rejected) => this.props.onDrop(files, rejected)}/>}
+                {this.state.showDropzone && !this.props.disabled && <Dropzone onDrop={(files, rejected) => this.props.onDrop(files, rejected)}/>}
             </div>
         );
     }
